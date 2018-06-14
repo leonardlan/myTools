@@ -1,0 +1,5 @@
+tree
+pylint
+meld
+xclip
+libreoffice

@@ -1,0 +1,16 @@
+{
+	"color_scheme": "Packages/Pylinter/MonokaiPylinter.tmTheme",
+	"draw_white_space": "all",
+	"font_size": 8,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"rulers":
+	[
+		100
+	],
+	"scroll_past_end": true,
+	"strip_whitespace_lines_on_save": false,
+	"translate_tabs_to_spaces": true
+}

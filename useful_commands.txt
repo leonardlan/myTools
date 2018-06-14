@@ -1,0 +1,211 @@
+Git
+    check git status of all projects
+        for d in ~/dev/*/ ; do (cd "$d" && pwd && git st); done
+    View origin
+        git remote show origin
+
+Copy directory across hosts
+    scp -r . llan@10.2.100.56:/home/llan/dev/folder_name
+
+Installing packages
+    yum
+        yum install PACKAGE
+        yum update PACKAGE
+        yum list available
+        install from file
+            sudo yum -y install $(install_my_stuff.txt)
+    pip
+        pip show
+        pip freeze
+        pip install --upgrade pip
+        pip uninstall PACKAGE_NAME
+    Unzip tar.gz
+        tar -zxvf
+
+Permissions
+    Give permission recursively
+        sudo chmod -Rvf 755
+    Check if user is sudo
+        sudo -l -U USER
+    Add user to sudoers
+        sudo usermod -aG wheel USER
+    Log in as root
+        sudo su -
+
+cd into all directories and run a command
+    for d in ./*/ ; do (echo $d && cd "$d" && somecommand); done
+
+File System size
+    View directory size recursively
+        du -ch PATH_TO_FOLDER
+
+Symbolic link
+    ln -s REAL LINK_NAME
+    unlink LINK_NAME
+    rm LINK_NAME
+
+Change file owner
+    chown USER:GROUP FILE
+
+Make multiple directories in one go
+    mkdir ~/projects/{bin,pkg,src}
+
+Ports and processes
+    Check listening ports and applications
+        sudo netstat -tulpn | grep LISTEN
+
+Images and Exr:
+    Get info about image
+        identify
+
+Regex
+    Line without word
+        ^((?!word).)*$
+
+Users
+    See which user is using a file
+        fuser -u FILE
+    List all local users
+        cat /etc/passwd
+    Add user
+        adduser username
+    Remove user
+        sudo su -
+        userdel USER
+    Remove user and user directory
+        sudo su -
+        userdel -r USER
+    Sign in as another user
+        su - USER
+    Add account for user
+        sudo chsh -s /bin/bash USER
+    Add existing user to existing group
+        sudo usermod -aG GROUP USER
+    Change user home directory
+        usermod -d /new/home user
+
+Groups
+    List all groups
+        cat /etc/group
+    Change group
+        chgrp GROUP FILENAME
+    Add a user to a group
+        sudo adduser username grouptoadd
+
+Web dev
+    Django
+        Takes migration names and returns their SQL
+            python manage.py sqlmigrate APP VERSION
+        Makemigrations
+            python manage.py makemigrations
+        Migrate
+            python manage.py migrate
+        Runserver
+            python manage.py runserver &
+            python manage.py runserver LOCAL_IP:PORT
+        Shell
+            python manage.py shell
+        Create super user
+            python manage.py createsuperuser
+        Run test
+            python manage.py test APP
+        python -m django --version
+        python manage.py check --deploy
+        python manage.py collectstatic
+
+        Generate requirements.txt
+            pipreqs /path/to/project
+        Install requirements in file
+            pip install -r requirements.txt
+
+Servers
+    Apache
+        apachectl restart
+        apachectl stop
+        apachectl start
+        check version
+            httpd -v
+        Enable the Apache service so that it starts automatically at boot
+            sudo systemctl enable httpd
+        sudo systemctl start httpd
+        sudo systemctl restart httpd
+        sudo systemctl stop httpd
+        sudo systemctl status httpd
+        Debug virtual host configuration
+            apachectl -S
+        View logs
+            journalctl -u service-name.service
+        Remove service
+            systemctl stop [servicename]
+            systemctl disable [servicename]
+            rm /etc/systemd/system/[servicename]
+            rm /etc/systemd/system/[servicename] symlinks that might be related
+            systemctl daemon-reload
+            systemctl reset-failed
+    Nginx
+        Access and error logs
+            /var/log/nginx/
+
+Virtual environment
+    Virtualenv
+        Create a Python virtual environment
+            virtualenv ENV_NAME
+        Activate
+            source /path/to/env/bin/activate
+        deactivate
+    virtualenvwrapper
+        mkvirtualenv ENV_NAME
+        workon ENV_NAME
+
+Password
+    Change password for user
+        sudo passwd USER
+    No password
+        sudo passwd -d USER
+
+Mouting and unmounting
+    View fstab file
+        cat /etc/fstab
+    Mac:
+        /etc/auto_home
+        /etc/auto_nfs
+    Mount drive settings
+        Refresh /etc/fstab file
+            sudo mount -a
+        Mac:
+            sudo automount -vc
+    Unmount
+        umount PATH_TO_DIR
+    View mount info
+        nfsstat -m
+
+View system info:
+    Mac:
+        system_profiler SPHardwareDataType
+
+Databases
+    sqlite
+        Backup
+            sqlite3 my_database.sq3 ".backup 'backup_file.sq3'"
+    postgresql
+        Dump
+            pg_dump -U postgres -s postgres
+
+SSH
+    Known hosts file
+        ~/.ssh/known_hosts
+    Launch gui from remote
+        ssh -X vfx56
+
+SELinux
+    Check status
+        sestatus
+    Disable SE Linux
+        setenforce 0
+
+List all images recursively
+    find . -name '*' -exec file {} \; | grep -o -P '^.+: \w+ image'
+
+Find out where a command is
+    which
+    whereis
