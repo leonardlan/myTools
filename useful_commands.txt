@@ -35,10 +35,6 @@ Permissions
 cd into all directories and run a command
     for d in ./*/ ; do (echo $d && cd "$d" && somecommand); done
 
-File System size
-    View directory size recursively
-        du -ch PATH_TO_FOLDER
-
 Symbolic link
     ln -s REAL LINK_NAME
     unlink LINK_NAME
@@ -61,6 +57,8 @@ Images and Exr:
 Regex
     Line without word
         ^((?!word).)*$
+    Matching square brackets! Ha! Genius!
+        \[([^]]+)\]
 
 Users
     See which user is using a file
@@ -154,6 +152,7 @@ Virtual environment
             source /path/to/env/bin/activate
         deactivate
     virtualenvwrapper
+        lsvirtualenv
         mkvirtualenv ENV_NAME
         workon ENV_NAME
 
@@ -163,7 +162,7 @@ Password
     No password
         sudo passwd -d USER
 
-Mouting and unmounting
+Mounting and unmounting
     View fstab file
         cat /etc/fstab
     Mac:
@@ -187,6 +186,10 @@ Databases
     sqlite
         Backup
             sqlite3 my_database.sq3 ".backup 'backup_file.sq3'"
+        Print the database structure
+            .schema
+        Print database structure and data
+            .dump
     postgresql
         Dump
             pg_dump -U postgres -s postgres
@@ -209,3 +212,9 @@ List all images recursively
 Find out where a command is
     which
     whereis
+
+Memory
+    View machine RAM
+        free -mh
+    View size of directories
+        du -shc *

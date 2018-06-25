@@ -12,5 +12,6 @@
 	],
 	"scroll_past_end": true,
 	"strip_whitespace_lines_on_save": false,
+	"theme": "Default.sublime-theme",
 	"translate_tabs_to_spaces": true
 }

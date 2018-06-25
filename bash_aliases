@@ -38,3 +38,6 @@ alias migrate='python manage.py migrate'
 alias makemigrations='python manage.py makemigrations'
 alias rs='python manage.py runserver &'
 alias createsuperuser='python manage.py createsuperuser'
+
+# Python
+which_python () { python -c "import $@ ; print $@.__file__ ; print $@.__version__"; }
