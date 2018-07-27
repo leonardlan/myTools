@@ -59,6 +59,8 @@ Regex
         ^((?!word).)*$
     Matching square brackets! Ha! Genius!
         \[([^]]+)\]
+    Positive lookbehind and lookahead
+        (?:^|(?<= ))(words|I|want|to|find)(?:(?= )|$)
 
 Users
     See which user is using a file
@@ -132,7 +134,7 @@ Servers
         Debug virtual host configuration
             apachectl -S
         View logs
-            journalctl -u service-name.service
+            journalctl -u service_name.service --since today
         Remove service
             systemctl stop [servicename]
             systemctl disable [servicename]

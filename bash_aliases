@@ -40,4 +40,15 @@ alias rs='python manage.py runserver &'
 alias createsuperuser='python manage.py createsuperuser'
 
 # Python
-which_python () { python -c "import $@ ; print $@.__file__ ; print $@.__version__"; }
+which_python () {
+python - <<EOF
+import $@
+for attribute in ["__file__", "__version__"]:
+    try:
+        print attribute, "=", getattr($@, attribute)
+    except AttributeError, e:
+        print e
+EOF
+}
+
+alias clean_pyc_files='find . -name "*.pyc" -delete'
