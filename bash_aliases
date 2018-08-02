@@ -25,10 +25,6 @@ alias subl='~/sublime_text_3/sublime_text'
 # View env var split by semicolon
 listenv () { sed "s/:/\n/g" <<< "$@"; }
 
-# Nuke
-dn () { _c="dev nuke $@ &" ; echo $_c ; eval $_c; }
-n () { _c="nuke $@ &" ; echo $_c ; eval $_c; }
-
 # Kill process
 alias pk='killall -9'
 alias pkp='pk python'
