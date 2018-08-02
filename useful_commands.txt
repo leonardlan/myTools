@@ -3,6 +3,16 @@ Git
         for d in ~/dev/*/ ; do (cd "$d" && pwd && git st); done
     View origin
         git remote show origin
+    Remove remote branch
+        git push origin --delete web-request2
+    Show which files have changed betwen two revisions
+        git diff --name-status master..branchName
+
+Shell
+    copy command output to clipboard with pipe:
+        xclip -sel clip
+    find number of files in current folder:
+        find . -type f | wc -l
 
 Copy directory across hosts
     scp -r . llan@10.2.100.56:/home/llan/dev/folder_name
@@ -118,6 +128,17 @@ Web dev
         Install requirements in file
             pip install -r requirements.txt
 
+MySQL server
+    Start server
+        sudo /etc/init.d/mysql start
+    Connect to server from shell
+        mysql -u <user name> -p <database name>
+        mysql -u root -p ftta_application
+    Source sql file from mysql shell
+        source <file name>;
+    configuration file
+        /etc/mysql/my.cnf
+
 Servers
     Apache
         apachectl restart
@@ -220,3 +241,9 @@ Memory
         free -mh
     View size of directories
         du -shc *
+
+Images
+    convert jpg to png
+        convert img.jpg img.png
+    convert multiple jpg to png
+        mogrify -formt png *.jpg
