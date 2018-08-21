@@ -7,6 +7,10 @@ Git
         git push origin --delete web-request2
     Show which files have changed betwen two revisions
         git diff --name-status master..branchName
+    Ammend last commit without changing message
+        git add <files>
+        git commit --amend --no-edit
+        git push -f origin some_branch
 
 Shell
     copy command output to clipboard with pipe:
@@ -31,6 +35,10 @@ Installing packages
         pip uninstall PACKAGE_NAME
     Unzip tar.gz
         tar -zxvf
+
+Backing up files
+    Add date and time in filename (file.txt.backup_2018-08-03_12:51:34)
+        mv file.txt file.txt.backup_$(date +%F_%T)
 
 Permissions
     Give permission recursively
@@ -75,6 +83,10 @@ Regex
         (?<= )
     Positive lookahead
         (?=\t)
+    Remove whitespace lines
+        ^[\t ]+$
+    Remove trailing
+        [\t\n ]{2,}\Z => \n
 
 Users
     See which user is using a file
