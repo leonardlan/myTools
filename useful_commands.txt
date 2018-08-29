@@ -83,8 +83,8 @@ Regex
         (?<= )
     Positive lookahead
         (?=\t)
-    Remove whitespace lines
-        ^[\t ]+$
+    Remove unnecessary whitespace
+        [\t ]+$
     Remove trailing
         [\t\n ]{2,}\Z => \n
 
@@ -263,3 +263,6 @@ Images
         convert img.jpg img.png
     convert multiple jpg to png
         mogrify -formt png *.jpg
+
+Maya hangs while starting up (No error)
+    Check if a config file is locked up at ~/.config/Autodesk/
