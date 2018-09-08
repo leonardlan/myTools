@@ -7,3 +7,22 @@ except ImportError:
 else:
     import rlcompleter
     readline.parse_and_bind("tab: complete")
+
+from pprint import pprint
+
+
+def debug(thing, ignore_private=False, ignore_attrs=[], call_funcs=True):
+    thing_name = getattr(thing, "__name__") if hasattr(thing, "__name__") else ""
+    for attr in dir(thing):
+        if (ignore_private and attr.startswith("_")) or attr in ignore_attrs:
+            continue
+        long_name = "%s.%s" % (thing_name, attr)
+        print "%s: " % long_name,
+        pprint(getattr(thing, attr))
+        if call_funcs and callable(eval("thing.%s" % attr)):
+            print "%s(): " % long_name,
+            try:
+                pprint(getattr(thing, attr)())
+            except:
+                pass
+    print "Type:", type(thing)
