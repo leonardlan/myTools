@@ -68,9 +68,16 @@ Ports and processes
     Check listening ports and applications
         sudo netstat -tulpn | grep LISTEN
 
-Images and Exr:
+Images:
     Get info about image
         identify
+    List all images recursively
+        find . -name '*' -exec file {} \; | grep -o -P '^.+: \w+ image'
+    Converting
+        convert jpg to png
+            convert img.jpg img.png
+        convert multiple jpg to png
+            mogrify -formt png *.jpg
 
 Regex
     Line without word
@@ -186,14 +193,17 @@ Servers
 Virtual environment
     Virtualenv
         Create a Python virtual environment
-            virtualenv ENV_NAME
+            virtualenv <vir_env_name>
         Activate
             source /path/to/env/bin/activate
         deactivate
     virtualenvwrapper
-        lsvirtualenv
-        mkvirtualenv ENV_NAME
-        workon ENV_NAME
+        lsvirtualenv -b
+        mkvirtualenv <vir_env_name>
+        workon <vir_env_name>
+        lssitepackages
+        deactivate
+        rmvirtualenv <vir_env_name>
 
 Password
     Change password for user
@@ -245,9 +255,6 @@ SELinux
     Disable SE Linux
         setenforce 0
 
-List all images recursively
-    find . -name '*' -exec file {} \; | grep -o -P '^.+: \w+ image'
-
 Find out where a command is
     which
     whereis
@@ -257,12 +264,6 @@ Memory
         free -mh
     View size of directories
         du -shc *
-
-Images
-    convert jpg to png
-        convert img.jpg img.png
-    convert multiple jpg to png
-        mogrify -formt png *.jpg
 
 Maya hangs while starting up (No error)
     Check if a config file is locked up at ~/.config/Autodesk/

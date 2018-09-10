@@ -32,13 +32,15 @@ function backup() {
     done
 }
 
+alias myTools='cd ~/myTools'
+
 # Git
 alias gg='git gui &'
 alias gsa='for d in $MY_DEV/*/ ; do (cd "$d" && pwd && git st); done'
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'
-alias sa='source ~/.bash_aliases; source ~/.bash_aliases_airbud'
+alias sa='source `ls ~/.bash_aliases*`'
 alias tree='tree -C'
 alias ns='notify-send "Done" "I am done!"'
 

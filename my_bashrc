@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source `ls ~/.bash_aliases*`
+
+export PYTHONSTARTUP=~/.pythonrc
+
+# source Virtualenvwrapper
+if [ -f /usr/bin/virtualenvwrapper.sh ]; then
+    source /usr/bin/virtualenvwrapper.sh
+fi
