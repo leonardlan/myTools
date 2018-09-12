@@ -9,20 +9,44 @@ else:
     readline.parse_and_bind("tab: complete")
 
 from pprint import pprint
+import colorama
 
 
-def debug(thing, ignore_private=False, ignore_attrs=[], call_funcs=True):
+def debug(thing, ignore_private=False, ignore_attrs=[], call=False):
+    """Prints type and attributes of object thing.
+
+    :param thing object: An object to debug.
+    :param ignore_private bool: Ignores attributes starting with underscore.
+    :param ignore_attrs list: List of attributes to ignore.
+    :param call bool: Calls attributes that are functions and thing itself if it is callable.
+    """
     thing_name = getattr(thing, "__name__") if hasattr(thing, "__name__") else ""
     for attr in dir(thing):
         if (ignore_private and attr.startswith("_")) or attr in ignore_attrs:
             continue
         long_name = "%s.%s" % (thing_name, attr)
-        print "%s: " % long_name,
-        pprint(getattr(thing, attr))
-        if call_funcs and callable(eval("thing.%s" % attr)):
-            print "%s(): " % long_name,
-            try:
-                pprint(getattr(thing, attr)())
-            except:
-                pass
-    print "Type:", type(thing)
+        print colorama.Style.BRIGHT + colorama.Fore.BLUE + "%s: " % long_name + colorama.Fore.GREEN,
+        res = getattr(thing, attr)
+        _print(res)
+        func = eval("thing.%s" % attr)
+        if call and callable(func):
+            _call(func)
+    if call and callable(thing):
+        _call(thing)
+    print colorama.Fore.BLUE + "type:" + colorama.Fore.GREEN, type(thing), colorama.Style.RESET_ALL
+
+
+def _call(func):
+    print colorama.Fore.BLUE + "%s(): " % func.__name__ + colorama.Fore.GREEN,
+    try:
+        res = func()
+        _print(res)
+    except Exception, e:
+        print colorama.Fore.RED, e
+
+
+def _print(to_print):
+    if isinstance(to_print, basestring):
+        print to_print
+    else:
+        pprint(to_print)

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source `ls ~/.bash_aliases*`
+for f in ~/.bash_aliases*; do source $f; done
 
 export PYTHONSTARTUP=~/.pythonrc
 

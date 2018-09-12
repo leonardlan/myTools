@@ -17,6 +17,8 @@ Shell
         xclip -sel clip
     find number of files in current folder:
         find . -type f | wc -l
+    View long list for a single directory
+        l -d dir
 
 Copy directory across hosts
     scp -r . llan@10.2.100.56:/home/llan/dev/folder_name
