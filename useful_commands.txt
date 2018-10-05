@@ -11,6 +11,8 @@ Git
         git add <files>
         git commit --amend --no-edit
         git push -f origin some_branch
+    Ammend last commit message
+        git commit --amend
 
 Shell
     copy command output to clipboard with pipe:
@@ -19,6 +21,11 @@ Shell
         find . -type f | wc -l
     View long list for a single directory
         l -d dir
+
+Files
+    Query number of files open limited by operating system
+        ulimit -n
+        ulimit -n 2048
 
 Copy directory across hosts
     scp -r . llan@10.2.100.56:/home/llan/dev/folder_name
@@ -129,6 +136,8 @@ Groups
 
 Web dev
     Django
+        Create app
+            python manage.py startapp polls
         Takes migration names and returns their SQL
             python manage.py sqlmigrate APP VERSION
         Makemigrations
@@ -260,6 +269,9 @@ SELinux
 Find out where a command is
     which
     whereis
+View function
+    type function
+    typeset -f <function>
 
 Memory
     View machine RAM
@@ -269,3 +281,25 @@ Memory
 
 Maya hangs while starting up (No error)
     Check if a config file is locked up at ~/.config/Autodesk/
+
+Nosetests
+    Show print messages
+        nosetests --nocapture
+    Test specific function
+        nosetests tests/test_backrefs.py:TestBackrefs.test_backref
+
+htop shortcuts
+    +--------------+--------------+--------------------------+
+    | Shortcut Key | Function Key |       Description        |
+    +--------------+--------------+--------------------------+
+    | h            | F1           | Invoke htop Help         |
+    | S            | F2           | Htop Setup Menu          |
+    | /            | F3           | Search for a Process     |
+    | I            | F4           | Invert Sort Order        |
+    | t            | F5           | Tree View                |
+    | >            | F6           | Sort by a column         |
+    | [            | F7           | Nice – (change priority) |
+    | ]            | F8           | Nice + (change priority) |
+    | k            | F9           | Kill a Process           |
+    | q            | F10          | Quit htop                |
+    +--------------+--------------+--------------------------+

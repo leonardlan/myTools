@@ -14,6 +14,7 @@ f () { find . -name "*$@*" | grep --color $@; }
 g () { grep -nr --color "$@"; }
 
 complete -a alias
+complete -a unalias
 
 # Change to workspace
 ws() { cd $MY_DEV/$1; }
@@ -26,7 +27,7 @@ complete -F _ls_dev_dirs ws
 function backup() {
     for var in "$@"
     do
-        cmd="mv $var $var.backup_$(date +%F_%T)"
+        cmd="cp -r $var $var.backup_$(date +%F_%T)"
         echo $cmd
         $cmd
     done
@@ -36,13 +37,14 @@ alias myTools='cd ~/myTools'
 
 # Git
 alias gg='git gui &'
+alias gs='git st'
 alias gsa='for d in $MY_DEV/*/ ; do (cd "$d" && pwd && git st); done'
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'
 alias sa='for f in ~/.bash_aliases*; do source $f; done'
 alias tree='tree -C'
-alias ns='notify-send "Done" "I am done!"'
+ns() { notify-send "Done" "I am done! $@"; }
 
 alias subl='~/sublime_text_3/sublime_text'
 
@@ -63,7 +65,7 @@ alias createsuperuser='python manage.py createsuperuser'
 which_python () {
 python - <<EOF
 import $@
-for attribute in ["__file__", "__version__"]:
+for attribute in ["__path__", "__version__"]:
     try:
         print attribute, "=", getattr($@, attribute)
     except AttributeError, e:

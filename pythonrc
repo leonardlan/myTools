@@ -3,13 +3,24 @@
 try:
     import readline
 except ImportError:
-    print("Module readline not available.")
+    print "Module readline not available."
 else:
     import rlcompleter
     readline.parse_and_bind("tab: complete")
 
 from pprint import pprint
-import colorama
+try:
+    import colorama
+except ImportError:
+    print "Module colorama not available."
+    colorama = None
+finally:
+    BLUE = colorama.Fore.BLUE if colorama else ""
+    BRIGHT = colorama.Style.BRIGHT if colorama else ""
+    CYAN = colorama.Fore.CYAN if colorama else ""
+    GREEN = colorama.Fore.GREEN if colorama else ""
+    RED = colorama.Fore.RED if colorama else ""
+    RESET_ALL = colorama.Style.RESET_ALL if colorama else ""
 
 
 def debug(thing, ignore_private=False, ignore_attrs=[], call=False):
@@ -21,28 +32,40 @@ def debug(thing, ignore_private=False, ignore_attrs=[], call=False):
     :param call bool: Calls attributes that are functions and thing itself if it is callable.
     """
     thing_name = getattr(thing, "__name__") if hasattr(thing, "__name__") else ""
+    print BRIGHT
+    call_count = private_count = total = 0
     for attr in dir(thing):
-        if (ignore_private and attr.startswith("_")) or attr in ignore_attrs:
+        if attr in ignore_attrs:
             continue
+        if attr.startswith("_"):
+            private_count += 1
+            if ignore_private:
+                continue
+        total += 1
         long_name = "%s.%s" % (thing_name, attr)
-        print colorama.Style.BRIGHT + colorama.Fore.BLUE + "%s: " % long_name + colorama.Fore.GREEN,
+        print BLUE + "%s:" % long_name,
+        print GREEN,
         res = getattr(thing, attr)
         _print(res)
         func = eval("thing.%s" % attr)
-        if call and callable(func):
-            _call(func)
+        if callable(func):
+            call_count += 1
+            if call:
+                _call(func)
     if call and callable(thing):
         _call(thing)
-    print colorama.Fore.BLUE + "type:" + colorama.Fore.GREEN, type(thing), colorama.Style.RESET_ALL
+    print "%sCallable: %i, Uncallable: %i" % (CYAN, call_count, total - call_count)
+    print "Private: %i, Public: %i" % (private_count, total - private_count)
+    print BLUE + "type:" + GREEN, type(thing), RESET_ALL
 
 
 def _call(func):
-    print colorama.Fore.BLUE + "%s(): " % func.__name__ + colorama.Fore.GREEN,
+    print BLUE + "%s(): " % func.__name__ + GREEN,
     try:
         res = func()
         _print(res)
     except Exception, e:
-        print colorama.Fore.RED, e
+        print RED, e
 
 
 def _print(to_print):
