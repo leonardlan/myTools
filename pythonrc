@@ -42,25 +42,30 @@ def debug(thing, ignore_private=False, ignore_attrs=[], call=False):
             if ignore_private:
                 continue
         total += 1
+        try:
+            res = getattr(thing, attr)
+        except Exception, e:
+            print RED, e
+            continue
         long_name = "%s.%s" % (thing_name, attr)
-        print BLUE + "%s:" % long_name,
-        print GREEN,
-        res = getattr(thing, attr)
-        _print(res)
-        func = eval("thing.%s" % attr)
-        if callable(func):
+        print BLUE + "%s%s:" % (long_name, "()" if callable(res) else "") + GREEN,
+        if callable(res):
             call_count += 1
             if call:
-                _call(func)
+                _call(res)
+            else:
+                print getattr(res, "__doc__")
+        else:
+            _print(res)
     if call and callable(thing):
         _call(thing)
     print "%sCallable: %i, Uncallable: %i" % (CYAN, call_count, total - call_count)
     print "Private: %i, Public: %i" % (private_count, total - private_count)
+    print "Total: %i" % total
     print BLUE + "type:" + GREEN, type(thing), RESET_ALL
 
 
 def _call(func):
-    print BLUE + "%s(): " % func.__name__ + GREEN,
     try:
         res = func()
         _print(res)
