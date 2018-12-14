@@ -12,9 +12,20 @@ alias uuuu='cd ../../../..'
 alias uuuuu='cd ../../../../..'
 f () { find . -name "*$@*" | grep --color $@; }
 g () { grep -nr --color "$@"; }
+hs () { h | grep --color "$@"; }
+
+es () { env | grep --color "$@"; }
+complete -v es
+
+psa () { ps aux | grep --color "$@"; }
 
 complete -a alias
 complete -a unalias
+
+numfiles () {
+    N="$(ls $1 | wc -l)";
+    echo "$N files in $1";
+}
 
 # Change to workspace
 ws() { cd $MY_DEV/$1; }
@@ -44,12 +55,19 @@ alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'
 alias sa='for f in ~/.bash_aliases*; do source $f; done'
 alias tree='tree -C'
-ns() { notify-send "Done" "I am done! $@"; }
+ns () {
+    notify-send -i face-smile-big "Done! $@";
+    play /home/llan/myTools/sounds/quite-impressed.ogg &> /dev/null;
+}
 
 alias subl='~/sublime_text_3/sublime_text'
 
 # View env var split by semicolon
-listenv () { sed "s/:/\n/g" <<< "$@"; }
+listenv () {
+    var_name=$1
+    sed "s/:/\n/g" <<< "${!var_name}"
+}
+complete -v listenv
 
 # Kill process
 alias pk='killall -9'
@@ -60,12 +78,14 @@ alias migrate='python manage.py migrate'
 alias makemigrations='python manage.py makemigrations'
 alias rs='python manage.py runserver &'
 alias createsuperuser='python manage.py createsuperuser'
+alias collectstatic='python manage.py collectstatic'
+alias djshell='python manage.py shell'
 
 # Python
 which_python () {
 python - <<EOF
 import $@
-for attribute in ["__path__", "__version__"]:
+for attribute in ["__file__", "__path__", "__version__"]:
     try:
         print attribute, "=", getattr($@, attribute)
     except AttributeError, e:

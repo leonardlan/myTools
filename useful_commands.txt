@@ -34,6 +34,7 @@ Installing packages
     yum
         yum install PACKAGE
         yum update PACKAGE
+        yum info PACKAGE
         yum list available
         install from file
             sudo yum -y install $(install_my_stuff.txt)
@@ -76,6 +77,12 @@ Make multiple directories in one go
 Ports and processes
     Check listening ports and applications
         sudo netstat -tulpn | grep LISTEN
+
+Cron jobs
+    crontab -e    Edit crontab file, or create one if it doesn’t already exist.
+    crontab -l    crontab list of cronjobs , display crontab file contents.
+    crontab -r    Remove your crontab file.
+    crontab -v    Display the last time you edited your crontab file. (This option is only available on a few systems.)
 
 Images:
     Get info about image
@@ -121,18 +128,15 @@ Users
         su - USER
     Add account for user
         sudo chsh -s /bin/bash USER
-    Add existing user to existing group
-        sudo usermod -aG GROUP USER
     Change user home directory
         usermod -d /new/home user
-
-Groups
-    List all groups
-        cat /etc/group
-    Change group
-        chgrp GROUP FILENAME
-    Add a user to a group
-        sudo adduser username grouptoadd
+    Groups
+        List all groups
+            cat /etc/group
+        Change group
+            chgrp GROUP FILENAME
+        Add existing user to existing group
+            sudo usermod -aG GROUP USER
 
 Web dev
     Django
@@ -144,11 +148,14 @@ Web dev
             python manage.py makemigrations
         Migrate
             python manage.py migrate
+            python manage.py migrate --run-syncdb
         Runserver
             python manage.py runserver &
             python manage.py runserver LOCAL_IP:PORT
         Shell
             python manage.py shell
+        Run a script
+            python manage.py shell < myscript.py
         Create super user
             python manage.py createsuperuser
         Run test
