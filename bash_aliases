@@ -1,4 +1,14 @@
-export MY_DEV=~/dev
+if [ -d ~/dev/workspace ]; then
+    MY_WS=~/dev/workspace
+else
+    MY_WS=~/dev
+fi
+
+if [ -d ~/dev/sandbox ]; then
+    MY_SB=~/dev/sandbox
+else
+    MY_SB=~/dev
+fi
 
 alias ls='ls --color=auto'
 alias l='ls -lh'
@@ -28,12 +38,20 @@ numfiles () {
 }
 
 # Change to workspace
-ws() { cd $MY_DEV/$1; }
-_ls_dev_dirs () {
+ws () { cd $MY_WS/$1; }
+_ls_ws_dirs () {
     local cur="${COMP_WORDS[COMP_CWORD]}"
-    COMPREPLY=( $(compgen -W "`ls -D $MY_DEV`" -- ${cur}) )
+    COMPREPLY=( $(compgen -W "`ls -D $MY_WS`" -- ${cur}) )
 }
-complete -F _ls_dev_dirs ws
+complete -F _ls_ws_dirs ws
+
+# Change to sandbox
+sb () { cd $MY_SB/$1; }
+_ls_sb_dirs () {
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=( $(compgen -W "`ls -D $MY_SB`" -- ${cur}) )
+}
+complete -F _ls_sb_dirs sb
 
 function backup() {
     for var in "$@"
@@ -49,7 +67,7 @@ alias myTools='cd ~/myTools'
 # Git
 alias gg='git gui &'
 alias gs='git st'
-alias gsa='for d in $MY_DEV/*/ ; do (cd "$d" && pwd && git st); done'
+alias gsa='for d in $MY_WS/*/ ; do (cd "$d" && pwd && git st); done'
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'
