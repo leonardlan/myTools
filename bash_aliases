@@ -6,8 +6,8 @@ fi
 
 if [ -d ~/dev/sandbox ]; then
     MY_SB=~/dev/sandbox
-else
-    MY_SB=~/dev
+elif [ -d ~/sandbox ]; then
+    MY_SB=~/sandbox
 fi
 
 alias ls='ls --color=auto'
@@ -41,7 +41,7 @@ numfiles () {
 ws () { cd $MY_WS/$1; }
 _ls_ws_dirs () {
     local cur="${COMP_WORDS[COMP_CWORD]}"
-    COMPREPLY=( $(compgen -W "`ls -D $MY_WS`" -- ${cur}) )
+    COMPREPLY=( $(compgen -W "`ls -F $MY_WS | grep /`" -- ${cur}) )
 }
 complete -F _ls_ws_dirs ws
 
@@ -49,7 +49,7 @@ complete -F _ls_ws_dirs ws
 sb () { cd $MY_SB/$1; }
 _ls_sb_dirs () {
     local cur="${COMP_WORDS[COMP_CWORD]}"
-    COMPREPLY=( $(compgen -W "`ls -D $MY_SB`" -- ${cur}) )
+    COMPREPLY=( $(compgen -W "`ls -F $MY_SB | grep /`" -- ${cur}) )
 }
 complete -F _ls_sb_dirs sb
 
