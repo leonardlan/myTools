@@ -68,6 +68,7 @@ alias myTools='cd ~/myTools'
 alias gg='git gui &'
 alias gs='git st'
 alias gsa='for d in $MY_WS/*/ ; do (cd "$d" && pwd && git st); done'
+alias gd='git diff'
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'
@@ -75,7 +76,7 @@ alias sa='for f in ~/.bash_aliases*; do source $f; done'
 alias tree='tree -C'
 ns () {
     notify-send -i face-smile-big "Done! $@";
-    play /home/llan/myTools/sounds/quite-impressed.ogg &> /dev/null;
+    play ~/myTools/sounds/quite-impressed.ogg &> /dev/null;
 }
 
 alias subl='~/sublime_text_3/sublime_text'
