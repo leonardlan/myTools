@@ -21,14 +21,25 @@ Shell
         find . -type f | wc -l
     View long list for a single directory
         l -d dir
+    List by last modified
+        l -tr
 
 Files
     Query number of files open limited by operating system
         ulimit -n
         ulimit -n 2048
 
-Copy directory across hosts
-    scp -r . llan@10.2.100.56:/home/llan/dev/folder_name
+Syncing files and folders
+    Copy directory across hosts
+        scp -r . llan@10.2.100.56:/home/llan/dev/folder_name
+    Copy one single local file to a remote destination
+        scp /path/to/source-file user@host:/path/to/destination-folder/
+    Copy one single file from a remote server to your current local server
+        scp user@host:/path/to/source-file /path/to/destination-folder
+    Copy one single file from a remote server to another remote server
+        scp user1@server1:/path/to/file user2@server2:/path/to/folder/
+    Copy multiple files with one command
+        scp file1.txt file2.txt file3.txt pete@host.example.com:/home/pete/
 
 Installing packages
     yum
@@ -39,10 +50,14 @@ Installing packages
         install from file
             sudo yum -y install $(install_my_stuff.txt)
     pip
-        pip show
-        pip freeze
-        pip install --upgrade pip
-        pip uninstall PACKAGE_NAME
+        Show info about package
+            pip show PACKAGE_NAME
+        Show all package versions
+            pip freeze
+        Upgrade pip
+            pip install --upgrade pip
+        Uninstall package
+            pip uninstall PACKAGE_NAME
     Unzip tar.gz
         tar -zxvf
 
@@ -152,6 +167,7 @@ Web dev
         Runserver
             python manage.py runserver &
             python manage.py runserver LOCAL_IP:PORT
+            python manage.py runserver 0.0.0.0:8080
         Shell
             python manage.py shell
         Run a script
@@ -168,6 +184,7 @@ Web dev
             pipreqs /path/to/project
         Install requirements in file
             pip install -r requirements.txt
+        If server code is not updating with apache when you edit .py files, try touch wsgi.py, which will tell it to recompile .py files
 
 MySQL server
     Start server
@@ -182,6 +199,7 @@ MySQL server
 
 Servers
     Apache
+        apachectl status
         apachectl restart
         apachectl stop
         apachectl start
@@ -310,3 +328,23 @@ htop shortcuts
     | k            | F9           | Kill a Process           |
     | q            | F10          | Quit htop                |
     +--------------+--------------+--------------------------+
+
+Renderman
+    License
+        app
+            /opt/pixar/RenderManProServer-22.3/bin/LicenseApp
+        website
+            http://vfx-services.westernx.private:9010
+
+Imagemagick
+    Convert exr to png while maintaining format
+        convert input.exr -colorspace RGB -colorspace sRGB output.png
+
+Setuptools
+    Install
+        python setup.py install
+    Remove
+        Record a list of installed files
+            python setup.py install --record files.txt
+        Remove isntalled files
+            cat files.txt | xargs rm -rf

@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 if [ -d ~/dev/workspace ]; then
     MY_WS=~/dev/workspace
 else
@@ -46,7 +47,21 @@ _ls_ws_dirs () {
 complete -F _ls_ws_dirs ws
 
 # Change to sandbox
-sb () { cd $MY_SB/$1; }
+sb () {
+    # Ask to create directory if not exist
+    if [ ! -d $MY_SB/$1 ]
+    then
+        read -p "Directory $1 does not exist. Create one? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]
+        then
+            mkdir $MY_SB/$1
+        else
+            return
+        fi
+    fi
+    cd $MY_SB/$1;
+}
 _ls_sb_dirs () {
     local cur="${COMP_WORDS[COMP_CWORD]}"
     COMPREPLY=( $(compgen -W "`ls -F $MY_SB | grep /`" -- ${cur}) )
@@ -78,6 +93,7 @@ ns () {
     notify-send -i face-smile-big "Done! $@";
     play ~/myTools/sounds/quite-impressed.ogg &> /dev/null;
 }
+alias ns='ns &'
 
 alias subl='~/sublime_text_3/sublime_text'
 
