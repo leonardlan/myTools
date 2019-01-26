@@ -90,10 +90,9 @@ alias ea='vim ~/.bash_aliases'
 alias sa='for f in ~/.bash_aliases*; do source $f; done'
 alias tree='tree -C'
 ns () {
-    notify-send -i face-smile-big "Done! $@";
-    play ~/myTools/sounds/quite-impressed.ogg &> /dev/null;
+    notify-send -i face-smile-big "Done!" "$@";
+    play -q ~/myTools/sounds/quite-impressed.ogg &
 }
-alias ns='ns &'
 
 alias subl='~/sublime_text_3/sublime_text'
 
