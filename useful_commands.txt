@@ -7,11 +7,11 @@ Git
         git push origin --delete web-request2
     Show which files have changed betwen two revisions
         git diff --name-status master..branchName
-    Ammend last commit without changing message
+    Amend last commit without changing message
         git add <files>
         git commit --amend --no-edit
         git push -f origin some_branch
-    Ammend last commit message
+    Amend last commit message
         git commit --amend
 
 Shell
@@ -28,6 +28,12 @@ Files
     Query number of files open limited by operating system
         ulimit -n
         ulimit -n 2048
+    Rename (Red Hat; CentOS)
+        rename from to file
+        Fix the extension of HTML files so that all .htm files have a four-letter .html suffix:
+            rename .htm .html *.htm
+        Remove string (remove_me)
+            rename remove_me '' *
 
 Syncing files and folders
     Copy directory across hosts
@@ -109,6 +115,8 @@ Images:
             convert img.jpg img.png
         convert multiple jpg to png
             mogrify -formt png *.jpg
+    Convert exr to png while maintaining format
+        convert input.exr -colorspace RGB -colorspace sRGB output.png
 
 Regex
     Line without word
@@ -336,15 +344,11 @@ Renderman
         website
             http://vfx-services.westernx.private:9010
 
-Imagemagick
-    Convert exr to png while maintaining format
-        convert input.exr -colorspace RGB -colorspace sRGB output.png
-
 Setuptools
     Install
         python setup.py install
     Remove
         Record a list of installed files
             python setup.py install --record files.txt
-        Remove isntalled files
+        Remove installed files
             cat files.txt | xargs rm -rf

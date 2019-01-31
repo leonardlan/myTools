@@ -18,4 +18,4 @@ case "$hour" in
 esac
 
 notify-send -i face-laugh 'Hey!' "$msg"
-play `dirname $0/`/sounds/quite-impressed.ogg
+play `dirname $0/`/sounds/definite.ogg
