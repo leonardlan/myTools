@@ -174,16 +174,18 @@ Web dev
             python manage.py migrate --run-syncdb
         Runserver
             python manage.py runserver &
-            python manage.py runserver LOCAL_IP:PORT
-            python manage.py runserver 0.0.0.0:8080
+            python manage.py runserver 0.0.0.0:8080 &
         Shell
             python manage.py shell
         Run a script
             python manage.py shell < myscript.py
         Create super user
             python manage.py createsuperuser
+            python manage.py createsuperuser --email=admin@gmail.com
         Run test
             python manage.py test APP
+        Delete all migration files:
+            find . -iname '*migrations' | xargs rm -rf
         python -m django --version
         python manage.py check --deploy
         python manage.py collectstatic
@@ -352,3 +354,22 @@ Setuptools
             python setup.py install --record files.txt
         Remove installed files
             cat files.txt | xargs rm -rf
+
+Postgres Database:
+    Open db in command line:
+        sudo -u postgres psql -U postgres -d djattendance
+    pg_dump out your file:
+        sudo -u postgres psql djattendance > livebadgef15.backup
+    repopulate empty db with export file
+        sudo -u postgres psql djattendance < livebadgef15.backup
+    Alternative way to pg_dump/restore
+        pg_dump djattendance > db.sql
+        pg_restore -d newdb db.sql
+    restart server:
+        sudo /etc/init.d/postgresql restart
+    drop database:
+        sudo -u postgres psql postgres -c "DROP DATABASE djattendance"
+    create database:
+        sudo -u postgres psql postgres -c "CREATE DATABASE djattendance"
+    add hstore extension:
+        sudo -u postgres psql postgres -d djattendance -c "CREATE EXTENSION IF NOT EXISTS hstore;"
