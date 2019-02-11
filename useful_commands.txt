@@ -13,6 +13,10 @@ Git
         git push -f origin some_branch
     Amend last commit message
         git commit --amend
+    View the content of the most recent stash
+        git stash show -p
+    View the content of an arbitrary stash
+        git stash show -p stash@{1}
 
 Shell
     copy command output to clipboard with pipe:
@@ -28,12 +32,14 @@ Files
     Query number of files open limited by operating system
         ulimit -n
         ulimit -n 2048
-    Rename (Red Hat; CentOS)
+    Rename multiple files (Red Hat; CentOS)
         rename from to file
         Fix the extension of HTML files so that all .htm files have a four-letter .html suffix:
             rename .htm .html *.htm
         Remove string (remove_me)
             rename remove_me '' *
+    List files recursively modified in last 24 hours
+        find . -mtime -1 -print
 
 Syncing files and folders
     Copy directory across hosts
