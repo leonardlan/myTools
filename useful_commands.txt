@@ -21,14 +21,19 @@ Git
 Shell
     copy command output to clipboard with pipe:
         xclip -sel clip
+    Get last system reboot
+        uptime -s
+        last reboot
+    Get reboot history
+        last reboot | head -10
+
+Files
     find number of files in current folder:
         find . -type f | wc -l
     View long list for a single directory
         l -d dir
     List by last modified
         l -tr
-
-Files
     Query number of files open limited by operating system
         ulimit -n
         ulimit -n 2048
