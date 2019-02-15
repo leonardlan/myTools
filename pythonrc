@@ -27,7 +27,7 @@ finally:
     RESET_ALL = colorama.Style.RESET_ALL if colorama else ""
 
 
-def debug(thing, ignore_private=False, ignore_attrs=[], call=False):
+def debug(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False):
     """Prints type and attributes of object thing.
 
     :param thing object: An object to debug.
@@ -52,14 +52,18 @@ def debug(thing, ignore_private=False, ignore_attrs=[], call=False):
             print RED, e
             continue
         long_name = "%s.%s" % (thing_name, attr)
-        print BLUE + "%s%s:" % (long_name, "()" if callable(res) else "") + GREEN,
-        if callable(res):
+        is_callable = callable(res)
+        if is_callable and skip_callable:
+            continue
+        elif is_callable:
+            print BLUE + "%s(): " % long_name + GREEN,
             call_count += 1
             if call:
                 _call(res)
             else:
                 print getattr(res, "__doc__")
         else:
+            print BLUE + "%s: " % long_name + GREEN,
             _print(res)
     if call and callable(thing):
         _call(thing)
