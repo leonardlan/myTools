@@ -1,3 +1,4 @@
+
 # Debug checklist
 
 ## Render failing on farm
@@ -32,8 +33,15 @@ Are we out of license?
 
 ## Command works on my machine but not others' machine
 Try:
-- Diff output. Run `ssh MACHINE_NAME COMMAND | sort > /tmp/other_machine_env.txt; COMMAND | sort > /tmp/my_machine_env.txt; meld /tmp/other_machine_env.txt /tmp/my_machine_env.txt &`
-- Diff env var. Run `ssh MACHINE_NAME env | sort > /tmp/other_machine_env.txt; env | sort > /tmp/my_machine_env.txt; meld /tmp/other_machine_env.txt /tmp/my_machine_env.txt &`
+- Diff output. Run:
+    ```
+    export MACHINE_NAME=''
+    export COMMAND=''
+    ssh $MACHINE_NAME $COMMAND | sort > /tmp/other_machine_cmd_output.txt
+    eval $COMMAND | sort > /tmp/my_machine_cmd_output.txt
+    meld /tmp/other_machine_cmd_output.txt /tmp/my_machine_cmd_output.txt &
+    ```
+- Diff env var. Run the above with `export COMMAND='env'`
 
 Possible:
 - Different system environment
