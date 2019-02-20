@@ -70,4 +70,9 @@ Try:
 
 ## All Things Trivial
 - Is renderman globals node deleted?
-- Check if SELinux is enabled. `sestatus`. Try disabling it?
+- Check if SELinux is enabled. `sestatus`. Try disabling it: `setenforce 0`
+- Try disabling firewall on remote server
+- Non-breaking space: " "
+    A space character that prevents an automatic line break at its position. In Unicode it is encoded as U+00a0.
+    It looks like a space but it's not.
+    (╯°□°）╯︵ ┻━┻
