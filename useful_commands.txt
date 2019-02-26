@@ -26,6 +26,13 @@ Shell
         last reboot
     Get reboot history
         last reboot | head -10
+    List available commands
+        compgen -c # list all commands
+        compgen -a # list all aliases
+        compgen -b # list all built-ins
+        compgen -k # list all keywords
+        compgen -A function # list all functions
+        compgen -A function -abck # will list all the above in one go.
 
 Files
     find number of files in current folder:
@@ -206,6 +213,9 @@ Web dev
         Install requirements in file
             pip install -r requirements.txt
         If server code is not updating with apache when you edit .py files, try touch wsgi.py, which will tell it to recompile .py files
+    Python
+        Start service
+            python -m SimpleHTTPServer
 
 MySQL server
     Start server

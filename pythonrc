@@ -90,4 +90,4 @@ def _print(to_print):
 
 def ns(msg=""):
     """ Sends a desktop notification using alias ns """
-    subprocess.call(["/bin/bash", "-i", "-c", "ns", msg])
+    subprocess.call(["/bin/bash", "-i", "-c", "ns %s" % msg])

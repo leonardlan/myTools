@@ -25,6 +25,9 @@ f () { find . -name "*$@*" | grep --color $@; }
 g () { grep -nr --color "$@"; }
 hs () { h | grep --color "$@"; }
 
+# Command search
+cs () { compgen -c | sort | grep --color "$@"; }
+
 es () { env | grep --color "$@"; }
 complete -v es
 
