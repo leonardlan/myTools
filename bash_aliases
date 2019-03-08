@@ -129,5 +129,6 @@ for attribute in ["__file__", "__path__", "__version__"]:
         print e
 EOF
 }
+alias start_python_service='python -m SimpleHTTPServer &'
 
 alias clean_pyc_files='find . -name "*.pyc" -delete'

@@ -76,3 +76,6 @@ Try:
     A space character that prevents an automatic line break at its position. In Unicode it is encoded as U+00a0.
     It looks like a space but it's not.
     (╯°□°）╯︵ ┻━┻
+
+## General debug
+- Try closing and opening the software

@@ -178,6 +178,8 @@ Users
             chgrp GROUP FILENAME
         Add existing user to existing group
             sudo usermod -aG GROUP USER
+    print real and effective user and group IDs
+        id [USER]
 
 Web dev
     Django

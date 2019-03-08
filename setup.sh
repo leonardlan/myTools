@@ -18,3 +18,6 @@ crontab -l > /tmp/mycron
 add_line_to_file "0 9-18 * * 1-5 /home/llan/myTools/notify-time.sh > /dev/null 2>&1 # Notify me every so often" /tmp/mycron
 crontab /tmp/mycron
 rm /tmp/mycron
+
+# Install python packages
+pip install -r requirements.txt
