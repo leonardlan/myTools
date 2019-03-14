@@ -315,8 +315,8 @@ Databases
 SSH
     Known hosts file
         ~/.ssh/known_hosts
-    Launch gui from remote
-        ssh -X vfx56
+    Launch gui from remote (Enables X11 forwarding)
+        ssh -X machine_name
 
 SELinux
     Check status
@@ -366,8 +366,6 @@ Renderman
     License
         app
             /opt/pixar/RenderManProServer-22.3/bin/LicenseApp
-        website
-            http://vfx-services.westernx.private:9010
 
 Setuptools
     Install

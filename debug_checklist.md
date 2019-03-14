@@ -12,7 +12,7 @@ Try:
 7. Run on higher CPU machine
 
 Possible:
-- File system not set up correctly. See `df -h`
+- File system not set up or mounted correctly. See `df -h`
 - Permission denied. Run `777 PATH_TO_FILE_OR_FOLDER`
 - Cannot connect to a server
 - Machine ran out of memory
@@ -79,3 +79,7 @@ Try:
 
 ## General debug
 - Try closing and opening the software
+
+## Service not found or failing
+1. Try pinging the service `ping MACHINE_NAME`
+2. File system not set up or mounted correctly. See `df -h`
