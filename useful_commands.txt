@@ -90,6 +90,9 @@ Backing up files
         mv file.txt file.txt.backup_$(date +%F_%T)
 
 Permissions
+    View mask
+        umask
+        umask -S
     Give permission recursively
         sudo chmod -Rvf 755
     Check if user is sudo

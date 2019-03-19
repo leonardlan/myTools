@@ -1,5 +1,5 @@
-tree
-pylint
+git-gui
 meld
+pylint
+tree
 xclip
-libreoffice

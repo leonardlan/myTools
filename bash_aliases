@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
-if [ -d ~/dev/workspace ]; then
-    MY_WS=~/dev/workspace
-else
-    MY_WS=~/dev
-fi
+
+# Set MY_WS variable
+MY_WSS=$MY_WSS:~/dev/workspace:~/dev
+for path in ${MY_WSS//:/ }; do
+    if [ -d "$path" ]; then
+        MY_WS=$path
+        break
+    fi
+done
 
 if [ -d ~/dev/sandbox ]; then
     MY_SB=~/dev/sandbox
