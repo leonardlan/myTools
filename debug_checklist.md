@@ -23,6 +23,9 @@ Possible:
 - Try rebooting the machine: `ssh root@machine reboot`
 - Omit the machine in render job
 
+## Some render frames fail while others don't
+1. Check output permissions are same. If not, check mask (umask) of machines that rendered the failed frames.
+
 ## No available license
 1. Look up license usage
 Maybe there were too many renders going on at the same time maxing out licenses. Try limiting/reserving current renders available for renderer

@@ -17,6 +17,8 @@ Git
         git stash show -p
     View the content of an arbitrary stash
         git stash show -p stash@{1}
+    Show all users and the number of commits
+        git shortlog -sn
 
 Shell
     copy command output to clipboard with pipe:
@@ -74,6 +76,8 @@ Installing packages
         install from file
             sudo yum -y install $(install_my_stuff.txt)
     pip
+        Install package for specific user *in home directory* (without sudo)
+            pip install --user PACKAGE
         Show info about package
             pip show PACKAGE_NAME
         Show all package versions
