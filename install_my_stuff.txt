@@ -1,5 +1,4 @@
 git-gui
 meld
-pylint
 tree
 xclip

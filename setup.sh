@@ -5,6 +5,7 @@ mkdir -p ~/dev/sandbox
 
 ln -sfn `readlink -f bash_aliases` ~/.bash_aliases
 ln -sfn `readlink -f gitconfig` ~/.gitconfig
+ln -sfn `readlink -f gitignore_global` ~/.gitignore_global
 ln -sfn `readlink -f my_bashrc` ~/.my_bashrc
 ln -sfn `readlink -f Preferences.sublime-settings` ~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings
 ln -sfn `readlink -f pythonrc` ~/.pythonrc

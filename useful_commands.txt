@@ -19,6 +19,8 @@ Git
         git stash show -p stash@{1}
     Show all users and the number of commits
         git shortlog -sn
+    Show top-level directory
+        git rev-parse --show-toplevel
 
 Shell
     copy command output to clipboard with pipe:
@@ -75,6 +77,8 @@ Installing packages
         yum list available
         install from file
             sudo yum -y install $(install_my_stuff.txt)
+        Download RPMs from Yum repositories without install
+            yumdownloader PACKAGE
     pip
         Install package for specific user *in home directory* (without sudo)
             pip install --user PACKAGE
@@ -126,7 +130,7 @@ Ports and processes
 
 Cron jobs
     crontab -e    Edit crontab file, or create one if it doesn’t already exist.
-    crontab -l    crontab list of cronjobs , display crontab file contents.
+    crontab -l    crontab list of cronjobs, display crontab file contents.
     crontab -r    Remove your crontab file.
     crontab -v    Display the last time you edited your crontab file. (This option is only available on a few systems.)
 
