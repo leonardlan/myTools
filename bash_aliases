@@ -111,6 +111,7 @@ listenv () {
 complete -v listenv
 
 # Kill process
+alias ks='kill -9'
 alias pk='killall -9'
 alias pkp='pk python'
 

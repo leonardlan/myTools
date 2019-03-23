@@ -356,6 +356,9 @@ Nosetests
         nosetests --nocapture
     Test specific function
         nosetests tests/test_backrefs.py:TestBackrefs.test_backref
+    Test with execution time per test
+        nosetests --with-timer
+
 
 htop shortcuts
     +--------------+--------------+--------------------------+

@@ -1,3 +1,4 @@
 colorama==0.4.1
 clipboard==0.0.4
+nose-timer==0.7.5
 pylint==1.9.4
