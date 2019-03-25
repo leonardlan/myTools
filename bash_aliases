@@ -137,3 +137,17 @@ EOF
 alias start_python_service='python -m SimpleHTTPServer &'
 
 alias clean_pyc_files='find . -name "*.pyc" -delete'
+
+# Prints path to file color-indicating up to where it exists
+lssmart () {
+    for file in "$@"
+    do
+        exists=$file
+        while [[ $exists && ! -d $exists ]] ; do
+            exists=$(dirname "${exists}")
+        done
+        if [[ -d $exists ]] ; then
+            echo -e "\e[1m\e[34m$exists\e[31m${file/$exists/}\e[39m\e[0m"
+        fi
+    done
+}
