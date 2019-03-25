@@ -92,6 +92,7 @@ alias gs='git st'
 alias gsa='for d in $MY_WS/*/ ; do (cd "$d" && pwd && git st); done'
 alias gd='git diff'
 alias gb='git branch'
+alias showtoplevel='git rev-parse --show-toplevel'
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'
