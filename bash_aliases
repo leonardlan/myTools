@@ -26,7 +26,7 @@ alias uuu='cd ../../..'
 alias uuuu='cd ../../../..'
 alias uuuuu='cd ../../../../..'
 f () { find . -name "*$@*" | grep --color $@; }
-g () { grep -nr --color "$@"; }
+g () { grep -nr --color --exclude=\*.{jpg,png} "$@"; }
 hs () { h | grep --color "$@"; }
 
 # Command search

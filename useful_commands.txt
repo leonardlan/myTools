@@ -359,6 +359,9 @@ Nosetests
     Test with execution time per test
         nosetests --with-timer
 
+Processes
+    List open files
+        lsof -p PROCESS_ID
 
 htop shortcuts
     +--------------+--------------+--------------------------+
@@ -408,3 +411,32 @@ Postgres Database:
         sudo -u postgres psql postgres -c "CREATE DATABASE djattendance"
     add hstore extension:
         sudo -u postgres psql postgres -d djattendance -c "CREATE EXTENSION IF NOT EXISTS hstore;"
+
+gdb
+    +------------+------------------------------------------------------------------+
+    | b main     | Puts a breakpoint at the beginning of the program                |
+    | b          | Puts a breakpoint at the current line                            |
+    | b N        | Puts a breakpoint at line N                                      |
+    | b +N       | Puts a breakpoint N lines down from the current line             |
+    | b fn       | Puts a breakpoint at the beginning of function "fn"              |
+    | d N        | Deletes breakpoint number N                                      |
+    | info break | list breakpoints                                                 |
+    | r          | Runs the program until a breakpoint or error                     |
+    | c          | Continues running the program until the next breakpoint or error |
+    | f          | Runs until the current function is finished                      |
+    | s          | Runs the next line of the program                                |
+    | s N        | Runs the next N lines of the program                             |
+    | n          | Like s, but it does not step into functions                      |
+    | u N        | Runs until you get N lines in front of the current line          |
+    | p var      | Prints the current value of the variable "var"                   |
+    | bt         | Prints a stack trace                                             |
+    | u          | Goes up a level in the stack                                     |
+    | d          | Goes down a level in the stack                                   |
+    | q          | Quits gdb                                                        |
+    | attach ID  | Attaches to process with process ID                              |
+    | detach     | Detaches from current attached process                           |
+    +------------+------------------------------------------------------------------+
+
+OpenEXR
+    exrstdattr - a utility for modifying OpenEXR standard attributes
+    exrinfo - show file format version, channels contained, compression type, data window, display window, line order, pixel aspect ratio, and the center and width of the screen window for a given OpenEXR file(s).

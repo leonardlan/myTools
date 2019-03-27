@@ -18,6 +18,18 @@ Possible:
 - Machine ran out of memory
 - No available license
 
+## Instance taking longer than others
+Try:
+1. Meld log with a normal instance
+2. ssh into machine and monitor process status
+3. Check if it's hanging on a specific frame
+4. Check output render and see which frames are not rendered
+
+Possible solutions:
+- Kill and restart the instance
+OR
+- Kill the job and submit another job rendering just the missing frame(s)
+
 ## Specific machine not working
 - Check if the machine is updated to pipeline tools
 - Try rebooting the machine: `ssh root@machine reboot`
@@ -75,7 +87,7 @@ Try:
 - Is renderman globals node deleted?
 - Check if SELinux is enabled. `sestatus`. Try disabling it: `setenforce 0`
 - Try disabling firewall on remote server
-- Non-breaking space: " "
+- Non-breaking space (also called no-break space, non-breakable space (NBSP), hard space, or fixed space): " "
     A space character that prevents an automatic line break at its position. In Unicode it is encoded as U+00a0.
     It looks like a space but it's not.
     (╯°□°）╯︵ ┻━┻
