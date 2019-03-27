@@ -5,3 +5,7 @@ A collection of my [aliases](bash_aliases), tools, [useful commands](useful_comm
 
 # Setup
 Run `./setup.sh`
+
+# Maya Scripts
+[Cube of Spheres](maya_scripts/cube_of_spheres.py) creates a cube made up of spheres with input size
+![Cube of Spheres](img/cube_of_spheres.png?raw=true "Cube of Spheres!!!!")
