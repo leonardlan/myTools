@@ -94,6 +94,9 @@ alias gd='git diff'
 alias gb='git branch'
 alias showtoplevel='realpath --relative-to=`pwd` "$(git rev-parse --show-toplevel)"'
 alias showorigin='git remote show origin'
+alias gac="git add . && git commit -m" # + commit message
+alias gp="git push"
+alias gl="git pull"
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'
