@@ -8,4 +8,3 @@ class TimestampCommand(sublime_plugin.TextCommand):
     timestamp = "[%s]" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     for sel in self.view.sel():
         self.view.insert(edit, sel.begin(), timestamp)
-
