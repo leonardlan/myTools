@@ -3,7 +3,7 @@
 
 ## Render failing on farm
 Try:
-1. Check stdout and stderr for error traceback
+1. Check stdout and stderr logs for error traceback
 2. Check hosts to see if it's happening on a [specific machine](#specific-machine-not-working)
 3. Check time launched to see if it's happening around the same time (Might be related to when something else broke)
 4. Check farm and local machine are using same version of software (ie. Nuke 10 on submitter but Nuke 9 on farm)

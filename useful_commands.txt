@@ -21,6 +21,8 @@ Git
         git shortlog -sn
     Show top-level directory
         git rev-parse --show-toplevel
+    Squash last 2 commits into one
+        git rebase -i HEAD~2
 
 Shell
     copy command output to clipboard with pipe:

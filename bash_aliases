@@ -88,6 +88,7 @@ alias myTools='cd ~/myTools'
 
 # Git
 alias gg='git gui &'
+alias gitk='gitk &'
 alias gs='git st'
 alias gsa='for d in $MY_WS/*/ ; do (cd "$d" && pwd && git st); done'
 alias gd='git diff'
