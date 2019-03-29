@@ -25,6 +25,9 @@ alias uu='cd ../..'
 alias uuu='cd ../../..'
 alias uuuu='cd ../../../..'
 alias uuuuu='cd ../../../../..'
+
+runmeindirs () { for d in ./*/ ; do (cd "$d" && echo && pwd && $@); done }
+
 f () { find . -name "*$@*" | grep --color $@; }
 g () { grep -nr --color --exclude=\*.{jpg,png} "$@"; }
 hs () { h | grep --color "$@"; }
@@ -98,6 +101,8 @@ alias showorigin='git remote show origin'
 alias gac="git add . && git commit -m" # + commit message
 alias gp="git push"
 alias gl="git pull"
+alias gpom="git push origin master"
+alias glom="git pull origin master"
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'

@@ -3,8 +3,10 @@ Git
         for d in ~/dev/*/ ; do (cd "$d" && pwd && git st); done
     View origin
         git remote show origin
+    To delete a local branch
+        git branch -d the_local_branch
     Remove remote branch
-        git push origin --delete web-request2
+        git push origin --delete the_remote_branch
     Show which files have changed betwen two revisions
         git diff --name-status master..branchName
     Amend last commit without changing message
