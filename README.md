@@ -1,7 +1,15 @@
 # myTools
-A collection of my [bash aliases and functions](bash_aliases), tools, [useful commands](useful_commands.txt), git preferences, Sublime preferences, [Maya scripts](maya_scripts) from working as a Software Developer and Pipeline TD in VFX. Here's more:
+A collection of my
+  - [bash aliases and functions](bash_aliases)
+  - tools
+  - [useful commands](useful_commands.txt)
+  - git preferences
+  - Sublime preferences
+  - [Maya scripts](maya_scripts)
   - Step-by-step [debug checklist](debug_checklist.md) for when a render fails on the farm or a service is not working
   - [Python functions](pythonrc) that help with debugging in Python Interpreter
+
+from working as a Software Developer and Pipeline TD in VFX.
 
 # Setup
 Run `./setup.sh`
