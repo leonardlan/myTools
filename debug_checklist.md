@@ -1,4 +1,3 @@
-
 # Debug checklist
 
 ## Render failing on farm
@@ -32,8 +31,10 @@ OR
 
 ## Specific machine not working
 - Check if the machine is updated to pipeline tools
+- Check file system set up or mounted correctly. See `df -h`
 - Try rebooting the machine: `ssh root@machine reboot`
 - Omit the machine in render job
+- Write ticket to Systems/IT
 
 ## Some render frames fail while others don't
 1. Check output permissions are same. If not, check mask (umask) of machines that rendered the failed frames.
@@ -49,7 +50,7 @@ Are we out of license?
 ## Command works on my machine but not others' machine
 Try:
 - Diff output. Run:
-    ```
+    ```bash
     export MACHINE_NAME=''
     export COMMAND=''
     ssh $MACHINE_NAME $COMMAND | sort > /tmp/other_machine_cmd_output.txt
