@@ -28,17 +28,17 @@ alias uuuuu='cd ../../../../..'
 
 runmeindirs () { for d in ./*/ ; do (cd "$d" && echo && pwd && $@); done }
 
-f () { find . -name "*$@*" | grep --color $@; }
-g () { grep -nr --color --exclude=\*.{jpg,png} "$@"; }
-hs () { h | grep --color "$@"; }
+f () { find . -name "*$@*" | grep $@; }
+g () { grep -nr --exclude=\*.{jpg,png} "$@"; }
+hs () { h | grep "$@"; }
 
 # Command search
-cs () { compgen -c | sort | grep --color "$@"; }
+cs () { compgen -c | sort | grep "$@"; }
 
-es () { env | grep --color "$@"; }
+es () { env | grep "$@"; }
 complete -v es
 
-psa () { ps aux | grep --color "$@"; }
+psa () { ps aux | grep "$@"; }
 
 complete -a alias
 complete -a unalias
@@ -91,7 +91,6 @@ alias myTools='cd ~/myTools'
 
 # Git
 alias gg='git gui &'
-alias gitk='gitk &'
 alias gs='git st'
 alias gsa='for d in $MY_WS/*/ ; do (cd "$d" && pwd && git st); done'
 alias gd='git diff'
@@ -103,6 +102,7 @@ alias gp="git push"
 alias gl="git pull"
 alias gpom="git push origin master"
 alias glom="git pull origin master"
+alias gitshowdevelopers='git shortlog -sn'
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'
