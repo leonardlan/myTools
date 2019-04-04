@@ -163,3 +163,13 @@ lssmart () {
         fi
     done
 }
+
+# Virtualenv
+alias srcvirtualenv='
+if [ -f /usr/bin/virtualenvwrapper.sh ]; then
+    source /usr/bin/virtualenvwrapper.sh
+fi
+
+if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
+    source ~/.local/bin/virtualenvwrapper.sh
+fi'

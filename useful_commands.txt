@@ -25,6 +25,8 @@ Git
         git rev-parse --show-toplevel
     Squash last 2 commits into one
         git rebase -i HEAD~2
+    Go back 1 commit (Warning: cannot undo)
+        git reset --hard HEAD~1
 
 Shell
     copy command output to clipboard with pipe:
