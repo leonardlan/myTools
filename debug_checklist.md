@@ -2,13 +2,27 @@
 
 ## Render failing on farm
 Try:
-1. Check stdout and stderr logs for error traceback
-2. Check hosts to see if it's happening on a [specific machine](#specific-machine-not-working)
-3. Check time started to see if it's happening around the same time (Might be related to when something else broke)
-4. Check farm and local machine are using same version of software (ie. Nuke 10 on submitter but Nuke 9 on farm)
-5. Run render command locally
-6. Diff env var on farm and local
-7. Run on higher CPU machine
+1. Check hosts to see if it's happening on a [specific machine](#specific-machine-not-working)
+2. Check time started to see if it's happening around the same time (Might be related to when something else broke)
+3. Check memory usage to see where it is peaking
+4. Check stdout and stderr logs for error traceback
+    1. Check for pattern among failed renders
+5. `ssh` into machines and check status of rendering process
+6. Check farm and local machine are using same version of software (ie. Nuke 10 on submitter but Nuke 9 on farm)
+7. Run render command locally
+8. Diff env var on farm and local
+9. Run on higher CPU machine
+
+Reasons for failure:
+    - No Camera present in scene
+    - No license found for renderer
+    - License server going down may cause render to stop and sleep indefinitely. Example Katana log:
+
+        2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {WARNING} License warning - code 113: No route to host
+        2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {CONTINUED} license source: 9010@vmlic01.bron.local
+        2019-04-04 13:06:52,759 katana                       [ INFO     ] R50004 {WARNING} License warning - license server connection re-established
+
+        Render process went to sleep mode and did not recover.
 
 Possible:
 - File system not set up or mounted correctly. See `df -h`
@@ -19,6 +33,7 @@ Possible:
 
 ## Instance taking longer than others
 Try:
+1. Check [Render failing on farm](#render-failing-on-farm) first
 1. Meld log with a normal instance
 2. ssh into machine and monitor process status
 3. Check if it's hanging on a specific frame

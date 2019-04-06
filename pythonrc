@@ -3,7 +3,7 @@
 
 import subprocess
 
-# enable syntax completion
+# Enable syntax completion
 try:
     import readline
 except ImportError:
@@ -13,6 +13,8 @@ else:
     readline.parse_and_bind("tab: complete")
 
 from pprint import pprint
+
+# Import colorama for color-printing to terminal
 try:
     import colorama
 except ImportError:
@@ -100,3 +102,10 @@ def cb(content):
         clipboard.copy(content)
     except pyperclip.PyperclipException:
         clipboard.copy(str(content))
+
+
+def start_QApplication():
+    import sys
+    from bron_qt.qt import QtGui
+
+    return QtGui.QApplication(sys.argv)
