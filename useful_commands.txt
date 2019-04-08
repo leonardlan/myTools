@@ -43,6 +43,11 @@ Shell
         compgen -k # list all keywords
         compgen -A function # list all functions
         compgen -A function -abck # will list all the above in one go.
+    Redirecting output
+        Redirect error message to NUL
+            command args 2> nul
+        Redirect output to one place and errors to another
+            command args > output.msg 2> output.err
 
 Files
     find number of files in current folder:

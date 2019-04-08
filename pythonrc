@@ -109,3 +109,9 @@ def start_QApplication():
     from bron_qt.qt import QtGui
 
     return QtGui.QApplication(sys.argv)
+
+
+def history():
+    """ Prints interactive python command history """
+    for i in range(readline.get_current_history_length() - 1):
+        print readline.get_history_item(i + 1)

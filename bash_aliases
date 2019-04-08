@@ -113,7 +113,7 @@ ns () {
     play -q ~/myTools/sounds/quite-impressed.ogg &
 }
 
-alias subl='~/sublime_text_3/sublime_text'
+alias s='~/sublime_text_3/sublime_text'
 
 # View env var split by semicolon
 listenv () {
