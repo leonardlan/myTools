@@ -15,10 +15,13 @@ elif [ -d ~/sandbox ]; then
     MY_SB=~/sandbox
 fi
 
+echo_and_run () { echo "\$ $*" ; "$@" ; }
+
 alias ls='ls --color=auto'
 alias l='ls -lh'
 alias h='history'
 alias py='python'
+alias p='python' # Everyday, I get a little bit lazier
 alias fp='readlink -f'
 alias u='cd ..'
 alias uu='cd ../..'
@@ -95,7 +98,7 @@ alias gs='git st'
 alias gsa='for d in $MY_WS/*/ ; do (cd "$d" && pwd && git st); done'
 alias gd='git diff'
 alias gb='git branch'
-alias showtoplevel='realpath --relative-to=`pwd` "$(git rev-parse --show-toplevel)"'
+alias gitshowtoplevel='realpath --relative-to=`pwd` "$(git rev-parse --show-toplevel)"'
 alias showorigin='git remote show origin'
 alias gac="git add . && git commit -m" # + commit message
 alias gp="git push"
@@ -135,6 +138,9 @@ alias createsuperuser='python manage.py createsuperuser'
 alias collectstatic='python manage.py collectstatic'
 alias djshell='python manage.py shell'
 
+# Testing
+alias nt='nosetests $@; ns'
+
 # Python
 which_python () {
 python - <<EOF
@@ -167,9 +173,9 @@ lssmart () {
 # Virtualenv
 alias srcvirtualenv='
 if [ -f /usr/bin/virtualenvwrapper.sh ]; then
-    source /usr/bin/virtualenvwrapper.sh
+    echo_and_run source /usr/bin/virtualenvwrapper.sh
 fi
 
 if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
-    source ~/.local/bin/virtualenvwrapper.sh
+    echo_and_run source ~/.local/bin/virtualenvwrapper.sh
 fi'
