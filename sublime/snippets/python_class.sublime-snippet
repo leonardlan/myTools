@@ -1,7 +1,7 @@
 <snippet>
     <content><![CDATA[
 class ${1:ClassName}(object):
-    '''
+    """
     The Vehicle object contains a lot of vehicles
 
     Args:
@@ -11,13 +11,13 @@ class ${1:ClassName}(object):
 
     Attributes:
         arg (str): This is where we store arg,
-    '''
+    """
     def __init__(self, arg, *args, **kwargs):
         super(${1:ClassName}, self).__init__()
         self.arg = arg
 
     def cars(self, distance,destination):
-        '''We can't travel distance in vehicles without fuels, so here is the fuels
+        """We can"t travel distance in vehicles without fuels, so here is the fuels
 
         Args:
             distance (int): The amount of distance traveled
@@ -28,7 +28,7 @@ class ${1:ClassName}(object):
 
         Returns:
             cars: A car mileage
-        '''
+        """
         pass
 ]]></content>
     <tabTrigger>class</tabTrigger>

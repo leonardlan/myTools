@@ -1,17 +1,7 @@
 <snippet>
     <content><![CDATA[
 def ${1:func}(${2:arg, *args, **kwargs}):
-    """${3:What do I do?}
-
-    Args:
-        arg (type): What am I?
-
-    Raises:
-        Error: Something wrong
-
-    Returns:
-        type: What do you want?
-    """
+    """ ${3:What do I do?} """
     ${4:pass}
 ]]></content>
     <tabTrigger>def</tabTrigger>
