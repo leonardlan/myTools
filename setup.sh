@@ -16,6 +16,7 @@ ln -sfn "`readlink -f 'Default (Linux).sublime-keymap'`" ~/.config/sublime-text-
 ln -sfn `readlink -f sublime/snippets/python_class.sublime-snippet` ~/.config/sublime-text-3/Packages/User/python_class.sublime-snippet
 ln -sfn `readlink -f sublime/snippets/python_function.sublime-snippet` ~/.config/sublime-text-3/Packages/User/python_function.sublime-snippet
 ln -sfn `readlink -f sublime/snippets/python_function_simple.sublime-snippet` ~/.config/sublime-text-3/Packages/User/python_function_simple.sublime-snippet
+ln -sfn `readlink -f sublime/snippets/python_docstring.sublime-snippet` ~/.config/sublime-text-3/Packages/User/python_docstring.sublime-snippet
 
 add_line_to_file() {
     grep -qF -- "$1" "$2" || echo "$1" >> "$2"

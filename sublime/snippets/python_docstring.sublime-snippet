@@ -1,0 +1,17 @@
+<snippet>
+    <content><![CDATA[
+"""${1:What do I do?}
+
+Args:
+    ${2:arg} (${3:type}): ${4:What am I?}
+
+Raises:
+    Error: Something wrong
+
+Returns:
+    ${6:type}: ${5:What do you want?}
+"""
+]]></content>
+    <tabTrigger>"""</tabTrigger>
+    <scope>source.python</scope>
+</snippet>
