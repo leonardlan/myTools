@@ -2,6 +2,7 @@
 # ~/.pythonrc
 
 import subprocess
+import sys
 
 # Enable syntax completion
 try:
@@ -21,12 +22,10 @@ except ImportError:
     print "Module colorama not available."
     colorama = None
 finally:
-    BLUE = colorama.Fore.BLUE if colorama else ""
-    BRIGHT = colorama.Style.BRIGHT if colorama else ""
-    CYAN = colorama.Fore.CYAN if colorama else ""
-    GREEN = colorama.Fore.GREEN if colorama else ""
-    RED = colorama.Fore.RED if colorama else ""
-    RESET_ALL = colorama.Style.RESET_ALL if colorama else ""
+    for color in ["BLUE", "CYAN", "GREEN", "RED"]:
+        globals()[color] = getattr(colorama.Fore, color) if colorama else ""
+    for style in ["BRIGHT", "RESET_ALL"]:
+        globals()[style] = getattr(colorama.Style, style) if colorama else ""
 
 
 def debug(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False):
@@ -36,9 +35,22 @@ def debug(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callabl
     :param ignore_private bool: Ignores attributes starting with underscore.
     :param ignore_attrs list: List of attributes to ignore.
     :param call bool: Calls attributes that are functions and thing itself if it is callable.
+    :param skip_callable bool: Doesn't print callable attributes.
     """
+    typ = type(thing)
+    sys.stdout.write(BRIGHT)
+
+    if typ == list:
+        if thing:
+            print BLUE + "List of %i %s" % (len(thing), type(thing[0]))
+            print GREEN + "[0]:", thing[0]
+            _print_types(type(thing[0]))
+            print RESET_ALL
+        else:
+            print RED + "Empty list: []", RESET_ALL
+        return
+
     thing_name = getattr(thing, "__name__") if hasattr(thing, "__name__") else ""
-    print BRIGHT
     call_count = private_count = total = 0
     for attr in dir(thing):
         if attr in ignore_attrs:
@@ -51,28 +63,37 @@ def debug(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callabl
         try:
             res = getattr(thing, attr)
         except Exception, e:
-            print RED, e
+            print RED + e
             continue
         long_name = "%s.%s" % (thing_name, attr)
         is_callable = callable(res)
         if is_callable and skip_callable:
             continue
         elif is_callable:
-            print BLUE + "%s(): " % long_name + GREEN,
+            print BLUE + "%s():" % long_name + GREEN,
             call_count += 1
             if call:
                 _call(res)
             else:
                 print getattr(res, "__doc__")
         else:
-            print BLUE + "%s: " % long_name + GREEN,
+            print BLUE + "%s:" % long_name + GREEN,
             _print(res)
     if call and callable(thing):
         _call(thing)
     print "%sCallable: %i, Uncallable: %i" % (CYAN, call_count, total - call_count)
     print "Private: %i, Public: %i" % (private_count, total - private_count)
     print "Total: %i" % total
-    print BLUE + "type:" + GREEN, type(thing), RESET_ALL
+
+    _print_types(typ)
+
+    print RESET_ALL
+
+
+def _print_types(typ):
+    import inspect
+    print BLUE + "parents:" + GREEN, inspect.getmro(typ)  # Print types of all parent classes
+    print BLUE + "type:" + GREEN, typ
 
 
 def _call(func):
@@ -105,7 +126,6 @@ def cb(content):
 
 
 def start_QApplication():
-    import sys
     from bron_qt.qt import QtGui
 
     return QtGui.QApplication(sys.argv)

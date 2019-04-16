@@ -7,12 +7,13 @@ Try:
 3. Check memory usage to see where it is peaking
 4. Check stdout and stderr logs for error traceback
     1. Check for pattern in logs among failed renders. (ie. Maybe they all were killed on a certain frame)
-5. `ssh` into machines and check status of rendering process
-6. Check farm and local machine are using same version of software (ie. Nuke 10 on submitter but Nuke 9 on farm)
-7. Run render command locally
-8. Run render command as render user on remote machine that failed
-9. Diff env var on farm and local
-10. Run on higher CPU machine
+5. Check output renders with `rv output.exr`. List size. If zero, render failed.
+6. `ssh` into machines and check status of rendering process
+7. Check farm and local machine are using same version of software (ie. Nuke 10 on submitter but Nuke 9 on farm)
+8. Run render command locally
+9. Run render command as render user on remote machine that failed
+10. Diff env var on farm and local
+11. Run on higher CPU machine
 
 Reasons for failure:
     - No Camera present in scene

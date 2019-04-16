@@ -451,6 +451,8 @@ gdb
 OpenEXR
     exrstdattr - a utility for modifying OpenEXR standard attributes
     exrinfo - show file format version, channels contained, compression type, data window, display window, line order, pixel aspect ratio, and the center and width of the screen window for a given OpenEXR file(s).
+    exrmerge - takes a collection of EXR images and outputs them as a single EXR with all channels combined, suitable for use with denoise.
+    exrheader - view headers
 
 Terminal Mail
     mail: Launch Terminal app
