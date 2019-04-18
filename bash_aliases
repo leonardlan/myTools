@@ -105,7 +105,7 @@ alias gp="git push"
 alias gl="git pull"
 alias gpom="git push origin master"
 alias glom="git pull origin master"
-alias gitshowdevelopers='git shortlog -sn'
+alias gitshowdevs='git shortlog -sn'
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'
@@ -154,7 +154,7 @@ EOF
 }
 alias start_python_service='python -m SimpleHTTPServer &'
 
-alias clean_pyc_files='find . -name "*.pyc" -delete'
+alias clean='find . -name "*.pyc" -delete'
 
 # Prints path to file color-indicating up to where it exists
 lssmart () {

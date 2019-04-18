@@ -373,6 +373,8 @@ Nosetests
 Processes
     List open files
         lsof -p PROCESS_ID
+    View environment variables of a running process
+        cat /proc/<pid>/environ
 
 htop shortcuts
     +--------------+--------------+--------------------------+
