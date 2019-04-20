@@ -152,7 +152,7 @@ for attribute in ["__file__", "__path__", "__version__"]:
         print e
 EOF
 }
-alias start_python_service='python -m SimpleHTTPServer &'
+alias start_python_service='python -m SimpleHTTPServer & google-chrome 0.0.0.0:8000'
 
 alias clean='find . -name "*.pyc" -delete'
 
