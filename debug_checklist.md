@@ -1,7 +1,9 @@
 # Debug checklist
 
+The things I've learned throughout years of debugging failed renders and bugs. Maybe this will one day be scripted and no longer require TDs. :smile:
+
 ## Render failing on farm
-Try:
+### Try:
 1. Check hosts to see if it's happening on a [specific machine](#specific-machine-not-working)
 2. Check time started to see if it's happening around the same time (Might be related to when something else broke)
 3. Check memory usage to see where it is peaking
@@ -15,18 +17,18 @@ Try:
 10. Diff env var on farm and local
 11. Run on higher CPU machine
 
-Reasons for failure:
-    - No Camera present in scene
-    - No license found for renderer
-    - License server going down may cause render to stop and sleep indefinitely. Example Katana log:
+### Reasons for failure:
+- No Camera present in scene
+- [No license found](#No-available-license) for renderer or plug-in (ie. Nuke Optical Flare)
+- License server going down may cause render to stop and sleep indefinitely. Example Katana log:
 
         2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {WARNING} License warning - code 113: No route to host
-        2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {CONTINUED} license source: 9010@vmlic01.bron.local
+        2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {CONTINUED} license source: port@machine.name
         2019-04-04 13:06:52,759 katana                       [ INFO     ] R50004 {WARNING} License warning - license server connection re-established
 
         Render process went to sleep mode and did not recover.
 
-Possible:
+### Possible:
 - File system not set up or mounted correctly. See `df -h`
 - Permission denied. Run `777 PATH_TO_FILE_OR_FOLDER`
 - Cannot connect to a server
@@ -34,14 +36,14 @@ Possible:
 - No available license
 
 ## Instance taking longer than others
-Try:
+### Try:
 1. Check [Render failing on farm](#render-failing-on-farm) first
 1. Meld log with a normal instance
 2. ssh into machine and monitor process status
 3. Check if it's hanging on a specific frame
 4. Check output render and see which frames are not rendered
 
-Possible solutions:
+### Possible solutions:
 - Kill and restart the instance
 OR
 - Kill the job and submit another job rendering just the missing frame(s)
@@ -57,48 +59,49 @@ OR
 1. Check output permissions are same. If not, check mask (umask) of machines that rendered the failed frames.
 
 ## No available license
-1. Look up license usage
-Maybe there were too many renders going on at the same time maxing out licenses. Try limiting/reserving current renders available for renderer
+- Look up license usage. Maybe there were too many renders going on at the same time maxing out licenses. Try limiting/reserving current renders available for renderer
 Are we out of license?
-2. Ask ones who're not using it to close it down
-3. Ask to purchase more licenses
-4. Wait for a free license
+- If it's a Nuke plug-in, try to pre-comp the node output, delete the node, and render on the farm so that it won't take up a plug-in license.
+- Ask ones who're not using it to close it down
+- Ask to purchase more licenses
+- Wait for a free license
 
 ## Command works on my machine but not others' machine
-Try:
+### Try:
 - Diff output. Run:
     ```bash
-    export MACHINE_NAME=''
-    export COMMAND=''
-    ssh $MACHINE_NAME $COMMAND | sort > /tmp/other_machine_cmd_output.txt
-    eval $COMMAND | sort > /tmp/my_machine_cmd_output.txt
-    meld /tmp/other_machine_cmd_output.txt /tmp/my_machine_cmd_output.txt &
-    ```
-- Diff env var. Run the above with `export COMMAND='env'`
+export MACHINE_NAME=''
+export COMMAND=''
+ssh $MACHINE_NAME $COMMAND | sort > /tmp/other_machine_cmd_output.txt
+eval $COMMAND | sort > /tmp/my_machine_cmd_output.txt
+meld /tmp/other_machine_cmd_output.txt /tmp/my_machine_cmd_output.txt &
+```
+- Diff env var. Run the above with
+```bash
+export COMMAND='env'
+```
 
-Possible:
+### Possible:
 - Different system environment
 - Missing dependencies
 - Hard-coded directory or path in the code
 
 ## Maya scene takes too long to open or crashes a lot
-Possible:
+### Possible:
 - File too large
 - Is there complicated texturing?
 - When referencing, maya sequentially scans references and reads every file with selected options. Try referencing Maya Binary files (.mb) as they are already in Maya proprietary scene format and faster to load than Maya ASCII files.
 
-Try:
+### Try:
 - Turn off ray tracing
 - Turn off Subsurface Scattering
 - Turn off Anti Aliasing
 - Turn off motion blur
 
 ## Optimize scene size
-- Remove empty, invalid, and unused information from the scene.
-            Select File > Optimize Scene Size
+- Remove empty, invalid, and unused information from the scene. `Select File > Optimize Scene Size`
 - Remove construction history from the selected object(s). Only do this if you are sure you do not need to edit the objects’ history again.
-- Select the objects and select Edit > Delete by Type > History. Do not save panel layouts with the scene.
-            In the UI Elements preferences (Window > Settings/Preferences > Preferences), turn off Save Panel Layouts with File.
+- Select the objects and select Edit > Delete by Type > History. Do not save panel layouts with the scene. `In the UI Elements preferences (Window > Settings/Preferences > Preferences), turn off Save Panel Layouts with File.`
 - Delete static animation channels. `Edit > Delete by Type > Static Channels.`
 
 ## All Things Trivial
