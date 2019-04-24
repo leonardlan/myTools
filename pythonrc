@@ -44,7 +44,7 @@ def debug(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callabl
     if typ == list:
         if thing:
             print BLUE + "List of %i %s" % (len(thing), type(thing[0]))
-            print GREEN + "[0]:", thing[0]
+            print GREEN + "[0]:", pprint(thing[0])
             _print_types(type(thing[0]))
             print RESET_ALL
         else:

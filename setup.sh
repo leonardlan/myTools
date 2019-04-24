@@ -8,7 +8,6 @@ ln -sfn `readlink -f gitconfig` ~/.gitconfig
 ln -sfn `readlink -f gitignore_global` ~/.gitignore_global
 ln -sfn `readlink -f my_bashrc` ~/.my_bashrc
 ln -sfn `readlink -f pythonrc` ~/.pythonrc
-ln -sfn `readlink -f useful_commands.txt` ~/useful_commands.txt
 
 # Setup my sublime prefs
 ln -sfn `readlink -f Preferences.sublime-settings` ~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings

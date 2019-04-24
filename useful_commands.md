@@ -1,55 +1,91 @@
-Git
-    check git status of all projects
-        for d in ~/dev/*/ ; do (cd "$d" && pwd && git st); done
-    View origin
-        git remote show origin
-    To delete a local branch
-        git branch -d the_local_branch
-    Remove remote branch
-        git push origin --delete the_remote_branch
-    Show which files have changed betwen two revisions
-        git diff --name-status master..branchName
-    Amend last commit without changing message
-        git add <files>
-        git commit --amend --no-edit
-        git push -f origin some_branch
-    Amend last commit message
-        git commit --amend
-    View the content of the most recent stash
-        git stash show -p
-    View the content of an arbitrary stash
-        git stash show -p stash@{1}
-    Show all users and the number of commits
-        git shortlog -sn
-    Show top-level directory
-        git rev-parse --show-toplevel
-    Squash last 2 commits into one
-        git rebase -i HEAD~2
-    Go back 1 commit (Warning: cannot undo)
-        git reset --hard HEAD~1
+## Useful Commands
 
-Shell
-    copy command output to clipboard with pipe:
-        xclip -sel clip
-    Get last system reboot
-        uptime -s
-        last reboot
-    Get reboot history
-        last reboot | head -10
-    List available commands
-        compgen -c # list all commands
-        compgen -a # list all aliases
-        compgen -b # list all built-ins
-        compgen -k # list all keywords
-        compgen -A function # list all functions
-        compgen -A function -abck # will list all the above in one go.
-    Redirecting output
-        Redirect error message to NUL
-            command args 2> nul
-        Redirect output to one place and errors to another
-            command args > output.msg 2> output.err
+My useful commands that I can't seem to remeber. :thinking_face:
 
-Files
+### Git
+- Check git status of all projects
+
+    `for d in ~/dev/*/ ; do (cd "$d" && pwd && git st); done`
+- View origin
+
+    `git remote show origin`
+- To delete a local branch
+
+    `git branch -d the_local_branch`
+- Remove remote branch
+
+    `git push origin --delete the_remote_branch`
+- Show which files have changed betwen two revisions
+
+    `git diff --name-status master..branchName`
+- Amend last commit without changing message
+
+    ```
+git add <files>
+git commit --amend --no-edit
+git push -f origin some_branch
+```
+- Amend last commit message
+
+    `git commit --amend`
+- View the content of the most recent stash
+
+    `git stash show -p`
+- View the content of an arbitrary stash
+
+    `git stash show -p stash@{1}`
+- Show all users and the number of commits
+
+    `git shortlog -sn`
+- Show top-level directory
+
+    `git rev-parse --show-toplevel`
+- Squash last 2 commits into one
+
+    `git rebase -i HEAD~2`
+- Go back 1 commit (Warning: cannot undo)
+
+    `git reset --hard HEAD~1`
+
+
+### Shell
+- Copy command output to clipboard with pipe:
+
+    `xclip -sel clip`
+- Get last system reboot
+
+    `uptime -s`
+
+    `last reboot`
+- Get reboot history
+
+    `last reboot | head -10`
+
+List available commands
+
+| Command               | Description        |
+|-----------------------|--------------------|
+| `compgen -c`          | List all commands  |
+| `compgen -a`          | List all aliases   |
+| `compgen -b`          | List all built-ins |
+| `compgen -k`          | List all keywords  |
+| `compgen -A function` | List all functions |
+
+- Redirecting output
+
+    `Redirect error message to NUL`
+        command args 2> nul
+    Redirect output to one place and errors to another
+        command args > output.msg 2> output.err
+- cd into all directories and run a command
+
+    `for d in ./*/ ; do (echo $d && cd "$d" && somecommand); done`
+- Make multiple directories in one go
+
+    `mkdir ~/projects/{bin,pkg,src}`
+
+
+### Files
     find number of files in current folder:
         find . -type f | wc -l
     View long list for a single directory
@@ -68,7 +104,8 @@ Files
     List files recursively modified in last 24 hours
         find . -mtime -1 -print
 
-Syncing files and folders
+
+### Syncing files and folders
     Copy directory across hosts
         scp -r . llan@10.2.100.56:/home/llan/dev/folder_name
     Copy one single local file to a remote destination
@@ -80,35 +117,44 @@ Syncing files and folders
     Copy multiple files with one command
         scp file1.txt file2.txt file3.txt pete@host.example.com:/home/pete/
 
-Installing packages
-    yum
-        yum install PACKAGE
-        yum update PACKAGE
-        yum info PACKAGE
-        yum list available
-        install from file
-            sudo yum -y install $(install_my_stuff.txt)
-        Download RPMs from Yum repositories without install
-            yumdownloader PACKAGE
-    pip
-        Install package for specific user *in home directory* (without sudo)
-            pip install --user PACKAGE
-        Show info about package
-            pip show PACKAGE_NAME
-        Show all package versions
-            pip freeze
-        Upgrade pip
-            pip install --upgrade pip
-        Uninstall package
-            pip uninstall PACKAGE_NAME
-    Unzip tar.gz
-        tar -zxvf
 
-Backing up files
+### Installing packages
+#### yum
+    yum install PACKAGE
+    yum update PACKAGE
+    yum info PACKAGE
+    yum list available
+
+Install from file
+
+    sudo yum -y install $(install_my_stuff.txt)
+Download RPMs from Yum repositories without install
+
+    yumdownloader PACKAGE
+#### pip
+- Install package for specific user **in home directory** (without sudo)
+
+    `pip install --user PACKAGE`
+- Show info about package
+
+    `pip show PACKAGE_NAME`
+- Show all package versions
+
+    `pip freeze`
+- Upgrade pip
+
+    `pip install --upgrade pip`
+- Uninstall package
+
+    `pip uninstall PACKAGE_NAME`
+
+
+### Backing up files
     Add date and time in filename (file.txt.backup_2018-08-03_12:51:34)
         mv file.txt file.txt.backup_$(date +%F_%T)
 
-Permissions
+
+### Permissions
     View mask
         umask
         umask -S
@@ -120,45 +166,48 @@ Permissions
         sudo usermod -aG wheel USER
     Log in as root
         sudo su -
+    Change file owner
+        chown USER:GROUP FILE
 
-cd into all directories and run a command
-    for d in ./*/ ; do (echo $d && cd "$d" && somecommand); done
 
-Symbolic link
+### Symbolic link
     ln -s REAL LINK_NAME
     unlink LINK_NAME
     rm LINK_NAME
 
-Change file owner
-    chown USER:GROUP FILE
 
-Make multiple directories in one go
-    mkdir ~/projects/{bin,pkg,src}
-
-Ports and processes
+### Ports and processes
     Check listening ports and applications
         sudo netstat -tulpn | grep LISTEN
 
-Cron jobs
+
+### Cron jobs
     crontab -e    Edit crontab file, or create one if it doesn’t already exist.
     crontab -l    crontab list of cronjobs, display crontab file contents.
     crontab -r    Remove your crontab file.
-    crontab -v    Display the last time you edited your crontab file. (This option is only available on a few systems.)
 
-Images:
-    Get info about image
-        identify
-    List all images recursively
-        find . -name '*' -exec file {} \; | grep -o -P '^.+: \w+ image'
-    Converting
-        convert jpg to png
-            convert img.jpg img.png
-        convert multiple jpg to png
-            mogrify -formt png *.jpg
-    Convert exr to png while maintaining format
-        convert input.exr -colorspace RGB -colorspace sRGB output.png
 
-Regex
+### Images:
+- Get info about image
+
+    `identify`
+- List all images recursively
+
+    `find . -name '*' -exec file {} \; | grep -o -P '^.+: \w+ image'`
+- Converting
+
+    - Convert jpg to png
+
+        `convert img.jpg img.png`
+    - Convert multiple jpg to png
+
+        `mogrify -formt png *.jpg`
+- Convert exr to png while maintaining format
+
+    `convert input.exr -colorspace RGB -colorspace sRGB output.png`
+
+
+### Regex
     Line without word
         ^((?!word).)*$
     Matching square brackets! Ha! Genius!
@@ -174,7 +223,8 @@ Regex
     Remove trailing
         [\t\n ]{2,}\Z => \n
 
-Users
+
+### Users
     See which user is using a file
         fuser -u FILE
     List all local users
@@ -203,7 +253,8 @@ Users
     print real and effective user and group IDs
         id [USER]
 
-Web dev
+
+### Web dev
     Django
         Create app
             python manage.py startapp polls
@@ -241,7 +292,8 @@ Web dev
         Start service
             python -m SimpleHTTPServer
 
-MySQL server
+
+### MySQL server
     Start server
         sudo /etc/init.d/mysql start
     Connect to server from shell
@@ -252,7 +304,8 @@ MySQL server
     configuration file
         /etc/mysql/my.cnf
 
-Servers
+
+### Servers
     Apache
         apachectl status
         apachectl restart
@@ -281,7 +334,8 @@ Servers
         Access and error logs
             /var/log/nginx/
 
-Virtual environment
+
+### Virtual environment
     Virtualenv
         Create a Python virtual environment
             virtualenv <vir_env_name>
@@ -296,13 +350,15 @@ Virtual environment
         deactivate
         rmvirtualenv <vir_env_name>
 
-Password
+
+### Password
     Change password for user
         sudo passwd USER
     No password
         sudo passwd -d USER
 
-Mounting and unmounting
+
+### Mounting and unmounting
     View fstab file
         cat /etc/fstab
     Mac:
@@ -318,11 +374,13 @@ Mounting and unmounting
     View mount info
         nfsstat -m
 
-View system info:
+
+### View system info:
     Mac:
         system_profiler SPHardwareDataType
 
-Databases
+
+### Databases
     sqlite
         Backup
             sqlite3 my_database.sq3 ".backup 'backup_file.sq3'"
@@ -334,35 +392,41 @@ Databases
         Dump
             pg_dump -U postgres -s postgres
 
-SSH
-    Known hosts file
-        ~/.ssh/known_hosts
-    Launch gui from remote (Enables X11 forwarding)
-        ssh -X machine_name
 
-SELinux
+### SSH
+- Known hosts file
+
+    `~/.ssh/known_hosts`
+- Launch gui from remote (Enables X11 forwarding)
+
+    `ssh -X machine_name`
+
+
+### SELinux
     Check status
         sestatus
     Disable SE Linux
         setenforce 0
 
-Find out where a command is
+
+### Find out where a command is
     which
     whereis
-View function
+
+
+### View function
     type function
     typeset -f <function>
 
-Memory
+
+### Memory
     View machine RAM
         free -mh
     View size of directories
         du -shc *
 
-Maya hangs while starting up (No error)
-    Check if a config file is locked up at ~/.config/Autodesk/
 
-Nosetests
+### Nosetests
     Show print messages
         nosetests --nocapture
     Test specific function
@@ -370,34 +434,36 @@ Nosetests
     Test with execution time per test
         nosetests --with-timer
 
-Processes
+
+### Processes
     List open files
         lsof -p PROCESS_ID
     View environment variables of a running process
         cat /proc/<pid>/environ
 
-htop shortcuts
-    +--------------+--------------+--------------------------+
-    | Shortcut Key | Function Key |       Description        |
-    +--------------+--------------+--------------------------+
-    | h            | F1           | Invoke htop Help         |
-    | S            | F2           | Htop Setup Menu          |
-    | /            | F3           | Search for a Process     |
-    | I            | F4           | Invert Sort Order        |
-    | t            | F5           | Tree View                |
-    | >            | F6           | Sort by a column         |
-    | [            | F7           | Nice – (change priority) |
-    | ]            | F8           | Nice + (change priority) |
-    | k            | F9           | Kill a Process           |
-    | q            | F10          | Quit htop                |
-    +--------------+--------------+--------------------------+
 
-Renderman
-    License
-        app
-            /opt/pixar/RenderManProServer-22.3/bin/LicenseApp
+### htop shortcuts
+| Shortcut Key | Function Key |       Description        |
+|--------------|--------------|--------------------------|
+| h            | F1           | Invoke htop Help         |
+| S            | F2           | Htop Setup Menu          |
+| /            | F3           | Search for a Process     |
+| I            | F4           | Invert Sort Order        |
+| t            | F5           | Tree View                |
+| >            | F6           | Sort by a column         |
+| [            | F7           | Nice – (change priority) |
+| ]            | F8           | Nice + (change priority) |
+| k            | F9           | Kill a Process           |
+| q            | F10          | Quit htop                |
 
-Setuptools
+
+### Renderman
+License app
+
+    /opt/pixar/RenderManProServer-22.3/bin/LicenseApp
+
+
+### Setuptools
     Install
         python setup.py install
     Remove
@@ -406,57 +472,82 @@ Setuptools
         Remove installed files
             cat files.txt | xargs rm -rf
 
-Postgres Database:
-    Open db in command line:
-        sudo -u postgres psql -U postgres -d djattendance
-    pg_dump out your file:
-        sudo -u postgres psql djattendance > livebadgef15.backup
-    repopulate empty db with export file
-        sudo -u postgres psql djattendance < livebadgef15.backup
-    Alternative way to pg_dump/restore
-        pg_dump djattendance > db.sql
-        pg_restore -d newdb db.sql
-    restart server:
-        sudo /etc/init.d/postgresql restart
-    drop database:
-        sudo -u postgres psql postgres -c "DROP DATABASE djattendance"
-    create database:
-        sudo -u postgres psql postgres -c "CREATE DATABASE djattendance"
-    add hstore extension:
-        sudo -u postgres psql postgres -d djattendance -c "CREATE EXTENSION IF NOT EXISTS hstore;"
 
-gdb
-    +------------+------------------------------------------------------------------+
-    | b main     | Puts a breakpoint at the beginning of the program                |
-    | b          | Puts a breakpoint at the current line                            |
-    | b N        | Puts a breakpoint at line N                                      |
-    | b +N       | Puts a breakpoint N lines down from the current line             |
-    | b fn       | Puts a breakpoint at the beginning of function "fn"              |
-    | d N        | Deletes breakpoint number N                                      |
-    | info break | list breakpoints                                                 |
-    | r          | Runs the program until a breakpoint or error                     |
-    | c          | Continues running the program until the next breakpoint or error |
-    | f          | Runs until the current function is finished                      |
-    | s          | Runs the next line of the program                                |
-    | s N        | Runs the next N lines of the program                             |
-    | n          | Like s, but it does not step into functions                      |
-    | u N        | Runs until you get N lines in front of the current line          |
-    | p var      | Prints the current value of the variable "var"                   |
-    | bt         | Prints a stack trace                                             |
-    | u          | Goes up a level in the stack                                     |
-    | d          | Goes down a level in the stack                                   |
-    | q          | Quits gdb                                                        |
-    | attach ID  | Attaches to process with process ID                              |
-    | detach     | Detaches from current attached process                           |
-    +------------+------------------------------------------------------------------+
+### Postgres Database:
+- Open db in command line
 
-OpenEXR
-    exrstdattr - a utility for modifying OpenEXR standard attributes
-    exrinfo - show file format version, channels contained, compression type, data window, display window, line order, pixel aspect ratio, and the center and width of the screen window for a given OpenEXR file(s).
-    exrmerge - takes a collection of EXR images and outputs them as a single EXR with all channels combined, suitable for use with denoise.
-    exrheader - view headers
+    `sudo -u postgres psql -U postgres -d <DATABASE_NAME>`
+- pg_dump out your file:
 
-Terminal Mail
-    mail: Launch Terminal app
+    `sudo -u postgres psql <DATABASE_NAME> > livebadgef15.backup`
+- repopulate empty db with export file
+
+    `sudo -u postgres psql <DATABASE_NAME> < livebadgef15.backup`
+- Alternative way to pg_dump/restore
+
+    ```
+pg_dump <DATABASE_NAME> > db.sql
+pg_restore -d newdb db.sql
+    ```
+- restart server:
+
+    `sudo /etc/init.d/postgresql restart`
+- drop database:
+
+    `sudo -u postgres psql postgres -c "DROP DATABASE <DATABASE_NAME>"`
+- create database:
+
+    `sudo -u postgres psql postgres -c "CREATE DATABASE <DATABASE_NAME>"`
+- add hstore extension:
+
+    `sudo -u postgres psql postgres -d <DATABASE_NAME> -c "CREATE EXTENSION IF NOT EXISTS hstore;"`
+
+
+### gdb
+`gdb -p PID`
+
+| Command    |                       Description                                |
+|------------|------------------------------------------------------------------|
+| b main     | Puts a breakpoint at the beginning of the program                |
+| b          | Puts a breakpoint at the current line                            |
+| b N        | Puts a breakpoint at line N                                      |
+| b +N       | Puts a breakpoint N lines down from the current line             |
+| b fn       | Puts a breakpoint at the beginning of function "fn"              |
+| d N        | Deletes breakpoint number N                                      |
+| info break | list breakpoints                                                 |
+| r          | Runs the program until a breakpoint or error                     |
+| c          | Continues running the program until the next breakpoint or error |
+| f          | Runs until the current function is finished                      |
+| s          | Runs the next line of the program                                |
+| s N        | Runs the next N lines of the program                             |
+| n          | Like s, but it does not step into functions                      |
+| u N        | Runs until you get N lines in front of the current line          |
+| p var      | Prints the current value of the variable "var"                   |
+| bt         | Prints a stack trace                                             |
+| u          | Goes up a level in the stack                                     |
+| d          | Goes down a level in the stack                                   |
+| q          | Quits gdb                                                        |
+| attach ID  | Attaches to process with process ID                              |
+| detach     | Detaches from current attached process                           |
+
+
+### OpenEXR
+    exrstdattr # a utility for modifying OpenEXR standard attributes
+    exrinfo # show file format version, channels contained, compression type, data window, display window, line order, pixel aspect ratio, and the center and width of the screen window for a given OpenEXR file(s).
+    exrmerge # takes a collection of EXR images and outputs them as a single EXR with all channels combined, suitable for use with denoise.
+    exrheader # view headers
+
+
+### Terminal Mail
+Launch Terminal app
+
+    mail
+
     ? delete *
     ? q
+
+
+### Misc
+- Unzip tar.gz
+
+    `tar -zxvf`

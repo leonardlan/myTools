@@ -86,11 +86,18 @@ export COMMAND='env'
 - Missing dependencies
 - Hard-coded directory or path in the code
 
-## Maya scene takes too long to open or crashes a lot
-### Possible:
+## Farm too full
+- Add unused machines (maybe someone sick or away)
+
+## Maya Problems
+### Maya scene takes too long to open or crashes a lot
+#### Possible:
 - File too large
 - Is there complicated texturing?
 - When referencing, maya sequentially scans references and reads every file with selected options. Try referencing Maya Binary files (.mb) as they are already in Maya proprietary scene format and faster to load than Maya ASCII files.
+
+### Maya hangs while starting up (No error)
+- Check if a config file is locked up at `~/.config/Autodesk/`
 
 ### Try:
 - Turn off ray tracing
