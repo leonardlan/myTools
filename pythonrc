@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 # ~/.pythonrc
 
+import os
+import re
 import subprocess
 import sys
+import time
+
 
 # Enable syntax completion
 try:
@@ -29,28 +33,66 @@ finally:
             globals()[code] = getattr(getattr(colorama, typ), code) if colorama else ""
 
 
-def debug(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False):
-    """Prints type and attributes of object thing.
+def _brighten_it_up(func):
+    """Brighten up the output"""
+    def wrapper(*args, **kwargs):
+        sys.stdout.write(BRIGHT)
+        res = func(*args, **kwargs)
+        sys.stdout.write(RESET_ALL)
+        return res
+    return wrapper
 
-    :param thing object: An object to debug.
+
+@_brighten_it_up
+def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False):
+    """What Am I? Prints type and attributes of object thing.
+
+    :param thing object: Anything and everything. That's what we're here to find out.
     :param ignore_private bool: Ignores attributes starting with underscore.
     :param ignore_attrs list: List of attributes to ignore.
     :param call bool: Calls attributes that are functions and thing itself if it is callable.
     :param skip_callable bool: Doesn't print callable attributes.
     """
     typ = type(thing)
-    sys.stdout.write(BRIGHT)
 
-    if typ == list:
+    # Let's see if we know what it is first.
+    if typ in (str, unicode):
         if thing:
-            print BLUE + "List of %i %s" % (len(thing), type(thing[0]))
+            print "Just a %s:" % typ.__name__, thing
+            if os.path.exists(thing):
+                if os.path.isfile(thing):
+                    print "file path"
+                else:
+                    print "directory"
+            elif re.match(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", thing):
+                print "IP Address"
+            elif re.match(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$', thing):
+                print "MAC Address"
+        else:
+            print "Empty %s: ''" % typ.__name__
+        return
+    elif typ in (int, float):
+        print "Just an int:", thing
+        if thing >= 946702800:  # Is it epoch time?
+            print time.strftime("%Z - %Y/%m/%d, %H:%M:%S", time.localtime(thing))
+        return
+    elif typ == dict:
+        if thing:
+            print "Just a dict:"
+            pprint(thing)
+        else:
+            print RED + "Empty dict: {}"
+        return
+    elif typ in (list, tuple):
+        if thing:
+            print BLUE + "%s of %i %s" % (typ.__name__.title(), len(thing), type(thing[0]))
             print GREEN + "[0]:", pprint(thing[0])
             _print_types(type(thing[0]))
-            print RESET_ALL
         else:
-            print RED + "Empty list: []", RESET_ALL
+            print RED + "Empty %s: %s" % (typ.__name__, str(thing))
         return
 
+    # So we don't know what it is. Let's print everything we can find about it.
     thing_name = getattr(thing, "__name__") if hasattr(thing, "__name__") else ""
     call_count = private_count = total = 0
     for attr in dir(thing):
@@ -82,13 +124,14 @@ def debug(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callabl
             _print(res)
     if call and callable(thing):
         _call(thing)
-    print "%sCallable: %i, Uncallable: %i" % (CYAN, call_count, total - call_count)
+    sys.stdout.write(CYAN)
+    if not skip_callable:
+        print "Callable: %i," % call_count,
+    print "Uncallable: %i" % (total - call_count)
     print "Private: %i, Public: %i" % (private_count, total - private_count)
     print "Total: %i" % total
 
     _print_types(typ)
-
-    sys.stdout.write(RESET_ALL)
 
 
 def _print_types(typ):
