@@ -22,18 +22,20 @@ The things I've learned throughout years of debugging failed renders and bugs. M
 - [No license found](#No-available-license) for renderer or plug-in (ie. Nuke Optical Flare)
 - License server going down may cause render to stop and sleep indefinitely. Example Katana log:
 
-        2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {WARNING} License warning - code 113: No route to host
-        2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {CONTINUED} license source: port@machine.name
-        2019-04-04 13:06:52,759 katana                       [ INFO     ] R50004 {WARNING} License warning - license server connection re-established
+```
+2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {WARNING} License warning - code 113: No route to host
+2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {CONTINUED} license source: port@machine.name
+2019-04-04 13:06:52,759 katana                       [ INFO     ] R50004 {WARNING} License warning - license server connection re-established
 
-        Render process went to sleep mode and did not recover.
+Render process went to sleep mode and did not recover.
+```
 
 ### Possible:
 - File system not set up or mounted correctly. See `df -h`
 - Permission denied. Run `777 PATH_TO_FILE_OR_FOLDER`
 - Cannot connect to a server
-- Machine ran out of memory
-- No available license
+- Machine ran out of memory. Try higher capacity machine.
+- [No available license](#no-available-license)
 
 ## Instance taking longer than others
 ### Try:
@@ -62,19 +64,18 @@ OR
 - Look up license usage. Maybe there were too many renders going on at the same time maxing out licenses. Try limiting/reserving current renders available for renderer
 Are we out of license?
 - If it's a Nuke plug-in, try to pre-comp the node output, delete the node, and render on the farm so that it won't take up a plug-in license.
+- Limit number of instances run simultaneously
 - Ask ones who're not using it to close it down
 - Ask to purchase more licenses
 - Wait for a free license
 
 ## Command works on my machine but not others' machine
 ### Try:
-- Diff output. Run:
-    ```bash
+- Meld output. Run:
+```bash
 export MACHINE_NAME=''
 export COMMAND=''
-ssh $MACHINE_NAME $COMMAND | sort > /tmp/other_machine_cmd_output.txt
-eval $COMMAND | sort > /tmp/my_machine_cmd_output.txt
-meld /tmp/other_machine_cmd_output.txt /tmp/my_machine_cmd_output.txt &
+meld <(ssh $MACHINE_NAME $COMMAND) <(eval $COMMAND) &
 ```
 - Diff env var. Run the above with
 ```bash

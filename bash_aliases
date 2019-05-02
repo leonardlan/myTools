@@ -98,14 +98,15 @@ alias gs='git st'
 alias gsa='for d in $MY_WS/*/ ; do (cd "$d" && pwd && git st); done'
 alias gd='git diff'
 alias gb='git branch'
-alias gitshowtoplevel='realpath --relative-to=`pwd` "$(git rev-parse --show-toplevel)"'
-alias showorigin='git remote show origin'
 alias gac="git add . && git commit -m" # + commit message
 alias gp="git push"
 alias gl="git pull"
 alias gpom="git push origin master"
 alias glom="git pull origin master"
-alias gitshowdevs='git shortlog -sn'
+alias git-show-devs='git shortlog -sn'
+alias git-show-origin='git remote show origin'
+alias git-show-top-level='realpath --relative-to=`pwd` "$(git rev-parse --show-toplevel)"'
+alias git-current-branch="git branch | grep \* | cut -d ' ' -f2"
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'

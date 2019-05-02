@@ -1,8 +1,8 @@
-## Useful Commands
+# Useful Commands
 
 My useful commands that I can't seem to remeber. :thinking_face:
 
-### Git
+## Git
 - Check git status of all projects
 
     `for d in ~/dev/*/ ; do (cd "$d" && pwd && git st); done`
@@ -48,8 +48,8 @@ git push -f origin some_branch
     `git reset --hard HEAD~1`
 
 
-### Shell
-- Copy command output to clipboard with pipe:
+## Shell
+- Copy command output to clipboard with pipe
 
     `xclip -sel clip`
 - Get last system reboot
@@ -72,11 +72,14 @@ List available commands
 | `compgen -A function` | List all functions |
 
 - Redirecting output
+    - Redirect error message to NUL
 
-    `Redirect error message to NUL`
-        command args 2> nul
-    Redirect output to one place and errors to another
-        command args > output.msg 2> output.err
+        `command args 2> nul`
+
+    - Redirect output to one place and errors to another
+
+        `command args > output.msg 2> output.err`
+
 - cd into all directories and run a command
 
     `for d in ./*/ ; do (echo $d && cd "$d" && somecommand); done`
@@ -85,41 +88,65 @@ List available commands
     `mkdir ~/projects/{bin,pkg,src}`
 
 
-### Files
-    find number of files in current folder:
-        find . -type f | wc -l
-    View long list for a single directory
-        l -d dir
-    List by last modified
-        l -tr
-    Query number of files open limited by operating system
-        ulimit -n
-        ulimit -n 2048
-    Rename multiple files (Red Hat; CentOS)
-        rename from to file
-        Fix the extension of HTML files so that all .htm files have a four-letter .html suffix:
-            rename .htm .html *.htm
-        Remove string (remove_me)
-            rename remove_me '' *
-    List files recursively modified in last 24 hours
-        find . -mtime -1 -print
+## Files
+- Find number of files in current folder
+
+    `find . -type f | wc -l`
+
+- View long list for a single directory
+
+    `l -d dir`
+
+- List by last modified
+
+    `l -tr`
+
+- Query number of files open limited by operating system
+
+    `ulimit -n`
+
+- Set number of files limited by OS
+
+    `ulimit -n 2048`
+
+- Rename multiple files (Red Hat; CentOS)
+    - Rename from to file
+        - Fix the extension of HTML files so that all .htm files have a four-letter .html suffix
+
+            `rename .htm .html *.htm`
+        - Remove string (remove_me)
+
+            `rename remove_me '' *`
+- List files recursively modified in last 24 hours
+
+    `find . -mtime -1 -print`
 
 
-### Syncing files and folders
-    Copy directory across hosts
-        scp -r . llan@10.2.100.56:/home/llan/dev/folder_name
-    Copy one single local file to a remote destination
-        scp /path/to/source-file user@host:/path/to/destination-folder/
-    Copy one single file from a remote server to your current local server
-        scp user@host:/path/to/source-file /path/to/destination-folder
-    Copy one single file from a remote server to another remote server
-        scp user1@server1:/path/to/file user2@server2:/path/to/folder/
-    Copy multiple files with one command
-        scp file1.txt file2.txt file3.txt pete@host.example.com:/home/pete/
+## Syncing files and folders
+- Copy directory across hosts
+
+    `scp -r . USER@HOST:/PATH/TO/DESTINATION_FOLDER`
+
+- Copy one single local file to a remote destination
+
+    `scp /PATH/TO/SOURCE_FILE USER@HOST:/PATH/TO/DESTINATION_FOLDER/`
+
+- Copy one single file from a remote server to your current local server
+
+    `scp USER@HOST:/PATH/TO/SOURCE_FILE /PATH/TO/DESTINATION_FOLDER`
+
+- Copy one single file from a remote server to another remote server
+
+    `scp USER1@SERVER1:/PATH/TO/SOURCE USER2@server2:/PATH/TO/DESTINATION/`
+
+- Copy multiple files with one command
+
+    `scp file1.txt file2.txt file3.txt USER@HOST:/PATH/TO/DESTINATION/`
 
 
-### Installing packages
-#### yum
+
+## Installing packages
+### yum
     yum install PACKAGE
     yum update PACKAGE
     yum info PACKAGE
@@ -128,10 +155,11 @@ List available commands
 Install from file
 
     sudo yum -y install $(install_my_stuff.txt)
+
 Download RPMs from Yum repositories without install
 
     yumdownloader PACKAGE
-#### pip
+### pip
 - Install package for specific user **in home directory** (without sudo)
 
     `pip install --user PACKAGE`
@@ -149,45 +177,62 @@ Download RPMs from Yum repositories without install
     `pip uninstall PACKAGE_NAME`
 
 
-### Backing up files
-    Add date and time in filename (file.txt.backup_2018-08-03_12:51:34)
-        mv file.txt file.txt.backup_$(date +%F_%T)
+## Backing up files
+Add date and time in filename (file.txt.backup_2018-08-03_12:51:34)
+
+    mv file.txt file.txt.backup_$(date +%F_%T)
 
 
-### Permissions
-    View mask
-        umask
-        umask -S
-    Give permission recursively
-        sudo chmod -Rvf 755
-    Check if user is sudo
-        sudo -l -U USER
-    Add user to sudoers
-        sudo usermod -aG wheel USER
-    Log in as root
-        sudo su -
-    Change file owner
-        chown USER:GROUP FILE
+## Permissions
+- View mask
+
+    ```
+umask
+umask -S
+```
+
+- Give permission recursively
+
+    `sudo chmod -Rvf 755`
+
+- Check if user is sudo
+
+    `sudo -l -U USER`
+
+- Add user to sudoers
+
+    `sudo usermod -aG wheel USER`
+
+- Log in as root
+
+    `sudo su -`
+
+- Change file owner
+
+    `chown USER:GROUP FILE`
 
 
-### Symbolic link
+## Symbolic link
     ln -s REAL LINK_NAME
     unlink LINK_NAME
     rm LINK_NAME
 
 
-### Ports and processes
-    Check listening ports and applications
-        sudo netstat -tulpn | grep LISTEN
+## Ports and processes
+Check listening ports and applications
+
+    sudo netstat -tulpn | grep LISTEN
 
 
-### Cron jobs
-    crontab -e    Edit crontab file, or create one if it doesn’t already exist.
-    crontab -l    crontab list of cronjobs, display crontab file contents.
-    crontab -r    Remove your crontab file.
+## Cron jobs
+    crontab -e  # Edit crontab file, or create one if it doesn’t already exist.
+    crontab -l  # crontab list of cronjobs, display crontab file contents.
+    crontab -r  # Remove your crontab file.
+
+See [crontab.guru](https://crontab.guru) for crontab notation.
 
 
-### Images:
+## Images
 - Get info about image
 
     `identify`
@@ -207,193 +252,341 @@ Download RPMs from Yum repositories without install
     `convert input.exr -colorspace RGB -colorspace sRGB output.png`
 
 
-### Regex
-    Line without word
-        ^((?!word).)*$
-    Matching square brackets! Ha! Genius!
-        \[([^]]+)\]
-    Positive lookbehind and lookahead
-        (?:^|(?<= ))(words|I|want|to|find)(?:(?= )|$)
-    Negative lookbehind
-        (?<= )
-    Positive lookahead
-        (?=\t)
-    Remove unnecessary whitespace
-        [\t ]+$
-    Remove trailing
-        [\t\n ]{2,}\Z => \n
+## Regex
+- Line without word
+
+    `^((?!word).)*$`
+
+- Matching square brackets! Ha! Genius!
+
+    `\[([^]]+)\]`
+
+- Positive lookbehind and lookahead
+
+    `(?:^|(?<= ))(words|I|want|to|find)(?:(?= )|$)`
+
+- Negative lookbehind
+
+    `(?<= )`
+
+- Positive lookahead
+
+    `(?=\t)`
+
+- Remove unnecessary whitespace
+
+    `[\t ]+$`
+
+- Remove trailing
+
+    `[\t\n ]{2,}\Z => \n`
 
 
-### Users
-    See which user is using a file
-        fuser -u FILE
-    List all local users
-        cat /etc/passwd
-    Add user
-        adduser username
-    Remove user
-        sudo su -
-        userdel USER
-    Remove user and user directory
-        sudo su -
-        userdel -r USER
-    Sign in as another user
-        su - USER
-    Add account for user
-        sudo chsh -s /bin/bash USER
-    Change user home directory
-        usermod -d /new/home user
-    Groups
-        List all groups
-            cat /etc/group
-        Change group
-            chgrp GROUP FILENAME
-        Add existing user to existing group
-            sudo usermod -aG GROUP USER
-    print real and effective user and group IDs
-        id [USER]
+## Users
+- See which user is using a file
+
+    `fuser -u FILE`
+
+- List all local users
+
+    `cat /etc/passwd`
+
+- Add user
+
+    `adduser username`
+
+- Remove user
+
+    ```
+userdel USER
+```
+
+- Remove user and user directory
+
+    ```
+userdel -r USER
+```
+
+- Sign in as another user
+
+    `su - USER`
+
+- Add account for user
+
+    `sudo chsh -s /bin/bash USER`
+
+- Change user home directory
+
+    `usermod -d /new/home user`
+
+- Groups
+    - List all groups
+
+        `cat /etc/group`
+
+    - Change group
+
+        `chgrp GROUP FILENAME`
+
+    - Add existing user to existing group
+
+        `sudo usermod -aG GROUP USER`
+
+- print real and effective user and group IDs
+
+    `id USER`
 
 
-### Web dev
-    Django
-        Create app
-            python manage.py startapp polls
-        Takes migration names and returns their SQL
-            python manage.py sqlmigrate APP VERSION
-        Makemigrations
-            python manage.py makemigrations
-        Migrate
-            python manage.py migrate
-            python manage.py migrate --run-syncdb
-        Runserver
-            python manage.py runserver &
-            python manage.py runserver 0.0.0.0:8080 &
-        Shell
-            python manage.py shell
-        Run a script
-            python manage.py shell < myscript.py
-        Create super user
-            python manage.py createsuperuser
-            python manage.py createsuperuser --email=admin@gmail.com
-        Run test
-            python manage.py test APP
-        Delete all migration files:
-            find . -iname '*migrations' | xargs rm -rf
-        python -m django --version
-        python manage.py check --deploy
-        python manage.py collectstatic
+## Web dev
+### Django
+- Create app
 
-        Generate requirements.txt
-            pipreqs /path/to/project
-        Install requirements in file
-            pip install -r requirements.txt
-        If server code is not updating with apache when you edit .py files, try touch wsgi.py, which will tell it to recompile .py files
-    Python
-        Start service
-            python -m SimpleHTTPServer
+    `python manage.py startapp polls`
+
+- Takes migration names and returns their SQL
+
+    `python manage.py sqlmigrate APP VERSION`
+
+- Makemigrations
+
+    `python manage.py makemigrations`
+
+- Migrate
+
+    ```bash
+python manage.py migrate
+python manage.py migrate --run-syncdb
+```
+
+- Runserver
+
+    ```bash
+python manage.py runserver &
+python manage.py runserver 0.0.0.0:8080 &
+```
+
+- Shell
+
+    `python manage.py shell`
+
+- Run a script
+
+    `python manage.py shell < myscript.py`
+
+- Create super user
+
+    ```bash
+python manage.py createsuperuser
+python manage.py createsuperuser --email=admin@gmail.com
+```
+
+- Run test
+
+    `python manage.py test APP`
+
+- Delete all migration files
+
+    `find . -iname '*migrations' | xargs rm -rf`
+
+```bash
+python -m django --version
+python manage.py check --deploy
+python manage.py collectstatic
+```
+
+- Generate requirements.txt
+
+    `pipreqs /path/to/project`
+
+- Install requirements in file
+
+    `pip install -r requirements.txt`
+
+Note: If server code is not updating with apache when you edit .py files, try `touch wsgi.py`, which will tell it to recompile .py files
+
+### Python
+Start service
+
+    python -m SimpleHTTPServer
 
 
+## Servers
+### Apache
+```bash
+apachectl status
+apachectl restart
+apachectl stop
+apachectl start
+```
+
+- check version
+
+    `httpd -v`
+
+- Enable the Apache service so that it starts automatically at boot
+
+    `sudo systemctl enable httpd`
+
+```bash
+sudo systemctl start httpd
+sudo systemctl restart httpd
+sudo systemctl stop httpd
+systemctl status httpd
+```
+
+- Debug virtual host configuration
+
+    `apachectl -S`
+
+- View logs
+
+    `journalctl -u service_name.service --since today`
+
+- Remove service
+
+    ```
+systemctl stop SERVICENAME
+systemctl disable SERVICENAME
+rm /etc/systemd/system/SERVICENAME
+rm /etc/systemd/system/SERVICENAME symlinks that might be related
+systemctl daemon-reload
+systemctl reset-failed
+```
+
+### Nginx
+Access and error logs
+
+    /var/log/nginx/
+
+
+## Virtual environment
+- Virtualenv
+    - Create a Python virtual environment
+
+        `virtualenv VIR_ENV_NAME`
+    - Activate
+
+        `source /path/to/env/bin/activate`
+
+    `deactivate`
+- [virtualenvwrapper](https://python-guide-cn.readthedocs.io/en/latest/dev/virtualenvs.html#virtualenvwrapper)
+
+    ```bash
+lsvirtualenv -b
+mkvirtualenv VIR_ENV_NAME
+workon VIR_ENV_NAME
+lssitepackages
+deactivate
+rmvirtualenv VIR_ENV_NAME
+```
+
+
+## Password
+- Change password for user
+
+    `sudo passwd USER`
+
+- No password
+
+    `sudo passwd -d USER`
+
+
+## Mounting and unmounting
+- View fstab file
+
+    `cat /etc/fstab`
+
+- Mac
+
+    ```
+/etc/auto_home
+/etc/auto_nfs
+```
+
+- Mount drive settings
+
+    - Refresh /etc/fstab file
+
+        `sudo mount -a`
+
+    - Mac
+
+        `sudo automount -vc`
+
+- Unmount
+
+    `umount PATH_TO_DIR`
+
+- View mount info
+
+    `nfsstat -m`
+
+
+## Databases
 ### MySQL server
-    Start server
-        sudo /etc/init.d/mysql start
-    Connect to server from shell
-        mysql -u <user name> -p <database name>
-        mysql -u root -p ftta_application
-    Source sql file from mysql shell
-        source <file name>;
-    configuration file
-        /etc/mysql/my.cnf
+- Start server
+
+    `sudo /etc/init.d/mysql start`
+
+- Connect to server from shell
+
+    ```
+mysql -u USER -p DATABASE_NAME
+mysql -u root -p ftta_application
+```
+
+- Source sql file from mysql shell
+
+    `source FILE_NAME;`
+
+- configuration file
+
+    `/etc/mysql/my.cnf`
+
+### Postgres
+- Open db in command line
+
+    `sudo -u postgres psql -U postgres -d DATABASE_NAME`
+- pg_dump out your file
+
+    `sudo -u postgres psql DATABASE_NAME > livebadgef15.backup`
+- repopulate empty db with export file
+
+    `sudo -u postgres psql DATABASE_NAME < livebadgef15.backup`
+- Alternative way to pg_dump/restore
+
+    ```
+pg_dump DATABASE_NAME > db.sql
+pg_restore -d newdb db.sql
+    ```
+- restart server
+
+    `sudo /etc/init.d/postgresql restart`
+- drop database
+
+    `sudo -u postgres psql postgres -c "DROP DATABASE DATABASE_NAME"`
+- create database
+
+    `sudo -u postgres psql postgres -c "CREATE DATABASE DATABASE_NAME"`
+- add hstore extension
+
+    `sudo -u postgres psql postgres -d DATABASE_NAME -c "CREATE EXTENSION IF NOT EXISTS hstore;"`
+
+### sqlite
+- Backup
+
+    `sqlite3 my_database.sq3 ".backup 'backup_file.sq3'"`
+
+- Print the database structure
+
+    `.schema`
+
+- Print database structure and data
+
+    `.dump`
 
 
-### Servers
-    Apache
-        apachectl status
-        apachectl restart
-        apachectl stop
-        apachectl start
-        check version
-            httpd -v
-        Enable the Apache service so that it starts automatically at boot
-            sudo systemctl enable httpd
-        sudo systemctl start httpd
-        sudo systemctl restart httpd
-        sudo systemctl stop httpd
-        sudo systemctl status httpd
-        Debug virtual host configuration
-            apachectl -S
-        View logs
-            journalctl -u service_name.service --since today
-        Remove service
-            systemctl stop [servicename]
-            systemctl disable [servicename]
-            rm /etc/systemd/system/[servicename]
-            rm /etc/systemd/system/[servicename] symlinks that might be related
-            systemctl daemon-reload
-            systemctl reset-failed
-    Nginx
-        Access and error logs
-            /var/log/nginx/
-
-
-### Virtual environment
-    Virtualenv
-        Create a Python virtual environment
-            virtualenv <vir_env_name>
-        Activate
-            source /path/to/env/bin/activate
-        deactivate
-    virtualenvwrapper
-        lsvirtualenv -b
-        mkvirtualenv <vir_env_name>
-        workon <vir_env_name>
-        lssitepackages
-        deactivate
-        rmvirtualenv <vir_env_name>
-
-
-### Password
-    Change password for user
-        sudo passwd USER
-    No password
-        sudo passwd -d USER
-
-
-### Mounting and unmounting
-    View fstab file
-        cat /etc/fstab
-    Mac:
-        /etc/auto_home
-        /etc/auto_nfs
-    Mount drive settings
-        Refresh /etc/fstab file
-            sudo mount -a
-        Mac:
-            sudo automount -vc
-    Unmount
-        umount PATH_TO_DIR
-    View mount info
-        nfsstat -m
-
-
-### View system info:
-    Mac:
-        system_profiler SPHardwareDataType
-
-
-### Databases
-    sqlite
-        Backup
-            sqlite3 my_database.sq3 ".backup 'backup_file.sq3'"
-        Print the database structure
-            .schema
-        Print database structure and data
-            .dump
-    postgresql
-        Dump
-            pg_dump -U postgres -s postgres
-
-
-### SSH
+## SSH
 - Known hosts file
 
     `~/.ssh/known_hosts`
@@ -401,48 +594,65 @@ Download RPMs from Yum repositories without install
 
     `ssh -X machine_name`
 
+- ssh into machine and cd to directory
 
-### SELinux
-    Check status
-        sestatus
-    Disable SE Linux
-        setenforce 0
+    `ssh -t qubesupe "cd /usr/local/pfx/qube ; bash"`
 
 
-### Find out where a command is
+## SELinux
+```bash
+# Check status
+sestatus
+# Disable SE Linux
+setenforce 0 
+```
+
+
+## Find out where a command is
     which
     whereis
 
 
-### View function
-    type function
-    typeset -f <function>
+## View function
+    type FUNCTION
+    typeset -f FUNCTION
 
 
-### Memory
-    View machine RAM
-        free -mh
-    View size of directories
-        du -shc *
+## Memory
+View machine RAM
+
+    free -mh
+
+View size of directories
+
+    du -shc *
 
 
-### Nosetests
-    Show print messages
-        nosetests --nocapture
-    Test specific function
-        nosetests tests/test_backrefs.py:TestBackrefs.test_backref
-    Test with execution time per test
-        nosetests --with-timer
+## Nosetests
+Show print messages
+
+    `nosetests --nocapture`
+
+Test specific function
+
+    `nosetests tests/test_backrefs.py:TestBackrefs.test_backref`
+
+Test with execution time per test
+
+    `nosetests --with-timer`
 
 
-### Processes
-    List open files
-        lsof -p PROCESS_ID
-    View environment variables of a running process
-        cat /proc/<pid>/environ
+## Processes
+List open files
+
+    lsof -p PROCESS_ID
+
+View environment variables of a running process
+
+    cat /proc/PID/environ
 
 
-### htop shortcuts
+## htop shortcuts
 | Shortcut Key | Function Key |       Description        |
 |--------------|--------------|--------------------------|
 | h            | F1           | Invoke htop Help         |
@@ -457,53 +667,27 @@ Download RPMs from Yum repositories without install
 | q            | F10          | Quit htop                |
 
 
-### Renderman
+## Renderman
 License app
 
     /opt/pixar/RenderManProServer-22.3/bin/LicenseApp
 
 
-### Setuptools
-    Install
-        python setup.py install
-    Remove
-        Record a list of installed files
-            python setup.py install --record files.txt
-        Remove installed files
-            cat files.txt | xargs rm -rf
+## Setuptools
+- Install
+
+    `python setup.py install`
+
+- Record a list of installed files
+
+    `python setup.py install --record files.txt`
+
+- Remove installed files
+
+    `cat files.txt | xargs rm -rf`
 
 
-### Postgres Database:
-- Open db in command line
-
-    `sudo -u postgres psql -U postgres -d <DATABASE_NAME>`
-- pg_dump out your file:
-
-    `sudo -u postgres psql <DATABASE_NAME> > livebadgef15.backup`
-- repopulate empty db with export file
-
-    `sudo -u postgres psql <DATABASE_NAME> < livebadgef15.backup`
-- Alternative way to pg_dump/restore
-
-    ```
-pg_dump <DATABASE_NAME> > db.sql
-pg_restore -d newdb db.sql
-    ```
-- restart server:
-
-    `sudo /etc/init.d/postgresql restart`
-- drop database:
-
-    `sudo -u postgres psql postgres -c "DROP DATABASE <DATABASE_NAME>"`
-- create database:
-
-    `sudo -u postgres psql postgres -c "CREATE DATABASE <DATABASE_NAME>"`
-- add hstore extension:
-
-    `sudo -u postgres psql postgres -d <DATABASE_NAME> -c "CREATE EXTENSION IF NOT EXISTS hstore;"`
-
-
-### gdb
+## gdb
 `gdb -p PID`
 
 | Command    |                       Description                                |
@@ -531,14 +715,14 @@ pg_restore -d newdb db.sql
 | detach     | Detaches from current attached process                           |
 
 
-### OpenEXR
+## OpenEXR
     exrstdattr # a utility for modifying OpenEXR standard attributes
     exrinfo # show file format version, channels contained, compression type, data window, display window, line order, pixel aspect ratio, and the center and width of the screen window for a given OpenEXR file(s).
     exrmerge # takes a collection of EXR images and outputs them as a single EXR with all channels combined, suitable for use with denoise.
     exrheader # view headers
 
 
-### Terminal Mail
+## Terminal Mail
 Launch Terminal app
 
     mail
@@ -547,7 +731,7 @@ Launch Terminal app
     ? q
 
 
-### Misc
+## Misc
 - Unzip tar.gz
 
     `tar -zxvf`

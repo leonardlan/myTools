@@ -74,7 +74,7 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
     elif typ in (int, float):
         print "Just an int:", thing
         if thing >= 946702800:  # Is it epoch time?
-            print time.strftime("%Z - %Y/%m/%d, %H:%M:%S", time.localtime(thing))
+            print time.strftime("%Z - %a %Y-%m-%d, %I:%M:%S %p", time.localtime(thing))
         return
     elif typ == dict:
         if thing:
@@ -93,7 +93,7 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
         return
 
     # So we don't know what it is. Let's print everything we can find about it.
-    thing_name = getattr(thing, "__name__") if hasattr(thing, "__name__") else ""
+    thing_name = getattr(thing, "__name__", "")
     call_count = private_count = total = 0
     for attr in dir(thing):
         if attr in ignore_attrs:
@@ -156,12 +156,12 @@ def _print(to_print):
 
 
 def ns(msg=""):
-    """ Sends a desktop notification using alias ns """
+    """Sends a desktop notification using alias ns"""
     subprocess.call(["/bin/bash", "-i", "-c", "ns %s" % msg])
 
 
 def cb(content):
-    """ Copies content to clipboard """
+    """Copies content to clipboard"""
     import clipboard, pyperclip
     try:
         clipboard.copy(content)
@@ -176,7 +176,7 @@ def start_QApplication():
 
 
 def history():
-    """ Returns interactive python command history """
+    """Returns interactive python command history"""
     msg = []
     for i in range(1, readline.get_current_history_length()):
         msg.append(readline.get_history_item(i))
@@ -185,3 +185,33 @@ def history():
 
 def print_history():
     print history()
+
+
+h = print_history
+
+
+def find(foo, target):
+    """Recursive finds path to target in dict foo
+
+    Args:
+        foo (dict): A complicated dict where I need to find a target
+    """
+    attrs = _find(foo, target)
+    if not attrs:
+        return "Target not found in dict"
+    path = "".join(["['%s']" % attr for attr in attrs])
+    print "%s: %s" % (path, eval("foo%s" % path))
+
+
+def _find(foo, target, path=[]):
+    """Recursive helper for find()"""
+    for k, v in foo.iteritems():
+        if type(v) == dict:
+            res = _find(v, target, path=path + [k])
+            if res:
+                return res
+        elif v:
+            if type(v) == str and type(target) == str and target.lower() in v.lower():
+                return path + [k]
+            elif type(v) == int and target == v:
+                return path + [k]
