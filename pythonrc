@@ -2,10 +2,12 @@
 # ~/.pythonrc
 
 import os
+from pprint import pprint
 import re
 import subprocess
 import sys
 import time
+from types import ModuleType
 
 
 # Enable syntax completion
@@ -17,7 +19,6 @@ else:
     import rlcompleter
     readline.parse_and_bind("tab: complete")
 
-from pprint import pprint
 
 # Import colorama for color-printing to terminal
 try:
@@ -27,10 +28,16 @@ except ImportError:
     colorama = None
 finally:
     # Adds color codes to global variables
-    type_to_code = {"Fore": ["BLUE", "CYAN", "GREEN", "RED"], "Style": ["BRIGHT", "RESET_ALL"]}
+    type_to_code = {
+        "Fore": ["BLUE", "CYAN", "GREEN", "MAGENTA", "RED", "LIGHTGREEN_EX", "YELLOW"],
+        "Style": ["BRIGHT", "RESET_ALL"]
+    }
     for typ, codes in type_to_code.iteritems():
         for code in codes:
             globals()[code] = getattr(getattr(colorama, typ), code) if colorama else ""
+
+
+IGNORED_ATTRIBUTES = ["__builtins__", "__globals__", "func_globals"]
 
 
 def _brighten_it_up(func):
@@ -44,7 +51,8 @@ def _brighten_it_up(func):
 
 
 @_brighten_it_up
-def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False):
+def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False,
+        skip_module=True, skip_known=False):
     """What Am I? Prints type and attributes of object thing.
 
     :param thing object: Anything and everything. That's what we're here to find out.
@@ -52,49 +60,66 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
     :param ignore_attrs list: List of attributes to ignore.
     :param call bool: Calls attributes that are functions and thing itself if it is callable.
     :param skip_callable bool: Doesn't print callable attributes.
+    :param skip_module bool: Skips module attributes.
+    :param skip_known bool: Prints every attribute even if we know what it is.
     """
     typ = type(thing)
 
-    # Let's see if we know what it is first.
-    if typ in (str, unicode):
-        if thing:
-            print "Just a %s:" % typ.__name__, thing
-            if os.path.exists(thing):
-                if os.path.isfile(thing):
-                    print "file path"
+    if not skip_known:
+        # Let's see if we know what it is first.
+        if typ in (str, unicode):
+            if thing:
+                if os.path.exists(thing):
+                    if os.path.isfile(thing):
+                        print "file path"
+                    else:
+                        print "directory"
+                elif re.match(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", thing):
+                    print "IP Address"
+                elif re.match(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$', thing):
+                    print "MAC Address"
                 else:
-                    print "directory"
-            elif re.match(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", thing):
-                print "IP Address"
-            elif re.match(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$', thing):
-                print "MAC Address"
-        else:
-            print "Empty %s: ''" % typ.__name__
-        return
-    elif typ in (int, float):
-        print "Just an int:", thing
-        if thing >= 946702800:  # Is it epoch time?
-            print time.strftime("%Z - %a %Y-%m-%d, %I:%M:%S %p", time.localtime(thing))
-        return
-    elif typ == dict:
-        if thing:
-            print "Just a dict:"
-            pprint(thing)
-        else:
-            print RED + "Empty dict: {}"
-        return
-    elif typ in (list, tuple):
-        if thing:
-            print BLUE + "%s of %i %s" % (typ.__name__.title(), len(thing), type(thing[0]))
-            print GREEN + "[0]:", pprint(thing[0])
-            _print_types(type(thing[0]))
-        else:
-            print RED + "Empty %s: %s" % (typ.__name__, str(thing))
-        return
+                    print "Just a %s:" % typ.__name__, thing
+            else:
+                print "Empty %s: ''" % typ.__name__
+            return
+        elif typ in (int, float):
+            if thing >= 946702800:
+                print "Epoch time"
+                print time.strftime("%Z - %a %Y-%m-%d, %I:%M:%S %p", time.localtime(thing))
+            else:
+                print "Just an int:", thing
+            return
+        elif typ == dict:
+            if thing:
+                print "Just a dict:"
+                pprint(thing)
+            else:
+                print RED + "Empty dict: {}"
+            return
+        elif typ in (list, tuple):
+            if thing:
+                print BLUE + "%s of %i %s%s" % (
+                    typ.__name__.title(),
+                    len(thing),
+                    type(thing[0]).__name__,
+                    "s" if len(thing) > 1 else ""
+                )
+                print GREEN + "[0]:", pprint(thing[0])
+                _print_types(type(thing[0]))
+            else:
+                print RED + "Empty %s: %s" % (typ.__name__, str(thing))
+            return
+        elif callable(thing):
+            print _func_name_args_kwargs(thing)
+            if thing.__doc__:
+                print thing.__doc__
+            return
 
     # So we don't know what it is. Let's print everything we can find about it.
     thing_name = getattr(thing, "__name__", "")
     call_count = private_count = total = 0
+    ignore_attrs += IGNORED_ATTRIBUTES
     for attr in dir(thing):
         if attr in ignore_attrs:
             continue
@@ -108,12 +133,19 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
         except Exception, e:
             print RED + e
             continue
-        long_name = "%s.%s" % (thing_name, attr)
+
+        # Skip if module
+        if isinstance(res, ModuleType) and skip_module:
+            continue
+
+        # Skip if callable
         is_callable = callable(res)
+        long_name = "%s.%s" % (thing_name, attr)
         if is_callable and skip_callable:
             continue
         elif is_callable:
-            print BLUE + "%s():" % long_name + GREEN,
+            # Print *args, **kwargs
+            print _func_name_args_kwargs(res),
             call_count += 1
             if call:
                 _call(res)
@@ -134,10 +166,27 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
     _print_types(typ)
 
 
+def _func_name_args_kwargs(func):
+    varnames_str = ""
+    code = getattr(func, "__code__", None)
+    if code:
+        co_varnames = getattr(code, "co_varnames", None)
+        if co_varnames:
+            varnames = list(co_varnames)
+            defaults = getattr(func, "__defaults__") or []
+            for i, default in enumerate(defaults):
+                index = len(varnames) - len(defaults) + i
+                varnames[index] = MAGENTA + varnames[index] + BLUE + "=" + YELLOW + \
+                    str(default) + BLUE
+            varnames_str = ", ".join(varnames)
+    return BLUE + "%s(%s):" % (func.__name__, varnames_str) + GREEN
+
+
 def _print_types(typ):
     import inspect
-    print CYAN + "Parents:" + GREEN, inspect.getmro(typ)[1:]  # Print types of all parent classes
-    print CYAN + "Type:" + GREEN, typ
+    # Print types of all parent classes
+    print CYAN + "Parents:" + GREEN, [t.__name__ for t in inspect.getmro(typ)[1:]]
+    print CYAN + "Type:" + GREEN, typ.__name__
 
 
 def _call(func):
