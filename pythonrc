@@ -30,7 +30,7 @@ finally:
     # Adds color codes to global variables
     type_to_code = {
         "Fore": ["BLUE", "CYAN", "GREEN", "MAGENTA", "RED", "LIGHTGREEN_EX", "YELLOW"],
-        "Style": ["BRIGHT", "RESET_ALL"]
+        "Style": ["BRIGHT", "NORMAL", "RESET_ALL"]
     }
     for typ, codes in type_to_code.iteritems():
         for code in codes:
@@ -71,7 +71,14 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
             if thing:
                 if os.path.exists(thing):
                     if os.path.isfile(thing):
-                        print "file path"
+                        if thing.endswith(".ma"):
+                            print "Maya ascii file"
+                        elif thing.endswith(".mb"):
+                            print "Maya binary file"
+                        elif thing.endswith(".exr"):
+                            print "EXR image"
+                        else:
+                            print "file path"
                     else:
                         print "directory"
                 elif re.match(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", thing):
@@ -105,7 +112,7 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
                     type(thing[0]).__name__,
                     "s" if len(thing) > 1 else ""
                 )
-                print GREEN + "[0]:", pprint(thing[0])
+                print NORMAL + GREEN + "[0]:", pprint(thing[0]), BRIGHT
                 _print_types(type(thing[0]))
             else:
                 print RED + "Empty %s: %s" % (typ.__name__, str(thing))

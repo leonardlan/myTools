@@ -1,66 +1,76 @@
-# Debug checklist
+# Debug Checklist
 
 The things I've learned throughout years of debugging failed renders and bugs. Maybe this will one day be scripted and no longer require TDs. :smile:
 
-## Render failing on farm
-### Try:
-1. Check hosts to see if it's happening on a [specific machine](#specific-machine-not-working)
-2. Check time started to see if it's happening around the same time (Might be related to when something else broke)
-3. Check memory usage to see where it is peaking
-4. Check stdout and stderr logs for error traceback
-    1. Check for pattern in logs among failed renders. (ie. Maybe they all were killed on a certain frame)
-5. Check output renders with `rv output.exr`. List size. If zero, render failed.
-6. `ssh` into machines and check status of rendering process
-7. Check farm and local machine are using same version of software (ie. Nuke 10 on submitter but Nuke 9 on farm)
-8. Run render command locally
-9. Run render command as render user on remote machine that failed
-10. Diff env var on farm and local
-11. Run on higher CPU machine
+## :computer:Service not found or failing
+- Check logs on client machine
+- Try accessing via browser
+- Check other URLs in web app
+- Try pinging the service `ping MACHINE_NAME`
+- ssh into machine
+    - Check service status
+    - Check logs
+    - File system not set up or mounted correctly. See `df -h`
+    - Check fstab `cat /etc/fstab` set up correctly
+    - Restart service as correct user
 
-### Reasons for failure:
+## Farm Issues
+### Render failing on farm:disappointed:
+#### Try:
+- Check hosts to see if it's happening on a [specific machine](#specific-machine-not-working)
+- Check time started to see if it's happening around the same time (Might be related to when something else broke)
+- Check memory usage to see where it is peaking
+- Check stdout and stderr logs for error traceback
+    - Check for pattern in logs among failed renders. (ie. Maybe they all were killed on a certain frame)
+- Check output renders with `rv output.exr`. List size. If zero, render failed.
+- `ssh` into machines and check status of rendering process
+- Check farm and local machine are using same version of software (ie. Nuke 10 on submitter but Nuke 9 on farm)
+- Run render command locally
+- Run render command as render user on remote machine that failed
+- Diff env var on farm and local
+- Run on higher CPU machine
+
+#### Reasons for failure:
 - No Camera present in scene
 - [No license found](#No-available-license) for renderer or plug-in (ie. Nuke Optical Flare)
 - License server going down may cause render to stop and sleep indefinitely. Example Katana log:
-
 ```
 2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {WARNING} License warning - code 113: No route to host
 2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {CONTINUED} license source: port@machine.name
 2019-04-04 13:06:52,759 katana                       [ INFO     ] R50004 {WARNING} License warning - license server connection re-established
-
-Render process went to sleep mode and did not recover.
 ```
 
-### Possible:
+#### Possible:
 - File system not set up or mounted correctly. See `df -h`
 - Permission denied. Run `777 PATH_TO_FILE_OR_FOLDER`
 - Cannot connect to a server
 - Machine ran out of memory. Try higher capacity machine.
 - [No available license](#no-available-license)
 
-## Instance taking longer than others
-### Try:
-1. Check [Render failing on farm](#render-failing-on-farm) first
-1. Meld log with a normal instance
-2. ssh into machine and monitor process status
-3. Check if it's hanging on a specific frame
-4. Check output render and see which frames are not rendered
+### Instance taking longer than others
+#### Try:
+- Check [Render failing on farm](#render-failing-on-farm) first
+- Meld log with a normal instance
+- ssh into machine and monitor process status
+- Check if it's hanging on a specific frame
+- Check output render and see which frames are not rendered
 
-### Possible solutions:
+#### Possible solutions:
 - Kill and restart the instance
 OR
 - Kill the job and submit another job rendering just the missing frame(s)
 
-## Specific machine not working
+### Specific machine not working
 - Check if the machine is updated to pipeline tools
 - Check file system set up or mounted correctly. See `df -h`
 - Try rebooting the machine: `ssh root@machine reboot`
 - Omit the machine in render job
 - Write ticket to Systems/IT
 
-## Some render frames fail while others don't
-1. Check output permissions are same. If not, check mask (umask) of machines that rendered the failed frames.
+### Some render frames fail while others don't
+- Check output permissions are same. If not, check mask (umask) of machines that rendered the failed frames.
 
-## No available license
+### No available license
 - Look up license usage. Maybe there were too many renders going on at the same time maxing out licenses. Try limiting/reserving current renders available for renderer
 Are we out of license?
 - If it's a Nuke plug-in, try to pre-comp the node output, delete the node, and render on the farm so that it won't take up a plug-in license.
@@ -69,9 +79,9 @@ Are we out of license?
 - Ask to purchase more licenses
 - Wait for a free license
 
-## Command works on my machine but not others' machine
-### Try:
-- Meld output. Run:
+### Command works on my machine but not others' machine
+#### Try:
+- Meld output of local machine with remote machine
 ```bash
 export MACHINE_NAME=''
 export COMMAND=''
@@ -82,15 +92,15 @@ meld <(ssh $MACHINE_NAME $COMMAND) <(eval $COMMAND) &
 export COMMAND='env'
 ```
 
-### Possible:
+#### Possible:
 - Different system environment
 - Missing dependencies
 - Hard-coded directory or path in the code
 
-## Farm too full
+### Farm too full
 - Add unused machines (maybe someone sick or away)
 
-## Maya Problems
+## <img src="https://1.bp.blogspot.com/-HGzMAuW1Neo/Wwg1DBO1nLI/AAAAAAAABvE/U8pNkz07IocDCljJVcEsvogx8bqkVpP8QCLcBGAs/s1600/Maya.png" style="background-color: transparent; vertical-align: middle; width: 32px; height: 32px"> Maya Problems
 ### Maya scene takes too long to open or crashes a lot
 #### Possible:
 - File too large
@@ -106,7 +116,7 @@ export COMMAND='env'
 - Turn off Anti Aliasing
 - Turn off motion blur
 
-## Optimize scene size
+### Optimize scene size
 - Remove empty, invalid, and unused information from the scene. `Select File > Optimize Scene Size`
 - Remove construction history from the selected object(s). Only do this if you are sure you do not need to edit the objects’ history again.
 - Select the objects and select Edit > Delete by Type > History. Do not save panel layouts with the scene. `In the UI Elements preferences (Window > Settings/Preferences > Preferences), turn off Save Panel Layouts with File.`
@@ -122,8 +132,4 @@ export COMMAND='env'
     (╯°□°）╯︵ ┻━┻
 
 ## General debug
-- Try closing and opening the software
-
-## Service not found or failing
-1. Try pinging the service `ping MACHINE_NAME`
-2. File system not set up or mounted correctly. See `df -h`
+- Try closing and opening the software:laughing:
