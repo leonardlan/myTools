@@ -4,7 +4,6 @@
 
 # Need this for notify-send to work in cron job
 export DISPLAY=:0.0
-export XAUTHORITY=/home/llan/.Xauthority
 
 hour=`date +%-l`
 msg="It's $hour o'clock!"
@@ -18,4 +17,6 @@ case "$hour" in
 esac
 
 notify-send -i face-laugh 'Hey!' "$msg"
-play `dirname $0/`/sounds/definite.ogg
+# Play a random sound
+export cur_path=`dirname $0/`
+play "$cur_path/sounds/`ls -1 $cur_path/sounds | shuf -n1`"
