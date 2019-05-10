@@ -246,28 +246,50 @@ def print_history():
 h = print_history
 
 
+def _is_text(s):
+    return type(s) in [str, unicode]
+
+
 def find(foo, target):
     """Recursive finds path to target in dict foo
 
     Args:
-        foo (dict): A complicated dict where I need to find a target
+        foo (dict or list): A complicated dict or list where I need to find a target
     """
     attrs = _find(foo, target)
     if not attrs:
         return "Target not found in dict"
-    path = "".join(["['%s']" % attr for attr in attrs])
-    print "%s: %s" % (path, eval("foo%s" % path))
+    path = ""
+    for attr in attrs:
+        if _is_text(attr):
+            path += "['%s']" % attr
+        else:
+            path += "[%s]" % attr
+    print "%s:" % path,
+    print eval("foo%s" % path)
 
 
 def _find(foo, target, path=[]):
     """Recursive helper for find()"""
-    for k, v in foo.iteritems():
-        if type(v) == dict:
-            res = _find(v, target, path=path + [k])
-            if res:
-                return res
-        elif v:
-            if type(v) == str and type(target) == str and target.lower() in v.lower():
-                return path + [k]
-            elif type(v) == int and target == v:
-                return path + [k]
+    if type(foo) == dict:
+        for k, v in foo.iteritems():
+            if type(v) in (dict, list):
+                res = _find(v, target, path=path + [k])
+                if res:
+                    return res
+            elif v:
+                if _is_text(v) and _is_text(target) and target.lower() in v.lower():
+                    return path + [k]
+                elif type(v) == int and target == v:
+                    return path + [k]
+    elif type(foo) == list:
+        for index, item in enumerate(foo):
+            if type(item) in (dict, list):
+                res = _find(item, target, path=path + [index])
+                if res:
+                    return res
+            elif item:
+                if _is_text(item) and _is_text(target) and target.lower() in item.lower():
+                    return path + [index]
+                elif type(item) == int and target == item:
+                    return path + [index]

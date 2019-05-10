@@ -731,6 +731,10 @@ Launch Terminal app
     ? q
 
 
+## NVidia
+`nvidia-smi`
+
+
 ## Misc
 - Unzip tar.gz
 
