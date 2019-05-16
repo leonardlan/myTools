@@ -112,7 +112,8 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
                     type(thing[0]).__name__,
                     "s" if len(thing) > 1 else ""
                 )
-                print NORMAL + GREEN + "[0]:", pprint(thing[0]), BRIGHT
+                print NORMAL + GREEN + "[0]: ",
+                pprint(thing[0]), BRIGHT
                 _print_types(type(thing[0]))
             else:
                 print RED + "Empty %s: %s" % (typ.__name__, str(thing))
@@ -226,8 +227,7 @@ def cb(content):
 
 
 def start_QApplication():
-    from bron_qt.qt import QtGui
-
+    from PyQt4 import QtGui
     return QtGui.QApplication(sys.argv)
 
 

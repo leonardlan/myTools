@@ -1,3 +1,5 @@
+<title>Debug Checklist</title>
+
 # Debug Checklist
 
 The things I've learned throughout years of debugging failed renders and bugs. Maybe this will one day be scripted and no longer require TDs. :smile:

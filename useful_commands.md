@@ -1,3 +1,5 @@
+<title>Useful Commands</title>
+
 # Useful Commands
 
 My useful commands that I can't seem to remeber. :thinking_face:
