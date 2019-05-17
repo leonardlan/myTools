@@ -48,6 +48,11 @@ git push -f origin some_branch
 - Go back 1 commit (Warning: cannot undo)
 
     `git reset --hard HEAD~1`
+- Fetch/merge
+    ```bash
+git fetch
+git merge origin/master
+    ```
 
 
 ## Shell
