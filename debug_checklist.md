@@ -37,9 +37,16 @@ The things I've learned throughout years of debugging failed renders and bugs. M
 - [No license found](#No-available-license) for renderer or plug-in (ie. Nuke Optical Flare)
 - License server going down may cause render to stop and sleep indefinitely. Example Katana log:
 ```
-2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {WARNING} License warning - code 113: No route to host
-2019-04-04 12:59:12,931 katana                       [ INFO     ] R50004 {CONTINUED} license source: port@machine.name
-2019-04-04 13:06:52,759 katana                       [ INFO     ] R50004 {WARNING} License warning - license server connection re-established
+[ INFO     ] R50004 {WARNING} License warning - code 113: No route to host
+[ INFO     ] R50004 {CONTINUED} license source: port@machine.name
+[ INFO     ] R50004 {WARNING} License warning - license server connection re-established
+```
+```
+[ INFO     ] R50004 {WARNING} License warning - code 104: Connection reset by peer
+[ INFO     ] R50004 {CONTINUED} license source: port@machine.name
+[ INFO     ] R50004 {WARNING} License warning - code 111: Connection refused
+[ INFO     ] R50004 {CONTINUED} license source: port@machine.name
+[ INFO     ] R50004 {WARNING} License warning - license server connection re-established
 ```
 
 #### Possible:
