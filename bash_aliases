@@ -107,6 +107,9 @@ alias git-show-devs='git shortlog -sn'
 alias git-show-origin='git remote show origin'
 alias git-show-top-level='realpath --relative-to=`pwd` "$(git rev-parse --show-toplevel)"'
 alias git-current-branch="git branch | grep \* | cut -d ' ' -f2"
+if [ -f $HOME/software/smartgit/bin/smartgit.sh ]; then
+    alias smartgit='$HOME/software/smartgit/bin/smartgit.sh'
+fi
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'

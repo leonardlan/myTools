@@ -257,6 +257,9 @@ See [crontab.guru](https://crontab.guru) for crontab notation.
 - Convert exr to png while maintaining format
 
     `convert input.exr -colorspace RGB -colorspace sRGB output.png`
+- Resize image
+
+    `convert img.png -resize 16x16 img.png`
 
 
 ## Regex

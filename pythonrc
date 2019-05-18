@@ -181,11 +181,12 @@ def _func_name_args_kwargs(func):
         co_varnames = getattr(code, "co_varnames", None)
         if co_varnames:
             varnames = list(co_varnames)
-            defaults = getattr(func, "__defaults__") or []
-            for i, default in enumerate(defaults):
-                index = len(varnames) - len(defaults) + i
-                varnames[index] = MAGENTA + varnames[index] + BLUE + "=" + YELLOW + \
-                    str(default) + BLUE
+            defaults = getattr(func, "__defaults__", [])
+            if defaults:
+                for i, default in enumerate(defaults):
+                    index = len(varnames) - len(defaults) + i
+                    varnames[index] = MAGENTA + varnames[index] + BLUE + "=" + YELLOW + \
+                        str(default) + BLUE
             varnames_str = ", ".join(varnames)
     return BLUE + "%s(%s):" % (func.__name__, varnames_str) + GREEN
 
