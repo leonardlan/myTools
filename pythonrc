@@ -294,3 +294,15 @@ def _find(foo, target, path=[]):
                     return path + [index]
                 elif type(item) == int and target == item:
                     return path + [index]
+
+
+def demo_colorama():
+    """Print every style and color possible with colorama"""
+    for color in dir(colorama.Fore):
+        if color.isupper() and color != "RESET":
+            print getattr(colorama.Fore, color),
+            for style in dir(colorama.Style):
+                if style.isupper() and style != "RESET_ALL":
+                    print getattr(colorama.Style, style), style, color,
+            print
+    sys.stdout.write(RESET_ALL)
