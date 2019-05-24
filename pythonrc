@@ -99,7 +99,7 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
             return
         elif typ == dict:
             if thing:
-                print "Just a dict:"
+                print BLUE + "Just a dict:"
                 pprint(thing)
             else:
                 print RED + "Empty dict: {}"
@@ -180,7 +180,11 @@ def _func_name_args_kwargs(func):
     if code:
         co_varnames = getattr(code, "co_varnames", None)
         if co_varnames:
-            varnames = list(co_varnames)
+            try:
+                varnames = list(co_varnames)
+            except TypeError, e:
+                print "Could not get func args for", co_varnames
+                return ""
             defaults = getattr(func, "__defaults__", [])
             if defaults:
                 for i, default in enumerate(defaults):
@@ -194,7 +198,7 @@ def _func_name_args_kwargs(func):
 def _print_types(typ):
     import inspect
     # Print types of all parent classes
-    print CYAN + "Parents:" + GREEN, [t.__name__ for t in inspect.getmro(typ)[1:]]
+    print CYAN + "Parents:" + GREEN, " -> ".join([t.__name__ for t in inspect.getmro(typ)[1:]])
     print CYAN + "Type:" + GREEN, typ.__name__
 
 

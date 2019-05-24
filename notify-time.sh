@@ -6,7 +6,11 @@
 export DISPLAY=:0.0
 
 hour=`date +%-l`
-msg="It's $hour o'clock!"
+if [[ `date +%M` == "00" ]]; then
+    msg="It's $hour o'clock!"
+else
+    msg="It's `date +%l:%M`!"
+fi
 
 case "$hour" in
     9) msg+=" Good morning!";;

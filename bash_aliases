@@ -81,6 +81,7 @@ _ls_sb_dirs () {
 }
 complete -F _ls_sb_dirs sb
 
+# Backup file or dir using cp
 function backup() {
     for var in "$@"
     do
@@ -133,6 +134,7 @@ complete -v listenv
 alias ks='kill -9'
 alias pk='killall -9'
 alias pkp='pk python'
+alias pkt='pk tail'
 
 # Django
 alias migrate='python manage.py migrate'

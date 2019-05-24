@@ -11,6 +11,7 @@ ln -sfnv `readlink -f gitignore_global` ~/.gitignore_global
 ln -sfnv `readlink -f my_bashrc` ~/.my_bashrc
 ln -sfnv `readlink -f pythonrc` ~/.pythonrc
 ln -sfnv `readlink -f useful_commands.md` ~/useful_commands.md
+ln -sfnv `readlink -f myTools.desktop` ~/.local/share/applications/myTools.desktop
 echo Symlinks all set up
 
 echo Setting up Sublime symlink...
@@ -20,6 +21,7 @@ ln -sfn `readlink -f sublime/snippets/python_class.sublime-snippet` ~/.config/su
 ln -sfn `readlink -f sublime/snippets/python_function.sublime-snippet` ~/.config/sublime-text-3/Packages/User/python_function.sublime-snippet
 ln -sfn `readlink -f sublime/snippets/python_function_simple.sublime-snippet` ~/.config/sublime-text-3/Packages/User/python_function_simple.sublime-snippet
 ln -sfn `readlink -f sublime/snippets/python_docstring.sublime-snippet` ~/.config/sublime-text-3/Packages/User/python_docstring.sublime-snippet
+ln -sfn `readlink -f sublime/snippets/python_unittest.sublime-snippet` ~/.config/sublime-text-3/Packages/User/python_unittest.sublime-snippet
 echo Sublime symlinks all set up
 
 add_line_to_file() {
