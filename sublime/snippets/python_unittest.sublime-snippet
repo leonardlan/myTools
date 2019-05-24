@@ -1,0 +1,17 @@
+<snippet>
+    <content><![CDATA[
+import unittest
+
+
+class Test${1:Problem}(unittest.TestCase):
+
+    def test_${2:sample}(self):
+        ${2:self.assertEqual(1, 1)}
+
+
+if __name__ == '__main__':
+    unittest.main()
+]]></content>
+    <tabTrigger>unittest</tabTrigger>
+    <!-- <scope>source.python</scope> -->
+</snippet>
