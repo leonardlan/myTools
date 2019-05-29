@@ -20,7 +20,8 @@ case "$hour" in
     *) msg+=" Drink some water!"
 esac
 
-notify-send -i face-laugh 'Hey!' "$msg"
+img=`shuf -n1 -e face-angel face-cool face-laugh face-smile face-smile-big stock_smiley-1 stock_smiley-3`
+notify-send -i $img 'Hey!' "$msg"
 # Play a random sound
 export cur_path=`dirname $0/`
 play "$cur_path/sounds/`ls -1 $cur_path/sounds | shuf -n1`"
