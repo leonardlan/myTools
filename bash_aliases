@@ -35,6 +35,7 @@ f () { find . -name "*$@*" | grep $@; }
 g () { grep -nr --exclude=\*.{jpg,png} "$@"; }
 
 alias find-executables-recursively='find . -type f -perm /u=x,g=x,o=x -exec ls -l {} \;'
+alias find-images-recursively='find ./ -type f \( -iname \*.jpg -o -iname \*.jpeg -o -iname \*.png -o -iname \*.exr -o -iname \*.tiff -o -iname \*.gif -o -iname \*.bmp \)'
 
 hs () { h | grep "$@"; }
 
