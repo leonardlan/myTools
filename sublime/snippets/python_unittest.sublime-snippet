@@ -5,6 +5,9 @@ import unittest
 
 class Test${1:Problem}(unittest.TestCase):
 
+    def __init__(self, *args, **kwargs):
+        super(Test${1:Problem}, self).__init__(*args, **kwargs)
+
     def test_${2:sample}(self):
         ${2:self.assertEqual(1, 1)}
 
