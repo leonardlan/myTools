@@ -11,7 +11,6 @@
 		100
 	],
 	"scroll_past_end": true,
-	"sublime_merge_path": "~/software/sublime-merge-1107-1.x86_64/opt/sublime_merge/sublime_merge",
 	"strip_whitespace_lines_on_save": false,
 	"theme": "Default.sublime-theme",
 	"translate_tabs_to_spaces": true
