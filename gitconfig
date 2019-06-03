@@ -11,6 +11,6 @@
   status = auto
   branch = auto
 [core]
-	excludesfile = ~/.gitignore_global
+  excludesfile = ~/.gitignore_global
 [user]
-	name = Leonard Lan
+  name = Leonard Lan
