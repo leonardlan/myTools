@@ -637,6 +637,10 @@ View size of directories
 
     du -shc *
 
+View `du -h` sorted by size
+
+    du -hs * | sort -h
+
 
 ## Nosetests
 Show print messages
