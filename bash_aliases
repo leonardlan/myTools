@@ -29,7 +29,10 @@ alias uuu='cd ../../..'
 alias uuuu='cd ../../../..'
 alias uuuuu='cd ../../../../..'
 
-runmeindirs () { for d in ./*/ ; do (cd "$d" && echo && pwd && $@); done }
+# Prints pwd relative to home dir in bold blue
+alias _pwd_nice='printf "\033[1;34m`dirs +0`\n\033[0m"'
+
+runmeindirs () { for d in ./*/ ; do (cd "$d" && echo && _pwd_nice && $@); done }
 
 f () { find . -name "*$@*" | grep $@; }
 g () { grep -nr --exclude=\*.{jpg,png} "$@"; }
@@ -100,7 +103,7 @@ alias myTools='cd ~/myTools'
 # Git
 alias gg='git gui &'
 alias gs='git st'
-alias gsa='for d in $MY_WS/*/ ; do (cd "$d" && pwd && git st); done'
+alias gsa='for d in $MY_WS/*/ ; do (cd "$d" && _pwd_nice && git st); done'
 alias gd='git diff'
 alias gb='git branch'
 alias gac="git add . && git commit -m" # + commit message

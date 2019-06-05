@@ -29,7 +29,7 @@ except ImportError:
 finally:
     # Adds color codes to global variables
     type_to_code = {
-        "Fore": ["BLUE", "CYAN", "GREEN", "MAGENTA", "RED", "LIGHTGREEN_EX", "YELLOW"],
+        "Fore": ["BLUE", "CYAN", "GREEN", "MAGENTA", "RED", "LIGHTGREEN_EX", "YELLOW", "RESET"],
         "Style": ["BRIGHT", "NORMAL", "RESET_ALL"]
     }
     for typ, codes in type_to_code.iteritems():
@@ -91,7 +91,7 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
                 print "Empty %s: ''" % typ.__name__
             return
         elif typ in (int, float):
-            if thing >= 946702800:
+            if thing >= 946702800:  # Epoch date
                 print "Epoch time"
                 print time.strftime("%Z - %a %Y-%m-%d, %I:%M:%S %p", time.localtime(thing))
             else:
@@ -106,6 +106,18 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
             return
         elif typ in (list, tuple):
             if thing:
+                if len(thing) > 1:
+                    typ_0 = type(thing[0])
+                    is_all_same_type = True
+                    for item in thing:
+                        if type(item) != typ_0:
+                            is_all_same_type = False
+                            break
+                    if not is_all_same_type:
+                        print BLUE + "%s of (%s)" % (
+                            typ.__name__.title(), ", ".join([type(item).__name__ for item in thing]))
+                        pprint(thing)
+                        return
                 print BLUE + "%s of %i %s%s" % (
                     typ.__name__.title(),
                     len(thing),
@@ -122,6 +134,7 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
             print _func_name_args_kwargs(thing)
             if thing.__doc__:
                 print thing.__doc__
+            _print_types(typ)
             return
 
     # So we don't know what it is. Let's print everything we can find about it.
@@ -196,10 +209,11 @@ def _func_name_args_kwargs(func):
 
 
 def _print_types(typ):
+    """Print types of all parent classes"""
     import inspect
-    # Print types of all parent classes
+    print typ
     print CYAN + "Parents:" + GREEN, " -> ".join([t.__name__ for t in inspect.getmro(typ)[1:]])
-    print CYAN + "Type:" + GREEN, typ.__name__
+    print CYAN + "Type:" + GREEN, typ.__name__, RESET
 
 
 def _call(func):

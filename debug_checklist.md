@@ -117,7 +117,7 @@ export COMMAND='env'
 - When referencing, maya sequentially scans references and reads every file with selected options. Try referencing Maya Binary files (.mb) as they are already in Maya proprietary scene format and faster to load than Maya ASCII files.
 
 ### Maya hangs while starting up (No error)
-- Check if a config file is locked up at `~/.config/Autodesk/`
+- Check if a config file is locked up at `~/.config/Autodesk/`. Remove the lock file. This sometimes happens when maya crashed.
 
 ### Try:
 - Turn off ray tracing
