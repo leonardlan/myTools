@@ -10,16 +10,6 @@ import time
 from types import ModuleType
 
 
-# Enable syntax completion
-try:
-    import readline
-except ImportError:
-    print "Module readline not available."
-else:
-    import rlcompleter
-    readline.parse_and_bind("tab: complete")
-
-
 # Import colorama for color-printing to terminal
 try:
     import colorama
@@ -38,6 +28,7 @@ finally:
 
 
 IGNORED_ATTRIBUTES = ["__builtins__", "__globals__", "func_globals"]
+PYTHON_HISTORY_PATH = os.path.join(os.environ['HOME'], '.python_history')
 
 
 def _brighten_it_up(func):
@@ -191,13 +182,14 @@ def _func_name_args_kwargs(func):
     varnames_str = ""
     code = getattr(func, "__code__", None)
     if code:
+        co_argcount = getattr(code, "co_argcount", None)
         co_varnames = getattr(code, "co_varnames", None)
-        if co_varnames:
+        if co_argcount and co_varnames:
             try:
-                varnames = list(co_varnames)
+                varnames = list(co_varnames)[0:co_argcount]
             except TypeError, e:
                 print "Could not get func args for", co_varnames
-                return ""
+                return varnames_str
             defaults = getattr(func, "__defaults__", [])
             if defaults:
                 for i, default in enumerate(defaults):
@@ -250,16 +242,25 @@ def start_QApplication():
     return QtGui.QApplication(sys.argv)
 
 
-def history():
+def history(include_current_line=False):
     """Returns interactive python command history"""
     msg = []
-    for i in range(1, readline.get_current_history_length()):
+    history_len = readline.get_current_history_length()
+    end = (history_len + 1) if include_current_line else history_len
+    for i in range(1, end):
         msg.append(readline.get_history_item(i))
     return "\n".join(msg)
 
 
 def print_history():
+    with open(PYTHON_HISTORY_PATH, "r") as fil:
+        print fil.read()
     print history()
+
+
+def _append_history_file():
+    with open(PYTHON_HISTORY_PATH, "a+") as fil:
+        fil.write(history(include_current_line=True) + "\n")
 
 
 h = print_history
@@ -324,3 +325,16 @@ def demo_colorama():
                     print getattr(colorama.Style, style), style, color,
             print
     sys.stdout.write(RESET_ALL)
+
+
+# Enable syntax completion
+try:
+    import readline
+except ImportError:
+    print "Module readline not available."
+else:
+    import atexit
+    import rlcompleter
+    readline.parse_and_bind("tab: complete")
+    atexit.register(_append_history_file)
+    del atexit, rlcompleter
