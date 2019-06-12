@@ -125,7 +125,8 @@ alias sa='for f in ~/.bash_aliases*; do source $f; done'
 alias tree='tree -C'
 ns () {
     img=`shuf -n1 -e face-angel face-cool face-laugh face-smile face-smile-big stock_smiley-1 stock_smiley-3`
-    notify-send -i $img "Done!" "$@";
+    args="$@"
+    notify-send -i $img 'Done!' "$args"
     play -q ~/myTools/sounds/quite-impressed.ogg &
 }
 
