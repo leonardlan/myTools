@@ -253,8 +253,11 @@ def history(include_current_line=False):
 
 
 def print_history():
-    with open(PYTHON_HISTORY_PATH, "r") as fil:
-        print fil.read()
+    try:
+        with open(PYTHON_HISTORY_PATH, "r") as fil:
+            print fil.read()
+    except IOError:
+        pass
     print history()
 
 
