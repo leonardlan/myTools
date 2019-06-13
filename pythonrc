@@ -242,7 +242,7 @@ def start_QApplication():
     return QtGui.QApplication(sys.argv)
 
 
-def history(include_current_line=False):
+def _history(include_current_line=False):
     """Returns interactive python command history"""
     msg = []
     history_len = readline.get_current_history_length()
@@ -252,21 +252,25 @@ def history(include_current_line=False):
     return "\n".join(msg)
 
 
-def print_history():
+def history(c=False):
+    """Python version of bash history command"""
+    if c:
+        open(PYTHON_HISTORY_PATH, "w").close()
+        return
     try:
         with open(PYTHON_HISTORY_PATH, "r") as fil:
             print fil.read()
     except IOError:
         pass
-    print history()
+    print _history()
 
 
 def _append_history_file():
     with open(PYTHON_HISTORY_PATH, "a+") as fil:
-        fil.write(history(include_current_line=True) + "\n")
+        fil.write(_history(include_current_line=True) + "\n")
 
 
-h = print_history
+h = history
 
 
 def _is_text(s):
