@@ -9,7 +9,7 @@ The things I've learned throughout years of debugging failed renders and bugs. M
 - Try accessing via browser
 - Check other URLs in web app
 - Try pinging the service `ping MACHINE_NAME`
-- ssh into machine
+- `ssh` into machine
     - Check service status
     - Check logs
     - File system not set up or mounted correctly. See `df -h`
@@ -108,6 +108,10 @@ export COMMAND='env'
 
 ### Farm too full
 - Add unused machines (maybe someone sick or away)
+
+### Job pending too long
+- Lower instances on existing renders
+- Create pool/group of machines for specific type of renders
 
 ## <img src="https://1.bp.blogspot.com/-HGzMAuW1Neo/Wwg1DBO1nLI/AAAAAAAABvE/U8pNkz07IocDCljJVcEsvogx8bqkVpP8QCLcBGAs/s1600/Maya.png" style="background-color: transparent; vertical-align: middle; width: 32px; height: 32px"> Maya Problems
 ### Maya scene takes too long to open or crashes a lot
