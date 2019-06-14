@@ -602,11 +602,11 @@ pg_restore -d newdb db.sql
     `~/.ssh/known_hosts`
 - Launch gui from remote (Enables X11 forwarding)
 
-    `ssh -X machine_name`
+    `ssh -X MACHINE_NAME`
 
 - ssh into machine and cd to directory
 
-    `ssh -t qubesupe "cd /usr/local/pfx/qube ; bash"`
+    `ssh -t MACHINE_NAME "cd /var/log ; bash"`
 
 
 ## SELinux
