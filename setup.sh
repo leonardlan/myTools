@@ -25,6 +25,7 @@ ln -sfn `readlink -f sublime/snippets/python_unittest.sublime-snippet` ~/.config
 echo Sublime symlinks all set up
 
 add_line_to_file() {
+    # If line already exists, don't add it again
     grep -qF -- "$1" "$2" || echo "$1" >> "$2"
 }
 
@@ -35,6 +36,7 @@ echo Adding cron job...
 crontab -l > /tmp/mycron
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 add_line_to_file "0 9-18 * * 1-5 ${DIR}/notify-time.sh > /dev/null 2>&1 # Notify me every so often" /tmp/mycron
+add_line_to_file "*/5 9-18 * * 1-5 ${DIR}/bin/change-desktop-wallpaper.sh > /dev/null 2>&1 # Change desktop background" /tmp/mycron
 crontab /tmp/mycron
 rm /tmp/mycron
 echo "New crontab:"
