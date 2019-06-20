@@ -113,6 +113,13 @@ export COMMAND='env'
 - Lower instances on existing renders
 - Create pool/group of machines for specific type of renders
 
+### Host not picking up jobs
+- `ping hostname`
+- `ssh hostname`
+
+### Network file/folder symlink does not exist on a machine
+- If network file/folder does not exist on a machine when it's supposed to, try rebooting it.
+
 ## <img src="https://1.bp.blogspot.com/-HGzMAuW1Neo/Wwg1DBO1nLI/AAAAAAAABvE/U8pNkz07IocDCljJVcEsvogx8bqkVpP8QCLcBGAs/s1600/Maya.png" style="background-color: transparent; vertical-align: middle; width: 32px; height: 32px"> Maya Problems
 ### Maya scene takes too long to open or crashes a lot
 #### Possible:

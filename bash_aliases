@@ -23,11 +23,15 @@ alias h='history'
 alias py='python'
 alias p='python' # Everyday, I get a little bit lazier
 alias fp='readlink -f'
+
+# How lazy am I?
 alias u='cd ..'
 alias uu='cd ../..'
 alias uuu='cd ../../..'
 alias uuuu='cd ../../../..'
 alias uuuuu='cd ../../../../..'
+
+alias less='less -R'    # Color me less
 
 # Prints pwd relative to home dir in bold blue
 alias _pwd_nice='printf "\033[1;34m`dirs +0`\n\033[0m"'
@@ -115,9 +119,6 @@ alias git-show-devs='git shortlog -sn'
 alias git-show-origin='git remote show origin'
 alias git-show-top-level='realpath --relative-to=`pwd` "$(git rev-parse --show-toplevel)"'
 alias git-current-branch="git branch | grep \* | cut -d ' ' -f2"
-if [ -f $HOME/software/smartgit/bin/smartgit.sh ]; then
-    alias smartgit='$HOME/software/smartgit/bin/smartgit.sh'
-fi
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'

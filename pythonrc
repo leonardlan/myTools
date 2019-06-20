@@ -85,8 +85,10 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
             if thing >= 946702800:  # Epoch date
                 print "Epoch time"
                 print time.strftime("%Z - %a %Y-%m-%d, %I:%M:%S %p", time.localtime(thing))
-            else:
+            elif typ == int:
                 print "Just an int:", thing
+            elif typ == float:
+                print "Just a float:", thing
             return
         elif typ == dict:
             if thing:
@@ -267,7 +269,7 @@ def history(c=False):
 
 def _append_history_file():
     with open(PYTHON_HISTORY_PATH, "a+") as fil:
-        fil.write(_history(include_current_line=True) + "\n")
+        fil.write("\n'''New session!'''\n" + _history(include_current_line=True) + "\n")
 
 
 h = history
@@ -332,6 +334,17 @@ def demo_colorama():
                     print getattr(colorama.Style, style), style, color,
             print
     sys.stdout.write(RESET_ALL)
+
+
+def time_me(func, *args, **kwargs):
+    """Prints how long function call took"""
+    start = time.time()
+    res = func(*args, **kwargs)
+    end = time.time()
+    args_str = [str(arg) for arg in args]
+    params = ", ".join(args_str + ["%s=%s" % (key, str(val)) for key, val in kwargs.iteritems()])
+    print "%s(%s) took %2.1fms" % (func.__name__, params, (end - start) * 1000)
+    return res
 
 
 # Enable syntax completion
