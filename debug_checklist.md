@@ -22,7 +22,7 @@ The things I've learned throughout years of debugging failed renders and bugs. M
 - Check hosts to see if it's happening on a [specific machine](#specific-machine-not-working)
 - Check time started to see if it's happening around the same time (Might be related to when something else broke)
 - Check memory usage to see where it is peaking
-- Check stdout and stderr logs for error traceback
+- Check stdout and stderr logs for error code and traceback
     - Check for pattern in logs among failed renders. (ie. Maybe they all were killed on a certain frame)
 - Check output renders with `rv output.exr`. List size. If zero, render failed.
 - `ssh` into machines and check status of rendering process

@@ -38,7 +38,8 @@ alias _pwd_nice='printf "\033[1;34m`dirs +0`\n\033[0m"'
 
 runmeindirs () { for d in ./*/ ; do (cd "$d" && echo && _pwd_nice && $@); done }
 
-f () { find . -name "*$@*" | grep $@; }
+# Case-insensitive file/folder search
+f () { find . -iname "*$@*" | grep -i --color=auto $@; }
 g () { grep -nr --exclude=\*.{jpg,png} "$@"; }
 
 alias find-executables-recursively='find . -type f -perm /u=x,g=x,o=x -exec ls -l {} \;'
