@@ -1,0 +1,7 @@
+#!/bin/bash
+# Creates notification with a message a random icon and plays a sound
+
+img=`shuf -n1 -e face-angel face-cool face-laugh face-smile face-smile-big stock_smiley-1 stock_smiley-3`
+args="$@"
+notify-send -i $img 'Done!' "$args"
+play -q ~/myTools/sounds/quite-impressed.ogg &

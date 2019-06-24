@@ -7,3 +7,4 @@ export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/en
 
 random_pic=`shuf -n1 -e $HOME/Pictures/*`
 dconf write /org/mate/desktop/background/picture-filename "'${random_pic}'"
+ns Successfully changed desktop wallpaper

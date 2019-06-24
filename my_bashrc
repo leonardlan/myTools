@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PATH=$PATH:/home/BRON/leonard.lan/myTools/bin
+PATH=$PATH:$HOME/myTools/bin
 
 for f in ~/.bash_aliases*; do source $f; done
 
