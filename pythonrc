@@ -244,11 +244,11 @@ def start_QApplication():
     return QtGui.QApplication(sys.argv)
 
 
-def _history(include_current_line=False):
+def _history(include_current=False):
     """Returns interactive python command history"""
     msg = []
     history_len = readline.get_current_history_length()
-    end = (history_len + 1) if include_current_line else history_len
+    end = (history_len + 1) if include_current else history_len
     for i in range(1, end):
         msg.append(readline.get_history_item(i))
     return "\n".join(msg)
@@ -269,7 +269,8 @@ def history(c=False):
 
 def _append_history_file():
     with open(PYTHON_HISTORY_PATH, "a+") as fil:
-        fil.write("\n'''New session!'''\n" + _history(include_current_line=True) + "\n")
+        fil.write(BRIGHT + BLUE + "\n'''New session!'''\n" + RESET_ALL)
+        fil.write(_history(include_current=True) + "\n")
 
 
 h = history
@@ -279,15 +280,15 @@ def _is_text(s):
     return type(s) in [str, unicode]
 
 
-def find(foo, target):
-    """Recursive finds path to target in dict foo
+def find(thing, target):
+    """Recursive finds path to target in dict thing
 
     Args:
-        foo (dict or list): A complicated dict or list where I need to find a target
+        thing (dict or list): A complicated dict or list where I need to find a target
     """
-    attrs = _find(foo, target)
+    attrs = _find(thing, target)
     if not attrs:
-        return "Target not found in dict"
+        return "Target not found"
     path = ""
     for attr in attrs:
         if _is_text(attr):
@@ -295,24 +296,24 @@ def find(foo, target):
         else:
             path += "[%s]" % attr
     print "%s:" % path,
-    print eval("foo%s" % path)
+    print eval("thing%s" % path)
 
 
-def _find(foo, target, path=[]):
+def _find(thing, target, path=[]):
     """Recursive helper for find()"""
-    if type(foo) == dict:
-        for k, v in foo.iteritems():
-            if type(v) in (dict, list):
-                res = _find(v, target, path=path + [k])
+    if type(thing) == dict:
+        for key, val in thing.iteritems():
+            if type(val) in (dict, list):
+                res = _find(val, target, path=path + [key])
                 if res:
                     return res
-            elif v:
-                if _is_text(v) and _is_text(target) and target.lower() in v.lower():
-                    return path + [k]
-                elif type(v) == int and target == v:
-                    return path + [k]
-    elif type(foo) == list:
-        for index, item in enumerate(foo):
+            elif val:
+                if _is_text(val) and _is_text(target) and target.lower() in val.lower():
+                    return path + [key]
+                elif type(val) == int and target == val:
+                    return path + [key]
+    elif type(thing) == list:
+        for index, item in enumerate(thing):
             if type(item) in (dict, list):
                 res = _find(item, target, path=path + [index])
                 if res:
