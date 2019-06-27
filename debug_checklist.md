@@ -112,6 +112,7 @@ export COMMAND='env'
 ### Job pending too long
 - Lower instances on existing renders
 - Create pool/group of machines for specific type of renders
+- Lower reservations. Maybe request less processors or memory.
 
 ### Host not picking up jobs
 - `ping hostname`

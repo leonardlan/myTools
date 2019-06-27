@@ -26,6 +26,8 @@ finally:
         for code in codes:
             globals()[code] = getattr(getattr(colorama, typ), code) if colorama else ""
 
+    globals()["BRIGHT_BLUE"] = lambda s: BRIGHT + BLUE + s + RESET_ALL
+
 
 IGNORED_ATTRIBUTES = ["__builtins__", "__globals__", "func_globals"]
 PYTHON_HISTORY_PATH = os.path.join(os.environ['HOME'], '.python_history')
