@@ -116,6 +116,7 @@ alias gp="git push"
 alias gl="git pull"
 alias gpom="git push origin master"
 alias glom="git pull origin master"
+alias gmom="git merge origin/master"
 alias git-show-devs='git shortlog -sn'
 alias git-show-origin='git remote show origin'
 alias git-show-top-level='realpath --relative-to=`pwd` "$(git rev-parse --show-toplevel)"'
