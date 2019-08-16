@@ -40,7 +40,9 @@ runmeindirs () { for d in ./*/ ; do (cd "$d" && echo && _pwd_nice && $@); done }
 
 # Case-insensitive file/folder search
 f () { find . -iname "*$@*" | grep -i --color=auto $@; }
-g () { grep -nr --exclude=\*.{jpg,png} "$@"; }
+g () {
+    grep -nr --exclude=\*.{jpg,png} "$@" 2>/dev/null
+}
 
 alias find-executables-recursively='find . -type f -perm /u=x,g=x,o=x -exec ls -l {} \;'
 alias find-images-recursively='find ./ -type f \( -iname \*.jpg -o -iname \*.jpeg -o -iname \*.png -o -iname \*.exr -o -iname \*.tiff -o -iname \*.gif -o -iname \*.bmp \)'
@@ -121,6 +123,7 @@ alias git-show-devs='git shortlog -sn'
 alias git-show-origin='git remote show origin'
 alias git-show-top-level='realpath --relative-to=`pwd` "$(git rev-parse --show-toplevel)"'
 alias git-current-branch="git branch | grep \* | cut -d ' ' -f2"
+alias git-stash-show='git stash show -p'
 
 alias c='xclip -sel clip'
 alias ea='vim ~/.bash_aliases'
@@ -191,3 +194,7 @@ fi
 if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
     echo_and_run source ~/.local/bin/virtualenvwrapper.sh
 fi'
+
+# Mock render jobs
+# Randomly succeed or fail
+alias true-or-false='if ((RANDOM % 2)); then echo_and_run true; else echo_and_run false; fi;'

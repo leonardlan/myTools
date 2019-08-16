@@ -54,7 +54,7 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
     :param call bool: Calls attributes that are functions and thing itself if it is callable.
     :param skip_callable bool: Doesn't print callable attributes.
     :param skip_module bool: Skips module attributes.
-    :param skip_known bool: Prints every attribute even if we know what it is.
+    :param skip_known bool: If True, prints every attribute even if we know what it is.
     """
     typ = type(thing)
 
@@ -125,12 +125,11 @@ def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=
             else:
                 print RED + "Empty %s: %s" % (typ.__name__, str(thing))
             return
-        elif callable(thing):
-            print _func_name_args_kwargs(thing)
-            if thing.__doc__:
-                print thing.__doc__
-            _print_types(typ)
-            return
+
+    if callable(thing):
+        print _func_name_args_kwargs(thing)
+        if thing.__doc__:
+            print thing.__doc__
 
     # So we don't know what it is. Let's print everything we can find about it.
     thing_name = getattr(thing, "__name__", "")
@@ -256,14 +255,18 @@ def _history(include_current=False):
     return "\n".join(msg)
 
 
-def history(c=False):
-    """Python version of bash history command"""
+def history(n=50, c=False):
+    """Python version of bash history command
+
+    Args:
+        n (int): Lines to print
+        c (bool): Clears history if True
+    """
     if c:
         open(PYTHON_HISTORY_PATH, "w").close()
         return
     try:
-        with open(PYTHON_HISTORY_PATH, "r") as fil:
-            print fil.read()
+        os.system("tail -%i %s" % (n, PYTHON_HISTORY_PATH))
     except IOError:
         pass
     print _history()

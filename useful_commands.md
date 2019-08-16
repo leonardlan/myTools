@@ -108,13 +108,21 @@ List available commands
 
     `l -tr`
 
-- Query number of files open limited by operating system
+- Query number of files open limited by OS
 
     `ulimit -n`
 
 - Set number of files limited by OS
 
     `ulimit -n 2048`
+
+- Query number of files limit by process
+
+    `prlimit -n -p PID`
+
+- Set number of files limit by process
+
+    `prlimit --nofile=4096 -p PID`
 
 - Rename multiple files (Red Hat; CentOS)
     - Rename from to file
@@ -293,7 +301,7 @@ See [crontab.guru](https://crontab.guru) for crontab notation.
 
 
 ## Users
-- See which user is using a file
+- See which user/process is using a file
 
     `fuser -u FILE`
 

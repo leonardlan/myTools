@@ -113,6 +113,7 @@ export COMMAND='env'
 - Lower instances on existing renders
 - Create pool/group of machines for specific type of renders
 - Lower reservations. Maybe request less processors or memory.
+- If it's a fast render, temporarily assign it to a group of available machines
 
 ### Host not picking up jobs
 - `ping hostname`
@@ -151,6 +152,7 @@ export COMMAND='env'
     A space character that prevents an automatic line break at its position. In Unicode it is encoded as U+00a0.
     It looks like a space but it's not.
     (╯°□°）╯︵ ┻━┻
+- Latest code is pushed to production repo but not deployed
 
 ## General debug
 - Try closing and opening the software:laughing:
