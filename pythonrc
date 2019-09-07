@@ -43,12 +43,17 @@ def _brighten_it_up(func):
     return wrapper
 
 
+def wai(*things, **kwargs):
+    for thing in things:
+        _wai(thing, **kwargs)
+
+
 @_brighten_it_up
-def wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False,
+def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False,
         skip_module=True, skip_known=False):
     """What Am I? Prints type and attributes of object thing.
 
-    :param thing object: Anything and everything. That's what we're here to find out.
+    :param thing object: Anything and everything. That's what we're here to find out. :)
     :param ignore_private bool: Ignores attributes starting with underscore.
     :param ignore_attrs list: List of attributes to ignore.
     :param call bool: Calls attributes that are functions and thing itself if it is callable.
