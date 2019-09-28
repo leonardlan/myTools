@@ -48,6 +48,9 @@ git push -f origin some_branch
 - Go back 1 commit (Warning: cannot undo)
 
     `git reset --hard HEAD~1`
+- Revert to previous commit (that was already pushed) in a new commit
+
+    `git revert COMMIT_HASH`
 - Fetch/merge
     ```bash
 git fetch
@@ -649,6 +652,10 @@ View `du -h` sorted by size
 
     du -hs * | sort -h
 
+`du` on steroids
+
+    ncdu
+
 
 ## Nosetests
 Show print messages
@@ -754,7 +761,7 @@ Launch Terminal app
 
 
 ## NVidia
-`nvidia-smi`
+View memory usage, GPU utilization, and temperature of GPU: `nvidia-smi`
 
 
 ## Misc

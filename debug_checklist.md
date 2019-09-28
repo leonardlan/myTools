@@ -1,8 +1,17 @@
+(setq markdown-xhtml-header-content
+      "<style type='text/css'>
+img {
+    vertical-align: middle;
+    width: 32px;
+    height: 32px
+}
+</style>")
+
 <title>Debug Checklist</title>
 
 # Debug Checklist
 
-The things I've learned throughout years of debugging failed renders and bugs. Maybe this will one day be scripted and no longer require TDs. :smile:
+The things I've learned throughout years of debugging failed renders and bugs. Maybe one day this will be scripted and no longer require TDs. :smile:
 
 ## :computer:Service not found or failing
 - Check logs on client machine
@@ -72,6 +81,7 @@ OR
 ### Specific machine not working
 - Check if the machine is updated to pipeline tools
 - Check file system set up or mounted correctly. See `df -h`
+- Check file system has enough space. See `df -h`. Run `du -hs * | sort -h` to see space usage.
 - Try rebooting the machine: `ssh root@machine reboot`
 - Omit the machine in render job
 - Write ticket to Systems/IT

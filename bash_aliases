@@ -132,6 +132,9 @@ alias tree='tree -C'
 
 alias s='~/sublime_text_3/sublime_text'
 
+# Debugging
+alias tf='tail -f'
+
 # View env var split by semicolon
 listenv () {
     var_name=$1
@@ -198,3 +201,8 @@ fi'
 # Mock render jobs
 # Randomly succeed or fail
 alias true-or-false='if ((RANDOM % 2)); then echo_and_run true; else echo_and_run false; fi;'
+# Never ends
+alias infinite-loop='while true; do date; sleep 1; done'
+
+# My docs
+alias useful-commands='vim ${MYTOOLS}/useful_commands.md'
