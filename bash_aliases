@@ -198,11 +198,35 @@ if [ -f ~/.local/bin/virtualenvwrapper.sh ]; then
     echo_and_run source ~/.local/bin/virtualenvwrapper.sh
 fi'
 
-# Mock render jobs
+
+####################
+# Mock render jobs #
+####################
 # Randomly succeed or fail
 alias true-or-false='if ((RANDOM % 2)); then echo_and_run true; else echo_and_run false; fi;'
+
 # Never ends
 alias infinite-loop='while true; do date; sleep 1; done'
 
-# My docs
+# Sleeps for 1-60 seconds
+sleeper () {
+    SECONDS_TO_SLEEP=$(((RANDOM % 60) + 1))
+    echo Sleeping for $SECONDS_TO_SLEEP seconds zzz...
+    sleep $SECONDS_TO_SLEEP
+    echo "Yawn! I'm done now!"
+}
+
+
+###########
+# My docs #
+###########
 alias useful-commands='vim ${MYTOOLS}/useful_commands.md'
+
+
+######################
+# 3rd party software #
+######################
+alias ho='houdini &'
+alias k='katana &'
+alias m='maya &'
+alias n='nuke &'

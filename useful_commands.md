@@ -138,6 +138,9 @@ List available commands
 - List files recursively modified in last 24 hours
 
     `find . -mtime -1 -print`
+- Keep last 1,000 lines of file (will overwrite existing)
+
+    `echo "$(tail -1000 my_super_huge.log)" > my_super_huge.log`
 
 
 ## Syncing files and folders

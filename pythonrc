@@ -300,7 +300,7 @@ h = history
 
 
 def hs(str):
-    os.system("grep '%s' %s" % (str, PYTHON_HISTORY_PATH))
+    os.system("grep --color=auto '%s' %s" % (str, PYTHON_HISTORY_PATH))
 
 def _is_text(s):
     return type(s) in [str, unicode]
