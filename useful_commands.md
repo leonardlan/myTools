@@ -5,434 +5,383 @@
 My useful commands that I can't seem to remeber. :thinking_face:
 
 ## Git
-- Check git status of all projects
+```bash
+# Run git status in all directories in ~/dev/
+for dir in ~/dev/*/ ; do (cd "$dir" && pwd && git st); done
 
-    `for d in ~/dev/*/ ; do (cd "$d" && pwd && git st); done`
-- View origin
+# View origin
+git remote show origin
 
-    `git remote show origin`
-- To delete a local branch
+# To delete a local branch
+git branch -d the_local_branch
 
-    `git branch -d the_local_branch`
-- Remove remote branch
+# Remove remote branch
+git push origin --delete the_remote_branch
 
-    `git push origin --delete the_remote_branch`
-- Show which files have changed betwen two revisions
+# Show which files have changed betwen two revisions
+git diff --name-status master..branchName
 
-    `git diff --name-status master..branchName`
-- Amend last commit without changing message
-
-    ```
+# Amend last commit without changing message
 git add <files>
 git commit --amend --no-edit
-git push -f origin some_branch
-```
-- Amend last commit message
 
-    `git commit --amend`
-- View the content of the most recent stash
+# Amend last commit message
+git commit --amend
 
-    `git stash show -p`
-- View the content of an arbitrary stash
+# View the content of the most recent stash
+git stash show -p
 
-    `git stash show -p stash@{1}`
-- Show all users and the number of commits
+# View the content of an arbitrary stash
+git stash show -p stash@{1}
 
-    `git shortlog -sn`
-- Show top-level directory
+# Show all users and the number of commits
+git shortlog -sn
 
-    `git rev-parse --show-toplevel`
-- Squash last 2 commits into one
+# Show top-level directory
+git rev-parse --show-toplevel
 
-    `git rebase -i HEAD~2`
-- Go back 1 commit (Warning: cannot undo)
+# Squash last 2 commits into one
+git rebase -i HEAD~2
 
-    `git reset --hard HEAD~1`
-- Revert to previous commit (that was already pushed) in a new commit
+# Go back 1 commit (Warning: cannot undo)
+git reset --hard HEAD~1
 
-    `git revert COMMIT_HASH`
-- Fetch/merge
-    ```bash
+# Revert to previous commit (that was already pushed) in a new commit
+git revert COMMIT_HASH
+
+# Fetch/merge
 git fetch
 git merge origin/master
-    ```
+```
 
 
 ## Shell
-- Copy command output to clipboard with pipe
+```bash
+# Copy command output to clipboard with pipe
+xclip -sel clip
 
-    `xclip -sel clip`
-- Get last system reboot
+# Get last system reboot
+uptime -s
 
-    `uptime -s`
+# Get reboot history
+last reboot | head -10
+```
 
-    `last reboot`
-- Get reboot history
+### Compgen: List All Available Commands
+```bash
+# List all commands
+compgen -c
 
-    `last reboot | head -10`
+# List all aliases
+compgen -a
 
-List available commands
+# List all built-ins
+compgen -b
 
-| Command               | Description        |
-|-----------------------|--------------------|
-| `compgen -c`          | List all commands  |
-| `compgen -a`          | List all aliases   |
-| `compgen -b`          | List all built-ins |
-| `compgen -k`          | List all keywords  |
-| `compgen -A function` | List all functions |
+# List all keywords
+compgen -k
 
-- Redirecting output
-    - Redirect error message to NUL
+# List all functions
+compgen -A functio
+```
 
-        `command args 2> nul`
+### Pipes (Redirecting Output)
+```bash
+# Redirect error message to NUL
+command args 2> nul
 
-    - Redirect output to one place and errors to another
+# Redirect output to one place and errors to another
+command args > output.log 2> error.log
+```
 
-        `command args > output.msg 2> output.err`
-
-- cd into all directories and run a command
-
-    `for d in ./*/ ; do (echo $d && cd "$d" && somecommand); done`
-- Make multiple directories in one go
-
-    `mkdir ~/projects/{bin,pkg,src}`
+### Miscellaneous
+```bash
+# cd into all directories and run a command
+for d in ./*/ ; do (echo $d && cd "$d" && somecommand); done
+```
 
 
-## Files
-- Find number of files in current folder
+## Files And Directories
+```bash
+# Make multiple directories in one go
+mkdir ~/projects/{bin,pkg,src}
 
-    `find . -type f | wc -l`
+# Find number of files in current folder
+find . -type f | wc -l
 
-- View long list for a single directory
+# View long list for a single directory
+l -d dir
 
-    `l -d dir`
+# List by last modified
+l -tr
 
-- List by last modified
+# Query number of files open limited by OS
+ulimit -n
 
-    `l -tr`
+# Set number of files limited by OS
+ulimit -n 2048
 
-- Query number of files open limited by OS
+# Query number of files limit by process
+prlimit -n -p PID
 
-    `ulimit -n`
+# Set number of files limit by process
+prlimit --nofile=4096 -p PID
 
-- Set number of files limited by OS
+# Rename multiple files (Red Hat; CentOS)
+# Fix the extension of HTML files so that all .htm files have a four-letter .html suffix
+rename .htm .html *.htm
 
-    `ulimit -n 2048`
+# Remove string (remove_me) in file names
+rename remove_me '' *
 
-- Query number of files limit by process
+# List files recursively modified in last 24 hours
+find . -mtime -1 -print
 
-    `prlimit -n -p PID`
-
-- Set number of files limit by process
-
-    `prlimit --nofile=4096 -p PID`
-
-- Rename multiple files (Red Hat; CentOS)
-    - Rename from to file
-        - Fix the extension of HTML files so that all .htm files have a four-letter .html suffix
-
-            `rename .htm .html *.htm`
-        - Remove string (remove_me)
-
-            `rename remove_me '' *`
-- List files recursively modified in last 24 hours
-
-    `find . -mtime -1 -print`
-- Keep last 1,000 lines of file (will overwrite existing)
-
-    `echo "$(tail -1000 my_super_huge.log)" > my_super_huge.log`
-
+# Keep last 1,000 lines of file (will overwrite existing)
+echo "$(tail -1000 my_super_huge.log)" > my_super_huge.log
+```
 
 ## Syncing files and folders
-- Copy directory across hosts
+```bash
+# Copy directory across hosts
+scp -r . USER@HOST:/PATH/TO/DESTINATION_FOLDER
 
-    `scp -r . USER@HOST:/PATH/TO/DESTINATION_FOLDER`
+# Copy one single local file to a remote destination
+scp /PATH/TO/SOURCE_FILE USER@HOST:/PATH/TO/DESTINATION_FOLDER/
 
-- Copy one single local file to a remote destination
+# Copy one single file from a remote server to your current local server
+scp USER@HOST:/PATH/TO/SOURCE_FILE /PATH/TO/DESTINATION_FOLDER
 
-    `scp /PATH/TO/SOURCE_FILE USER@HOST:/PATH/TO/DESTINATION_FOLDER/`
+# Copy one single file from a remote server to another remote server
+scp USER1@SERVER1:/PATH/TO/SOURCE USER2@server2:/PATH/TO/DESTINATION/
 
-- Copy one single file from a remote server to your current local server
+# Copy multiple files with one command
+scp file1.txt file2.txt file3.txt USER@HOST:/PATH/TO/DESTINATION/
+```
 
-    `scp USER@HOST:/PATH/TO/SOURCE_FILE /PATH/TO/DESTINATION_FOLDER`
-
-- Copy one single file from a remote server to another remote server
-
-    `scp USER1@SERVER1:/PATH/TO/SOURCE USER2@server2:/PATH/TO/DESTINATION/`
-
-- Copy multiple files with one command
-
-    `scp file1.txt file2.txt file3.txt USER@HOST:/PATH/TO/DESTINATION/`
-
-
+### Rsync
+```bash
+# Copy a Directory from Local Server to a Remote Server
+rsync -avz source_dir/ USER@IP_ADDRESS:/dest/dir/
+```
 
 ## Installing packages
 ### yum
-    yum install PACKAGE
-    yum update PACKAGE
-    yum info PACKAGE
-    yum list available
+```bash
+yum install PACKAGE
+yum update PACKAGE
+yum info PACKAGE
+yum list available
 
-Install from file
-
-    sudo yum -y install $(install_my_stuff.txt)
-
-Download RPMs from Yum repositories without install
-
-    yumdownloader PACKAGE
-### pip
-- Install package for specific user **in home directory** (without sudo)
-
-    `pip install --user PACKAGE`
-- Show info about package
-
-    `pip show PACKAGE_NAME`
-- Show all package versions
-
-    `pip freeze`
-- Upgrade pip
-
-    `pip install --upgrade pip`
-- Uninstall package
-
-    `pip uninstall PACKAGE_NAME`
-
-
-## Backing up files
-Add date and time in filename (file.txt.backup_2018-08-03_12:51:34)
-
-    mv file.txt file.txt.backup_$(date +%F_%T)
-
-
-## Permissions
-- View mask
-
-    ```
-umask
-umask -S
+# Install from file
+sudo yum -y install $(install_my_stuff.txt)
 ```
 
-- Give permission recursively
+### pip
+```bash
+# Install package for specific user **in home directory** (without sudo)
+pip install --user PACKAGE
 
-    `sudo chmod -Rvf 755`
+# Show info about package
+pip show PACKAGE_NAME
 
-- Check if user is sudo
+# Show all package versions
+pip freeze
 
-    `sudo -l -U USER`
+# Upgrade pip
+pip install --upgrade pip
 
-- Add user to sudoers
+# Uninstall package
+pip uninstall PACKAGE_NAME
 
-    `sudo usermod -aG wheel USER`
+```
 
-- Log in as root
+## Backing up files
+```bash
+# Backup file with date and time in filename (file.txt.backup_2018-08-03_12:51:34)
+mv file.txt file.txt.backup_$(date +%F_%T)
+```
 
-    `sudo su -`
+## Permissions
+```bash
+# View mask
+umask
+umask -S
 
-- Change file owner
+# Give permission recursively
+sudo chmod -Rvf 755
 
-    `chown USER:GROUP FILE`
+# Check if user is sudo
+sudo -l -U USER
 
+# Add user to sudoers
+sudo usermod -aG wheel USER
+
+# Log in as root
+sudo su -
+
+# Change file owner
+chown USER:GROUP FILE
+```
 
 ## Symbolic link
+```bash
     ln -s REAL LINK_NAME
     unlink LINK_NAME
     rm LINK_NAME
-
+```
 
 ## Ports and processes
-Check listening ports and applications
-
-    sudo netstat -tulpn | grep LISTEN
-
+```bash
+# Check listening ports and applications
+sudo netstat -tulpn | grep LISTEN
+```
 
 ## Cron jobs
-    crontab -e  # Edit crontab file, or create one if it doesn’t already exist.
-    crontab -l  # crontab list of cronjobs, display crontab file contents.
-    crontab -r  # Remove your crontab file.
+```bash
+crontab -e  # Edit crontab file, or create one if it doesn’t already exist.
+crontab -l  # crontab list of cronjobs, display crontab file contents.
+crontab -r  # Remove your crontab file.
+```
 
 See [crontab.guru](https://crontab.guru) for crontab notation.
 
 
 ## Images
-- Get info about image
+```bash
+# Get info about image
+identify
 
-    `identify`
-- List all images recursively
+# List all images recursively
+find . -name '*' -exec file {} \; | grep -o -P '^.+: \w+ image'
 
-    `find . -name '*' -exec file {} \; | grep -o -P '^.+: \w+ image'`
-- Converting
+# Converting
+# Convert jpg to pn
+convert img.jpg img.png
 
-    - Convert jpg to png
+# Convert multiple jpg to png
+mogrify -formt png *.jpg
 
-        `convert img.jpg img.png`
-    - Convert multiple jpg to png
+# Convert exr to png while maintaining format
+convert input.exr -colorspace RGB -colorspace sRGB output.png
 
-        `mogrify -formt png *.jpg`
-- Convert exr to png while maintaining format
-
-    `convert input.exr -colorspace RGB -colorspace sRGB output.png`
-- Resize image
-
-    `convert img.png -resize 16x16 img.png`
-
+# Resize image
+convert img.png -resize 16x16 img.png
+```
 
 ## Regex
-- Line without word
+```regex
+(?# Line without word)
+^((?!word).)*$
 
-    `^((?!word).)*$`
+(?# Matching square brackets! Ha! Genius!)
+\[([^]]+)\]
 
-- Matching square brackets! Ha! Genius!
+(?# Positive lookbehind and lookahead)
+(?:^|(?<= ))(words|I|want|to|find)(?:(?= )|$)
 
-    `\[([^]]+)\]`
+(?# Negative lookbehind)
+(?<= )
 
-- Positive lookbehind and lookahead
+(?# Positive lookahead)
+(?=\t)
 
-    `(?:^|(?<= ))(words|I|want|to|find)(?:(?= )|$)`
+(?# Remove unnecessary whitespace)
+[\t ]+$
 
-- Negative lookbehind
+(?# Remove trailing)
+[\t\n ]{2,}\Z => \n
+```
 
-    `(?<= )`
+## Users And Groups
+```bash
+# See which user/process is using a file
+fuser -u FILE
 
-- Positive lookahead
+# List all local users
+cat /etc/passwd
 
-    `(?=\t)`
+# Add user
+adduser username
 
-- Remove unnecessary whitespace
-
-    `[\t ]+$`
-
-- Remove trailing
-
-    `[\t\n ]{2,}\Z => \n`
-
-
-## Users
-- See which user/process is using a file
-
-    `fuser -u FILE`
-
-- List all local users
-
-    `cat /etc/passwd`
-
-- Add user
-
-    `adduser username`
-
-- Remove user
-
-    ```
+# Remove user
 userdel USER
-```
 
-- Remove user and user directory
-
-    ```
+# Remove user and user directory
 userdel -r USER
+
+# Sign in as another user
+su - USER
+
+# Add account for user
+sudo chsh -s /bin/bash USER
+
+# Change user home directory
+usermod -d /new/home user
+
+# List all groups
+cat /etc/group
+
+# Change group
+chgrp GROUP FILENAME
+
+# Add existing user to existing group
+sudo usermod -aG GROUP USER
+
+# print real and effective user and group IDs
+id USER
 ```
-
-- Sign in as another user
-
-    `su - USER`
-
-- Add account for user
-
-    `sudo chsh -s /bin/bash USER`
-
-- Change user home directory
-
-    `usermod -d /new/home user`
-
-- Groups
-    - List all groups
-
-        `cat /etc/group`
-
-    - Change group
-
-        `chgrp GROUP FILENAME`
-
-    - Add existing user to existing group
-
-        `sudo usermod -aG GROUP USER`
-
-- print real and effective user and group IDs
-
-    `id USER`
-
 
 ## Web dev
 ### Django
-- Create app
+```bash
+# Create app
+python manage.py startapp polls
 
-    `python manage.py startapp polls`
+# Takes migration names and returns their SQL
+python manage.py sqlmigrate APP VERSION
 
-- Takes migration names and returns their SQL
+# Makemigrations
+python manage.py makemigrations
 
-    `python manage.py sqlmigrate APP VERSION`
-
-- Makemigrations
-
-    `python manage.py makemigrations`
-
-- Migrate
-
-    ```bash
+# Migrate
 python manage.py migrate
 python manage.py migrate --run-syncdb
-```
 
-- Runserver
-
-    ```bash
+# Runserver
 python manage.py runserver &
 python manage.py runserver 0.0.0.0:8080 &
-```
 
-- Shell
+# Shell
+python manage.py shell
 
-    `python manage.py shell`
+# Run a script
+python manage.py shell < myscript.py
 
-- Run a script
-
-    `python manage.py shell < myscript.py`
-
-- Create super user
-
-    ```bash
+# Create super user
 python manage.py createsuperuser
 python manage.py createsuperuser --email=admin@gmail.com
+
+# Run test
+python manage.py test APP
+
+# Delete all migration files
+find . -iname '*migrations' | xargs rm -rf
+
+# Generate requirements.txt
+pipreqs /path/to/project
+
+# Install requirements in file
+pip install -r requirements.txt
 ```
 
-- Run test
-
-    `python manage.py test APP`
-
-- Delete all migration files
-
-    `find . -iname '*migrations' | xargs rm -rf`
-
-```bash
-python -m django --version
-python manage.py check --deploy
-python manage.py collectstatic
-```
-
-- Generate requirements.txt
-
-    `pipreqs /path/to/project`
-
-- Install requirements in file
-
-    `pip install -r requirements.txt`
-
-Note: If server code is not updating with apache when you edit .py files, try `touch wsgi.py`, which will tell it to recompile .py files
+> **_NOTE:_**  If server code is not updating with apache when you edit .py files, try `touch wsgi.py`, which will tell it to recompile .py files
 
 ### Python
-Start service
-
-    python -m SimpleHTTPServer
-
+```bash
+# Start service
+python -m SimpleHTTPServer
+```
 
 ## Servers
 ### Apache
@@ -441,61 +390,50 @@ apachectl status
 apachectl restart
 apachectl stop
 apachectl start
+
+# check version
+httpd -v
+
+# Enable the Apache service so that it starts automatically at boot
+sudo systemctl enable httpd
 ```
 
-- check version
-
-    `httpd -v`
-
-- Enable the Apache service so that it starts automatically at boot
-
-    `sudo systemctl enable httpd`
-
+### Systemctl
 ```bash
 sudo systemctl start httpd
 sudo systemctl restart httpd
 sudo systemctl stop httpd
+
+# Check status
 systemctl status httpd
-```
 
-- Debug virtual host configuration
+# View today's logs
+journalctl -u service_name.service --since today
 
-    `apachectl -S`
-
-- View logs
-
-    `journalctl -u service_name.service --since today`
-
-- Remove service
-
-    ```
+# Remove service
 systemctl stop SERVICENAME
 systemctl disable SERVICENAME
 rm /etc/systemd/system/SERVICENAME
-rm /etc/systemd/system/SERVICENAME symlinks that might be related
 systemctl daemon-reload
 systemctl reset-failed
 ```
 
 ### Nginx
-Access and error logs
-
-    /var/log/nginx/
-
+Access and error logs: `/var/log/nginx/`
 
 ## Virtual environment
-- Virtualenv
-    - Create a Python virtual environment
+```bash
+# Create a Python virtual environment
+virtualenv VIR_ENV_NAME
 
-        `virtualenv VIR_ENV_NAME`
-    - Activate
+# Activate
+source /path/to/env/bin/activate
 
-        `source /path/to/env/bin/activate`
+deactivate
+```
 
-    `deactivate`
-- [virtualenvwrapper](https://python-guide-cn.readthedocs.io/en/latest/dev/virtualenvs.html#virtualenvwrapper)
-
-    ```bash
+### [virtualenvwrapper](https://python-guide-cn.readthedocs.io/en/latest/dev/virtualenvs.html#virtualenvwrapper)
+```bash
 lsvirtualenv -b
 mkvirtualenv VIR_ENV_NAME
 workon VIR_ENV_NAME
@@ -504,185 +442,150 @@ deactivate
 rmvirtualenv VIR_ENV_NAME
 ```
 
-
 ## Password
-- Change password for user
+```bash
+# Change password for user
+sudo passwd USER
 
-    `sudo passwd USER`
-
-- No password
-
-    `sudo passwd -d USER`
-
-
-## Mounting and unmounting
-- View fstab file
-
-    `cat /etc/fstab`
-
-- Mac
-
-    ```
-/etc/auto_home
-/etc/auto_nfs
+# No password
+sudo passwd -d USER
 ```
 
-- Mount drive settings
+## Mounting and unmounting
+```bash
+# View fstab file
+cat /etc/fstab
 
-    - Refresh /etc/fstab file
+# Refresh /etc/fstab file
+sudo mount -a
 
-        `sudo mount -a`
+# Unmount
+umount PATH_TO_DIR
 
-    - Mac
-
-        `sudo automount -vc`
-
-- Unmount
-
-    `umount PATH_TO_DIR`
-
-- View mount info
-
-    `nfsstat -m`
-
+# View mount info
+nfsstat -m
+```
 
 ## Databases
 ### MySQL server
-- Start server
+```bash
+# Start server
+sudo /etc/init.d/mysql start
 
-    `sudo /etc/init.d/mysql start`
-
-- Connect to server from shell
-
-    ```
+# Connect to server from shell
 mysql -u USER -p DATABASE_NAME
 mysql -u root -p ftta_application
+
+# Source sql file from mysql shell
+source FILE_NAME;
+
+# Configuration file
+/etc/mysql/my.cnf
 ```
 
-- Source sql file from mysql shell
-
-    `source FILE_NAME;`
-
-- configuration file
-
-    `/etc/mysql/my.cnf`
-
 ### Postgres
-- Open db in command line
+```bash
+# Open db in command line
+sudo -u postgres psql -U postgres -d DATABASE_NAME
 
-    `sudo -u postgres psql -U postgres -d DATABASE_NAME`
-- pg_dump out your file
+# Dump out your file
+sudo -u postgres psql DATABASE_NAME > file.backup
 
-    `sudo -u postgres psql DATABASE_NAME > livebadgef15.backup`
-- repopulate empty db with export file
+# Repopulate empty db with export file
+sudo -u postgres psql DATABASE_NAME < file.backup
 
-    `sudo -u postgres psql DATABASE_NAME < livebadgef15.backup`
-- Alternative way to pg_dump/restore
-
-    ```
+# Alternative way to pg_dump/restore
 pg_dump DATABASE_NAME > db.sql
 pg_restore -d newdb db.sql
-    ```
-- restart server
 
-    `sudo /etc/init.d/postgresql restart`
-- drop database
+# Restart server
+sudo /etc/init.d/postgresql restart
 
-    `sudo -u postgres psql postgres -c "DROP DATABASE DATABASE_NAME"`
-- create database
+# Drop database
+sudo -u postgres psql postgres -c "DROP DATABASE DATABASE_NAME"
 
-    `sudo -u postgres psql postgres -c "CREATE DATABASE DATABASE_NAME"`
-- add hstore extension
+# Create database
+sudo -u postgres psql postgres -c "CREATE DATABASE DATABASE_NAME"
 
-    `sudo -u postgres psql postgres -d DATABASE_NAME -c "CREATE EXTENSION IF NOT EXISTS hstore;"`
+# Add hstore extension
+sudo -u postgres psql postgres -d DATABASE_NAME -c "CREATE EXTENSION IF NOT EXISTS hstore;"
+```
 
 ### sqlite
-- Backup
+```bash
+# Backup
+sqlite3 my_database.sq3 ".backup 'backup_file.sq3'"
 
-    `sqlite3 my_database.sq3 ".backup 'backup_file.sq3'"`
+# Print the database structure
+.schema
 
-- Print the database structure
-
-    `.schema`
-
-- Print database structure and data
-
-    `.dump`
-
+# Print database structure and data
+.dump
+```
 
 ## SSH
-- Known hosts file
+```bash
+# Known hosts file
+~/.ssh/known_hosts
 
-    `~/.ssh/known_hosts`
-- Launch gui from remote (Enables X11 forwarding)
+# Launch gui from remote (Enables X11 forwarding)
+ssh -X MACHINE_NAME
 
-    `ssh -X MACHINE_NAME`
-
-- ssh into machine and cd to directory
-
-    `ssh -t MACHINE_NAME "cd /var/log ; bash"`
-
+# ssh into machine and cd to directory
+ssh -t MACHINE_NAME "cd /var/log ; bash"
+```
 
 ## SELinux
 ```bash
 # Check status
 sestatus
+
 # Disable SE Linux
 setenforce 0 
 ```
 
 
 ## Find out where a command is
-    which
-    whereis
-
-
-## View function
-    type FUNCTION
-    typeset -f FUNCTION
-
+```bash
+which
+whereis
+```
 
 ## Memory
-View machine RAM
+```bash
+# View machine RAM
+free -mh
 
-    free -mh
+# View size of directories
+du -shc *
 
-View size of directories
+# View `du -h` sorted by size
+du -hs * | sort -h
 
-    du -shc *
-
-View `du -h` sorted by size
-
-    du -hs * | sort -h
-
-`du` on steroids
-
-    ncdu
-
+# `du` on steroids
+ncdu
+```
 
 ## Nosetests
-Show print messages
+```bash
+# Show print messages
+nosetests --nocapture
 
-    `nosetests --nocapture`
+# Test specific function
+nosetests tests/test_backrefs.py:TestBackrefs.test_backref
 
-Test specific function
-
-    `nosetests tests/test_backrefs.py:TestBackrefs.test_backref`
-
-Test with execution time per test
-
-    `nosetests --with-timer`
-
+# Test with execution time per test
+nosetests --with-timer
+```
 
 ## Processes
-List open files
+```bash
+# List open files
+lsof -p PROCESS_ID
 
-    lsof -p PROCESS_ID
-
-View environment variables of a running process
-
-    cat /proc/PID/environ
-
+# View environment variables of a running process
+cat /proc/PID/environ
+```
 
 ## htop shortcuts
 | Shortcut Key | Function Key |       Description        |
@@ -699,25 +602,17 @@ View environment variables of a running process
 | q            | F10          | Quit htop                |
 
 
-## Renderman
-License app
-
-    /opt/pixar/RenderManProServer-22.3/bin/LicenseApp
-
-
 ## Setuptools
-- Install
+```bash
+# Install
+python setup.py install
 
-    `python setup.py install`
+# Record a list of installed files
+python setup.py install --record files.txt
 
-- Record a list of installed files
-
-    `python setup.py install --record files.txt`
-
-- Remove installed files
-
-    `cat files.txt | xargs rm -rf`
-
+# Remove installed files
+cat files.txt | xargs rm -rf
+```
 
 ## gdb
 `gdb -p PID`
@@ -748,26 +643,38 @@ License app
 
 
 ## OpenEXR
-    exrstdattr # a utility for modifying OpenEXR standard attributes
-    exrinfo # show file format version, channels contained, compression type, data window, display window, line order, pixel aspect ratio, and the center and width of the screen window for a given OpenEXR file(s).
-    exrmerge # takes a collection of EXR images and outputs them as a single EXR with all channels combined, suitable for use with denoise.
-    exrheader # view headers
+```bash
+# A utility for modifying OpenEXR standard attributes
+exrstdattr
 
+# Show file format version, channels contained, compression type, data window, display window, line, pixel aspect ratio, and the center and width of the screen window for a given OpenEXR file(s).
+exrinfoorder
+
+# Takes a collection of EXR images and outputs them as a single EXR with all channels combined, for use with denoise.
+exrmergesuitable
+
+# View headers
+exrheader
+```
 
 ## Terminal Mail
-Launch Terminal app
+```bash
+# Launch Terminal app
+mail
 
-    mail
-
-    ? delete *
-    ? q
-
+# Commands
+? delete *
+? q
+```
 
 ## NVidia
-View memory usage, GPU utilization, and temperature of GPU: `nvidia-smi`
-
+```bash
+# View memory usage, GPU utilization, and temperature of GPU
+nvidia-smi
+```
 
 ## Misc
-- Unzip tar.gz
-
-    `tar -zxvf`
+```bash
+# Unzip tar.gz
+tar -zxvf
+```
