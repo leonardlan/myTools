@@ -52,6 +52,11 @@ git revert COMMIT_HASH
 # Fetch/merge
 git fetch
 git merge origin/master
+
+# Cherry-pick commit
+git cherry-pick <commit>
+# Cherry-pick but don't commit
+git cherry-pick -n <commit>
 ```
 
 

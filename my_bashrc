@@ -4,6 +4,11 @@ PATH=$PATH:$HOME/myTools/bin
 
 MYTOOLS=~/myTools
 
+# Source my awesome aliases
 for f in ~/.bash_aliases*; do source $f; done
 
+# Python CLI preferences
 export PYTHONSTARTUP=~/.pythonrc
+
+# Bash preferences
+HISTSIZE=10000

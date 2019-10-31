@@ -32,10 +32,11 @@ finally:
 
 IGNORED_ATTRIBUTES = ["__builtins__", "__globals__", "func_globals"]
 INTERVALS = OrderedDict([
-    ("year", 31536000),  # 60 * 60 * 24 * 365
-    ("week", 604800),    # 60 * 60 * 24 * 7
-    ("day", 86400),      # 60 * 60 * 24
-    ("hour", 3600),      # 60 * 60
+    ("millennium", 31536000000),  # 60 * 60 * 24 * 365 * 1000
+    ("year", 31536000),           # 60 * 60 * 24 * 365
+    ("week", 604800),             # 60 * 60 * 24 * 7
+    ("day", 86400),               # 60 * 60 * 24
+    ("hour", 3600),               # 60 * 60
     ("minute", 60),
     ("second", 1)
 ])
@@ -59,7 +60,7 @@ def wai(*things, **kwargs):
 
 @_brighten_it_up
 def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False,
-        skip_module=True, skip_known=False):
+         skip_module=True, skip_known=False):
     """What Am I? Prints type and attributes of object thing.
 
     :param thing object: Anything and everything. That's what we're here to find out. :)
@@ -108,7 +109,7 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
             return
         elif typ == dict:
             if thing:
-                print BLUE + "Just a dict:" + GREEN
+                print BLUE + "Just a dict of %i:" % len(thing) + GREEN
                 pprint(thing)
             else:
                 print RED + "Empty dict: {}"
@@ -124,12 +125,13 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
                             break
                     if not is_all_same_type:
                         print BLUE + "%s of (%s)" % (
-                            typ.__name__.title(), ", ".join([type(item).__name__ for item in thing]))
+                            typ.__name__.title(),
+                            ", ".join([type(item).__name__ for item in thing]))
                         pprint(thing)
                         return
-                print BLUE + "%s of %i %s%s" % (
+                print BLUE + "%s of %s %s%s" % (
                     typ.__name__.title(),
-                    len(thing),
+                    '{:,}'.format(len(thing)),
                     type(thing[0]).__name__,
                     "s" if len(thing) > 1 else ""
                 )
@@ -204,7 +206,7 @@ def _func_name_args_kwargs(func):
         if co_argcount and co_varnames:
             try:
                 varnames = list(co_varnames)[0:co_argcount]
-            except TypeError, e:
+            except TypeError:
                 print "Could not get func args for", co_varnames
                 return varnames_str
             defaults = getattr(func, "__defaults__", [])
@@ -302,6 +304,7 @@ h = history
 def hs(str):
     os.system("grep --color=auto '%s' %s" % (str, PYTHON_HISTORY_PATH))
 
+
 def _is_text(s):
     return type(s) in [str, unicode]
 
@@ -363,11 +366,11 @@ def demo_colorama():
     sys.stdout.write(RESET_ALL)
 
 
-def human_time(seconds, decimals=3):
+def human_time(seconds, decimals=1):
     """Human-readable time from seconds
 
     Args:
-        seconds (int, float): Duration in seconds
+        seconds (int or float): Duration in seconds
         decimals (int): Number of decimals
 
     Returns:
@@ -384,8 +387,11 @@ def human_time(seconds, decimals=3):
         if value:
             seconds -= value * count
             if value != 1:
-                name += "s"
-            res.append((value, name))
+                if name == "millennium":
+                    name = "millennia"
+                else:
+                    name += "s"
+            res.append((int(value), name))
 
     # Purge zeros starting from seconds
     while res and res[-1][0] == 0:

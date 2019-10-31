@@ -211,6 +211,7 @@ alias infinite-loop='while true; do date; sleep 1; done'
 # Sleeps for 1-60 seconds
 sleeper () {
     SECONDS_TO_SLEEP=$(((RANDOM % 60) + 1))
+    date
     echo Sleeping for $SECONDS_TO_SLEEP seconds zzz...
     sleep $SECONDS_TO_SLEEP
     echo "Yawn! I'm done now!"
