@@ -31,6 +31,9 @@ alias uuu='cd ../../..'
 alias uuuu='cd ../../../..'
 alias uuuuu='cd ../../../../..'
 
+alias a='alias'  # Aliasception
+complete -a a
+
 alias less='less -R'    # Color me less
 
 # Prints pwd relative to home dir in bold blue
