@@ -1,6 +1,6 @@
 # myTools
 A collection of my
-  - [Bash aliases and functions](bash_aliases)
+  - [Bash aliases and functions](my_settings/bash_aliases)
   - [Maya scripts](maya_scripts)
   - [Python functions](pythonrc) that help with debugging in Python Interpreter
   - Tools
@@ -17,7 +17,7 @@ Run `./setup.sh`
 # Honourable Mentions
 ## Aliases
 
-- lssmart - Prints path to file color-indicating up to where it exists. Source code [here](bash_aliases#L144).
+- lssmart - Prints path to file color-indicating up to where it exists.
 ![lssmart](img/lssmart.png?raw=true "Lists path to file up to existing in blue and rest in red")
 
 ## Maya Scripts
