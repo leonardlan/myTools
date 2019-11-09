@@ -108,7 +108,7 @@ function backup() {
     done
 }
 
-alias myTools='cd ~/myTools'
+alias myTools='cd ${MYTOOLS}'
 
 # Git
 alias gg='git gui &'
@@ -224,7 +224,7 @@ sleeper () {
 ###########
 # My docs #
 ###########
-alias useful-commands='vim ${MYTOOLS}/useful_commands.md'
+alias useful-commands='vim ${MYTOOLS}/docs/useful_commands.md'
 
 
 ######################

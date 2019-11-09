@@ -1,5 +1,3 @@
-# Creates symlinks. Be careful, this will delete existing.
-
 # Make sandbox dir
 mkdir -p ~/dev/sandbox
 
@@ -15,8 +13,8 @@ ln -sfnv `readlink -f myTools.desktop` ~/.local/share/applications/myTools.deskt
 echo Symlinks all set up
 
 echo Setting up Sublime symlink...
-ln -sfn `readlink -f Preferences.sublime-settings` ~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings
-ln -sfn "`readlink -f 'Default (Linux).sublime-keymap'`" ~/.config/sublime-text-3/Packages/User/'Default (Linux).sublime-keymap'
+ln -sfn `readlink -f sublime/Preferences.sublime-settings` ~/.config/sublime-text-3/Packages/User/Preferences.sublime-settings
+ln -sfn "`readlink -f sublime/'Default (Linux).sublime-keymap'`" ~/.config/sublime-text-3/Packages/User/'Default (Linux).sublime-keymap'
 ln -sfn `readlink -f sublime/snippets/python_class.sublime-snippet` ~/.config/sublime-text-3/Packages/User/python_class.sublime-snippet
 ln -sfn `readlink -f sublime/snippets/python_function.sublime-snippet` ~/.config/sublime-text-3/Packages/User/python_function.sublime-snippet
 ln -sfn `readlink -f sublime/snippets/python_function_simple.sublime-snippet` ~/.config/sublime-text-3/Packages/User/python_function_simple.sublime-snippet

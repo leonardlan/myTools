@@ -4,10 +4,10 @@ A collection of my
   - [Maya scripts](maya_scripts)
   - [Python functions](pythonrc) that help with debugging in Python Interpreter
   - Tools
-  - [Useful commands](useful_commands.md)
+  - [Useful commands](docs/useful_commands.md)
   - Git preferences
   - Sublime preferences
-  - Step-by-step [debug checklist](debug_checklist.md) for when a render fails on the farm or a service is not working
+  - Step-by-step [debug checklist](docs/debug_checklist.md) for when a render fails on the farm or a service is not working
 
 from working as a Software Developer and Pipeline TD in VFX.
 
