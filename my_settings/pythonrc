@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # ~/.pythonrc
 
+import math
 import os
 from pprint import pprint
 import re
@@ -76,6 +77,12 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
                 print "Epoch time"
                 print time.strftime("%Z - %a %Y-%m-%d, %I:%M:%S %p", time.localtime(thing))
             elif typ == int:
+                if thing >= 16:
+                    # Check if it's a power of 2
+                    log = math.log(thing, 2)
+                    if log.is_integer():
+                        print "%i = 2^%i" % (thing, int(log))
+                        return
                 print "Just an int:", thing
             elif typ == float:
                 print "Just a float:", thing
