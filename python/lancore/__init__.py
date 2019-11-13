@@ -11,7 +11,8 @@ except ImportError:
 finally:
     # Adds color codes to global variables
     type_to_code = {
-        'Fore': ['BLUE', 'CYAN', 'GREEN', 'MAGENTA', 'RED', 'LIGHTGREEN_EX', 'YELLOW', 'RESET'],
+        'Fore': ['BLUE', 'CYAN', 'GREEN', 'MAGENTA', 'RED', 'LIGHTGREEN_EX', 'YELLOW', 'RESET',
+                 'LIGHTRED_EX'],
         'Style': ['BRIGHT', 'NORMAL', 'RESET_ALL']
     }
     for typ, codes in type_to_code.iteritems():
@@ -20,6 +21,10 @@ finally:
 
     # Shortcut color global variables.
     globals()['BRIGHT_BLUE'] = lambda s: BRIGHT + BLUE + s + RESET_ALL
+    globals()['INFO'] = BRIGHT_BLUE
+    globals()['WARN'] = lambda s: YELLOW + s + RESET
+    globals()['ERROR'] = lambda s: BRIGHT + LIGHTRED_EX + s + RESET_ALL
+    globals()['CRITICAL'] = lambda s: colorama.Back.RED + BRIGHT + s + RESET_ALL
 
 
 INTERVALS = OrderedDict([
