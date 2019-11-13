@@ -39,8 +39,26 @@ INTERVALS = OrderedDict([
 ])
 
 
-def human_time(seconds, decimals=3):
+def human_time(seconds, decimals=1):
     '''Human-readable time from seconds (ie. 5 days and 2 hours).
+
+    Examples:
+        >>> human_time(15)
+        '15 seconds'
+        >>> human_time(3600)
+        '1 hour'
+        >>> human_time(3720)
+        '1 hour and 2 minutes'
+        >>> human_time(266400)
+        '3 days and 2 hours'
+        >>> human_time(-1.5)
+        '-1.5 seconds'
+        >>> human_time(0)
+        '0 seconds'
+        >>> human_time(0.1)
+        '100 milliseconds'
+        >>> human_time(1)
+        '1 second'
 
     Args:
         seconds (int or float): Duration in seconds.
@@ -49,31 +67,35 @@ def human_time(seconds, decimals=3):
     Returns:
         str: Human-readable time.
     '''
-    if seconds == 0:
+    input_is_int = isinstance(seconds, int)
+    if seconds < 0:
+        return str(seconds if input_is_int else round(seconds, decimals)) + ' seconds'
+    elif seconds == 0:
         return '0 seconds'
-    elif seconds < 1:
-        return str(round(seconds, decimals)) + ' seconds'
+    elif 0 < seconds < 1:
+        # Return in milliseconds.
+        ms = int(seconds * 1000)
+        return '%i millisecond%s' % (ms, 's' if ms != 1 else '')
+    elif 1 < seconds < INTERVALS['minute']:
+        return str(seconds if input_is_int else round(seconds, decimals)) + ' seconds'
 
     res = []
-    for name, count in INTERVALS.iteritems():
-        value = seconds // count
-        if value:
-            seconds -= value * count
-            if value != 1:
+    for interval, count in INTERVALS.iteritems():
+        quotient, remainder = divmod(seconds, count)
+        if quotient >= 1:
+            seconds = remainder
+            if quotient > 1:
                 # Plurals.
-                if name == 'millennium':
-                    name = 'millennia'
-                elif name == 'century':
-                    name = 'centuries'
+                if interval == 'millennium':
+                    interval = 'millennia'
+                elif interval == 'century':
+                    interval = 'centuries'
                 else:
-                    name += 's'
-            res.append((int(value), name))
+                    interval += 's'
+            res.append('%i %s' % (int(quotient), interval))
+        if remainder == 0:
+            break
 
-    # Purge zeros starting from seconds.
-    while res and res[-1][0] == 0:
-        res.pop()
-
-    res = ['%i %s' % (val, interval) for val, interval in res]
     if len(res) >= 2:
         # Only shows 2 most important intervals.
         return '{} and {}'.format(res[0], res[1])
