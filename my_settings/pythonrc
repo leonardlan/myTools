@@ -27,6 +27,11 @@ def _brighten_it_up(func):
     return wrapper
 
 
+def human_int(int_):
+    '''Add commas to int every 3 digits (ie. 1,234,567,890)'''
+    return '{:,}'.format(int_)
+
+
 def wai(*things, **kwargs):
     for thing in things:
         _wai(thing, **kwargs)
@@ -83,7 +88,7 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
                     if log.is_integer():
                         print "%i = 2^%i" % (thing, int(log))
                         return
-                print "Just an int:", thing
+                print "Just an int:", human_int(thing)
             elif typ == float:
                 print "Just a float:", thing
             return
@@ -111,7 +116,7 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
                         return
                 print BLUE + "%s of %s %s%s" % (
                     typ.__name__.title(),
-                    '{:,}'.format(len(thing)),
+                    human_int(len(thing)),
                     type(thing[0]).__name__,
                     "s" if len(thing) > 1 else ""
                 )

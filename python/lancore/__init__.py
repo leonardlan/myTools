@@ -20,11 +20,11 @@ finally:
             globals()[code] = getattr(getattr(colorama, typ), code) if colorama else ''
 
     # Shortcut color global variables.
-    globals()['BRIGHT_BLUE'] = lambda s: BRIGHT + BLUE + s + RESET_ALL
+    globals()['BRIGHT_BLUE'] = lambda s: BRIGHT + BLUE + str(s) + RESET_ALL
     globals()['INFO'] = BRIGHT_BLUE
-    globals()['WARN'] = lambda s: YELLOW + s + RESET
-    globals()['ERROR'] = lambda s: BRIGHT + LIGHTRED_EX + s + RESET_ALL
-    globals()['CRITICAL'] = lambda s: colorama.Back.RED + BRIGHT + s + RESET_ALL
+    globals()['WARN'] = lambda s: YELLOW + str(s) + RESET
+    globals()['ERROR'] = lambda s: BRIGHT + LIGHTRED_EX + str(s) + RESET_ALL
+    globals()['CRITICAL'] = lambda s: colorama.Back.RED + BRIGHT + str(s) + RESET_ALL
 
 
 INTERVALS = OrderedDict([
