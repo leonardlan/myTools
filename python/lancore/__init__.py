@@ -103,11 +103,33 @@ def human_time(seconds, decimals=1):
 
 
 def time_me(func, *args, **kwargs):
-    '''Prints how long function execution took.'''
-    start = time.time()
-    res = func(*args, **kwargs)
-    end = time.time()
+    '''Prints how long function execution took.
+
+    Args:
+        func (function): Function to call.
+        args (list): Args to pass to function.
+        kwargs (dict): Kwargs to pass to function.
+        n (int): Number of times to run func. Default to 1.
+
+    Returns:
+        Anything: Whatever function call returns.
+    '''
+    n = kwargs.pop('n', 1)
     args_str = [str(arg) for arg in args]
     params = ', '.join(args_str + ['%s=%s' % (key, str(val)) for key, val in kwargs.iteritems()])
-    print '%s(%s) took %s' % (func.__name__, params, human_time(end - start))
+    print 'Running: %s(%s)' % (func.__name__, params)
+    run_times = []
+    for count in range(n):
+        print 'Running function (%i/%i)' % (count + 1, n),
+        start = time.time()
+        res = func(*args, **kwargs)
+        end = time.time()
+        duration = end - start
+        run_times.append(duration)
+        print 'took %s' % human_time(duration)
+
+    if n > 1:
+        print 'Average time: %s' % human_time(sum(run_times) / n)
+        print 'Fastest time: %s' % human_time(min(run_times))
+        print 'Slowest time: %s' % human_time(max(run_times))
     return res
