@@ -1,5 +1,9 @@
 '''My useful core functions.'''
+import numpy
+import sys
 import time
+import traceback
+
 from collections import OrderedDict
 
 # Make CLI beautiful with color-printing to terminal using colorama.
@@ -117,19 +121,28 @@ def time_me(func, *args, **kwargs):
     n = kwargs.pop('n', 1)
     args_str = [str(arg) for arg in args]
     params = ', '.join(args_str + ['%s=%s' % (key, str(val)) for key, val in kwargs.iteritems()])
-    print 'Running: %s(%s)' % (func.__name__, params)
+    print 'Running %s(%s)' % (func.__name__, params)
     run_times = []
     for count in range(n):
-        print 'Running function (%i/%i)' % (count + 1, n),
+        sys.stdout.write('%i/%i: ' % (count + 1, n))
+        sys.stdout.flush()
         start = time.time()
-        res = func(*args, **kwargs)
+        try:
+            res = func(*args, **kwargs)
+        except Exception, e:
+            print WARN('Error running function: %s' % e)
+            print traceback.format_exc()
+            return
         end = time.time()
         duration = end - start
         run_times.append(duration)
-        print 'took %s' % human_time(duration)
+        print human_time(duration)
 
     if n > 1:
-        print 'Average time: %s' % human_time(sum(run_times) / n)
+        total = sum(run_times)
+        print 'Total time: %s' % human_time(total)
+        print 'Average time: %s' % human_time(total / n)
         print 'Fastest time: %s' % human_time(min(run_times))
         print 'Slowest time: %s' % human_time(max(run_times))
+        print 'Standard deviation: %.2f' % numpy.std(run_times)
     return res
