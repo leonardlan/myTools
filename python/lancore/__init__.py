@@ -1,4 +1,5 @@
 '''My useful core functions.'''
+import datetime
 import numpy
 import sys
 import time
@@ -109,6 +110,10 @@ def human_time(seconds, decimals=1):
 def time_me(func, *args, **kwargs):
     '''Prints how long function execution took.
 
+    >>> time_me(time.sleep, 5)
+    Running sleep(5)
+    1/1 [2019-11-26 09:45:33.276782]: 5.0 seconds
+
     Args:
         func (function): Function to call.
         args (list): Args to pass to function.
@@ -116,15 +121,16 @@ def time_me(func, *args, **kwargs):
         n (int): Number of times to run func. Default to 1.
 
     Returns:
-        Anything: Whatever function call returns.
+        Anything: Whatever function call returns. None if call failed on first try.
     '''
     n = kwargs.pop('n', 1)
     args_str = [str(arg) for arg in args]
     params = ', '.join(args_str + ['%s=%s' % (key, str(val)) for key, val in kwargs.iteritems()])
     print 'Running %s(%s)' % (func.__name__, params)
     run_times = []
+    res = None
     for count in range(n):
-        sys.stdout.write('%i/%i: ' % (count + 1, n))
+        sys.stdout.write('%i/%i [%s]: ' % (count + 1, n, str(datetime.datetime.now())))
         sys.stdout.flush()
         start = time.time()
         try:
@@ -132,16 +138,17 @@ def time_me(func, *args, **kwargs):
         except Exception, e:
             print WARN('Error running function: %s' % e)
             print traceback.format_exc()
-            return
+            return res
         end = time.time()
         duration = end - start
         run_times.append(duration)
         print human_time(duration)
 
-    if n > 1:
+    if n >= 2:
         total = sum(run_times)
         print 'Total time: %s' % human_time(total)
         print 'Average time: %s' % human_time(total / n)
+    if n >= 3:
         print 'Fastest time: %s' % human_time(min(run_times))
         print 'Slowest time: %s' % human_time(max(run_times))
         print 'Standard deviation: %.2f' % numpy.std(run_times)
