@@ -54,6 +54,7 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
 
     if not skip_known:
         # Let's see if we know what it is first.
+        from collections import defaultdict
         if typ in (str, unicode):
             if thing:
                 if os.path.exists(thing):
@@ -98,6 +99,9 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
                 pprint(thing)
             else:
                 print RED + "Empty dict: {}"
+            return
+        elif typ == defaultdict:
+            print BLUE + "defaultdict with %i key(s): %s" % (len(thing), thing.keys())
             return
         elif typ in (list, tuple):
             if thing:
