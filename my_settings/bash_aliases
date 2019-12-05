@@ -176,7 +176,7 @@ EOF
 }
 alias start_python_service='python -m SimpleHTTPServer & google-chrome 0.0.0.0:8000'
 
-alias clean='find . -name "*.pyc" -delete'
+alias clean='echo Deleting files...; find . -name "*.pyc" -print -delete; echo Done deleting.'
 
 # Prints path to file color-indicating up to where it exists
 lssmart () {
