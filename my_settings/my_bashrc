@@ -13,4 +13,5 @@ export PYTHONSTARTUP=~/.pythonrc
 export PYTHONPATH=$PYTHONPATH:$MYTOOLS/python
 
 # Bash preferences
-HISTSIZE=10000
+HISTSIZE=100000
+HISTIGNORE="ls:ps:history"
