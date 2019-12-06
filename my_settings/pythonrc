@@ -10,6 +10,8 @@ import sys
 import time
 from types import ModuleType
 
+from tabulate import tabulate
+
 from lancore import *
 
 
@@ -54,8 +56,10 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
 
     if not skip_known:
         # Let's see if we know what it is first.
-        from collections import defaultdict
-        if typ in (str, unicode):
+        if thing is None:
+            print "It's just None!"
+            return
+        elif typ in (str, unicode):
             if thing:
                 if os.path.exists(thing):
                     if os.path.isfile(thing):
@@ -100,7 +104,9 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
             else:
                 print RED + "Empty dict: {}"
             return
-        elif typ == defaultdict:
+
+        from collections import defaultdict
+        if typ == defaultdict:
             print BLUE + "defaultdict with %i key(s): %s" % (len(thing), thing.keys())
             return
         elif typ in (list, tuple):
@@ -290,23 +296,31 @@ def _append_history_file():
 h = history
 
 
-def hs(str):
-    os.system("grep --color=auto '%s' %s" % (str, PYTHON_HISTORY_PATH))
+def hs(str_, max_count=5):
+    '''Search interactive python history using grep. Returns last max_count results.
+
+    Args:
+        str_ (str): String to search for.
+        max_count (int): Max number of lines to show.
+    '''
+    os.system('grep "%s" %s | tail -%i | grep --color=auto "%s"' % (
+        str_, PYTHON_HISTORY_PATH, max_count, str_))
 
 
 def _is_text(s):
     return type(s) in [str, unicode]
 
 
-def find(thing, target):
-    """Recursive finds path to target in dict thing
+def find(haystack, needle):
+    """Recursively finds path to needle in haystack.
 
     Args:
-        thing (dict or list): A complicated dict or list where I need to find a target
+        haystack (dict or list): A dict or list.
+        needle (anything): Target to find.
     """
-    attrs = _find(thing, target)
+    attrs = _find(haystack, needle)
     if not attrs:
-        return "Target not found"
+        print "needle not found"
     path = ""
     for attr in attrs:
         if _is_text(attr):
@@ -314,32 +328,32 @@ def find(thing, target):
         else:
             path += "[%s]" % attr
     print "%s:" % path,
-    print eval("thing%s" % path)
+    print eval("haystack%s" % path)
 
 
-def _find(thing, target, path=[]):
+def _find(haystack, needle, path=[]):
     """Recursive helper for find()"""
-    if type(thing) == dict:
-        for key, val in thing.iteritems():
+    if type(haystack) == dict:
+        for key, val in haystack.iteritems():
             if type(val) in (dict, list):
-                res = _find(val, target, path=path + [key])
+                res = _find(val, needle, path=path + [key])
                 if res:
                     return res
             elif val:
-                if _is_text(val) and _is_text(target) and target.lower() in val.lower():
+                if _is_text(val) and _is_text(needle) and needle.lower() in val.lower():
                     return path + [key]
-                elif type(val) == int and target == val:
+                elif type(val) == int and needle == val:
                     return path + [key]
-    elif type(thing) == list:
-        for index, item in enumerate(thing):
+    elif type(haystack) == list:
+        for index, item in enumerate(haystack):
             if type(item) in (dict, list):
-                res = _find(item, target, path=path + [index])
+                res = _find(item, needle, path=path + [index])
                 if res:
                     return res
             elif item:
-                if _is_text(item) and _is_text(target) and target.lower() in item.lower():
+                if _is_text(item) and _is_text(needle) and needle.lower() in item.lower():
                     return path + [index]
-                elif type(item) == int and target == item:
+                elif type(item) == int and needle == item:
                     return path + [index]
 
 

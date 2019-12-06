@@ -1,4 +1,5 @@
 '''My useful core functions.'''
+import copy
 import datetime
 import numpy
 import sys
@@ -26,10 +27,11 @@ finally:
 
     # Shortcut color global variables.
     globals()['BRIGHT_BLUE'] = lambda s: BRIGHT + BLUE + str(s) + RESET_ALL
-    globals()['INFO'] = BRIGHT_BLUE
-    globals()['WARN'] = lambda s: YELLOW + str(s) + RESET
-    globals()['ERROR'] = lambda s: BRIGHT + LIGHTRED_EX + str(s) + RESET_ALL
-    globals()['CRITICAL'] = lambda s: colorama.Back.RED + BRIGHT + str(s) + RESET_ALL
+    globals()['INFO'] = lambda s: BRIGHT + BLUE + 'INFO:' + RESET_ALL + ' ' + str(s)
+    globals()['WARN'] = lambda s: BRIGHT + YELLOW + 'WARNING:' + RESET_ALL + ' ' + str(s)
+    globals()['ERROR'] = lambda s: BRIGHT + LIGHTRED_EX + 'ERROR:' + RESET_ALL + ' ' + str(s)
+    globals()['CRITICAL'] = lambda s: BRIGHT + colorama.Back.RED + 'CRITICAL:' + RESET_ALL + ' ' + \
+        str(s)
 
 
 INTERVALS = OrderedDict([
@@ -136,8 +138,10 @@ def time_me(func, *args, **kwargs):
         try:
             res = func(*args, **kwargs)
         except Exception, e:
-            print WARN('Error running function: %s' % e)
-            print traceback.format_exc()
+            end = time.time()
+            duration = end - start
+            print WARN('\nFunction errored after %s: %s' % (human_time(duration), e))
+            print traceback.format_exc().strip()
             return res
         end = time.time()
         duration = end - start
@@ -153,3 +157,15 @@ def time_me(func, *args, **kwargs):
         print 'Slowest time: %s' % human_time(max(run_times))
         print 'Standard deviation: %.2f' % numpy.std(run_times)
     return res
+
+
+def similarities(dicts):
+    '''Dict shared in common among all dicts.'''
+    if not dicts:
+        return {}
+    same_dict = copy.deepcopy(dicts[0])
+    for dict_ in dicts[1:]:
+        for key, val in dict_.iteritems():
+            if key in same_dict and same_dict[key] != val:
+                same_dict.pop(key)
+    return same_dict

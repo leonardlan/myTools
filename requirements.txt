@@ -1,6 +1,7 @@
-colorama==0.4.1
 clipboard==0.0.4
+colorama==0.4.1
 nose-timer==0.7.5
 pylint==1.9.4
+tabulate==0.6.8
 virtualenv==16.4.3
 virtualenvwrapper==4.8.4
