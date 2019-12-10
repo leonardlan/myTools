@@ -2,7 +2,11 @@
 
 MYTOOLS=~/myTools
 
+# My scripts
 PATH=$PATH:$MYTOOLS/bin
+
+# My prompt
+PS1="\[\033[35m\]\t\[\033[m\] \[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h\[\033[m\]:\[\033[34;1m\]\w\[\033[m\]\$ "
 
 # Source my awesome aliases
 for f in ~/.bash_aliases*; do source $f; done
