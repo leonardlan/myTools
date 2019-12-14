@@ -86,17 +86,20 @@ def _wai_number(num, typ):
         print "Just a float:", num
 
 
+def _is_all_same_type(list_):
+    '''True if all elements in list_ are same type.'''
+    typ_0 = type(list_[0])
+    for item in list_[1:]:
+        if type(item) != typ_0:
+            return False
+    return True
+
+
 def _wai_list(list_, typ):
     '''What is this list/tuple?'''
     if list_:
         if len(list_) > 1:
-            typ_0 = type(list_[0])
-            is_all_same_type = True
-            for item in list_:
-                if type(item) != typ_0:
-                    is_all_same_type = False
-                    break
-            if not is_all_same_type:
+            if not _is_all_same_type(list_):
                 print BLUE + "%s of (%s)" % (
                     typ.__name__.title(),
                     ", ".join([type(item).__name__ for item in list_]))
@@ -112,7 +115,21 @@ def _wai_list(list_, typ):
         pprint(list_[0]), BRIGHT
         _print_types(type(list_[0]))
     else:
-        print RED + "Empty %s: %s" % (typ.__name__, str(list_))
+        print DIM + "Empty %s: %s" % (typ.__name__, str(list_)) + RESET_ALL
+
+
+def _wai_dict(dict_, typ):
+    '''What is this dict?'''
+    if dict_:
+        keys = dict_.keys()
+        values = dict_.values()
+        if _is_all_same_type(keys) and _is_all_same_type(values):
+            print BLUE + "Just a dict of %i {%s: %s}" % (
+                len(dict_), type(keys[0]).__name__, type(values[0]).__name__)
+        print "Keys: %s" % dict_.keys() + GREEN
+    else:
+        print DIM + "Empty dict: {}" + RESET_ALL
+    return
 
 
 @_brighten_it_up
@@ -140,12 +157,7 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
         elif typ in (int, float):
             return _wai_number(thing, typ)
         elif typ == dict:
-            if thing:
-                print BLUE + "Just a dict of %i %s:" % (len(thing), thing.keys()) + GREEN
-                pprint(thing)
-            else:
-                print RED + "Empty dict: {}"
-            return
+            return _wai_dict(thing, typ)
 
         from collections import defaultdict
         if typ == defaultdict:
@@ -256,7 +268,7 @@ def _print(to_print):
 
 def ns(msg=""):
     """Sends a desktop notification using alias ns"""
-    subprocess.call("ns %s" % msg, shell=True)
+    subprocess.call("ns '%s'" % msg, shell=True)
 
 
 def cb(content):
@@ -271,6 +283,11 @@ def cb(content):
 def start_QApplication():
     from PyQt4 import QtGui
     return QtGui.QApplication(sys.argv)
+
+
+def my_date_time_stamp():
+    '''Date time stamp the way I like it.'''
+    return datetime.datetime.now().strftime('%c')
 
 
 def _history(include_current=False):
@@ -300,13 +317,14 @@ def history(n=50, c=False):
         os.system("tail -%i %s" % (n, PYTHON_HISTORY_PATH))
     except IOError:
         pass
-    print BRIGHT_BLUE("\nCurrent session:")
+    print BRIGHT_BLUE("\nCurrent session [%s]:" % my_date_time_stamp())
     print _history()
 
 
 def _append_history_file():
     with open(PYTHON_HISTORY_PATH, "a+") as fil:
-        fil.write(BRIGHT + BLUE + "\n'''New session!'''\n" + RESET_ALL)
+        fil.write(
+            BRIGHT_BLUE("\n'''New session [%s]'''\n" % my_date_time_stamp()))
         fil.write(_history(include_current=True) + "\n")
 
 
@@ -382,9 +400,14 @@ def demo_colorama():
             print getattr(colorama.Fore, color),
             for style in dir(colorama.Style):
                 if style.isupper() and style != "RESET_ALL":
-                    print getattr(colorama.Style, style), style, color,
+                    print getattr(colorama.Style, style), '"%s %s"' % (style, color),
             print
     sys.stdout.write(RESET_ALL)
+
+
+# Aliases for easier access. How lazy am I?
+def print_tabulate(dicts):
+    print tabulate(dicts, headers='keys')
 
 
 # Enable syntax completion and append history file on exit

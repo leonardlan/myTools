@@ -99,11 +99,12 @@ _ls_sb_dirs () {
 }
 complete -F _ls_sb_dirs sb
 
-# Backup file or dir using cp
+# Backup files or dirs using cp with datetime in name
 function backup() {
-    for var in "$@"
+    for file in "$@"
     do
-        cmd="cp -r $var $var.backup_$(date +%F_%T)"
+        file=${file%/}
+        cmd="cp -r $file $file.backup_$(date +%F_%T)"
         echo $cmd
         $cmd
     done

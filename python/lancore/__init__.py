@@ -19,7 +19,7 @@ finally:
     type_to_code = {
         'Fore': ['BLUE', 'CYAN', 'GREEN', 'MAGENTA', 'RED', 'LIGHTGREEN_EX', 'YELLOW', 'RESET',
                  'LIGHTRED_EX'],
-        'Style': ['BRIGHT', 'NORMAL', 'RESET_ALL']
+        'Style': ['BRIGHT', 'NORMAL', 'DIM', 'RESET_ALL']
     }
     for typ, codes in type_to_code.iteritems():
         for code in codes:
