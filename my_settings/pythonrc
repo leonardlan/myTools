@@ -86,34 +86,18 @@ def _wai_number(num, typ):
         print "Just a float:", num
 
 
-def _is_all_same_type(list_):
-    '''True if all elements in list_ are same type.'''
-    typ_0 = type(list_[0])
-    for item in list_[1:]:
-        if type(item) != typ_0:
-            return False
-    return True
-
-
 def _wai_list(list_, typ):
     '''What is this list/tuple?'''
     if list_:
-        if len(list_) > 1:
-            if not _is_all_same_type(list_):
-                print BLUE + "%s of (%s)" % (
-                    typ.__name__.title(),
-                    ", ".join([type(item).__name__ for item in list_]))
-                pprint(list_)
-                return
         print BLUE + "%s of %s %s%s" % (
             typ.__name__.title(),
             human_int(len(list_)),
-            type(list_[0]).__name__,
+            get_types(list_),
             "s" if len(list_) > 1 else ""
         )
         print NORMAL + GREEN + "[0]: ",
         pprint(list_[0]), BRIGHT
-        _print_types(type(list_[0]))
+        _print_parent_types(type(list_[0]))
     else:
         print DIM + "Empty %s: %s" % (typ.__name__, str(list_)) + RESET_ALL
 
@@ -121,12 +105,9 @@ def _wai_list(list_, typ):
 def _wai_dict(dict_, typ):
     '''What is this dict?'''
     if dict_:
-        keys = dict_.keys()
-        values = dict_.values()
-        if _is_all_same_type(keys) and _is_all_same_type(values):
-            print BLUE + "Just a dict of %i {%s: %s}" % (
-                len(dict_), type(keys[0]).__name__, type(values[0]).__name__)
-        print "Keys: %s" % dict_.keys() + GREEN
+        print BLUE + "Just a dict of %i {%s: %s}" % (
+                len(dict_), get_types(dict_.keys()), get_types(dict_.values()))
+        print "Keys: " + GREEN + str(dict_.keys())
     else:
         print DIM + "Empty dict: {}" + RESET_ALL
     return
@@ -186,7 +167,7 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
         try:
             res = getattr(thing, attr)
         except Exception, e:
-            print RED + e
+            print RED + str(e)
             continue
 
         # Skip if module
@@ -218,7 +199,7 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
     print "Private: %i, Public: %i" % (private_count, total - private_count)
     print "Total: %i" % total
 
-    _print_types(typ)
+    _print_parent_types(typ)
 
 
 def _func_name_args_kwargs(func):
@@ -243,12 +224,26 @@ def _func_name_args_kwargs(func):
     return BLUE + "%s(%s):" % (func.__name__, varnames_str) + GREEN
 
 
-def _print_types(typ):
+def _print_parent_types(typ):
     """Print types of all parent classes"""
     import inspect
     print typ
     print CYAN + "Parents:" + GREEN, " -> ".join([t.__name__ for t in inspect.getmro(typ)[1:]])
     print CYAN + "Type:" + GREEN, typ.__name__, RESET
+
+
+def get_types(items):
+    '''String of unique types in items.
+
+    >>> get_types([str, str, str])
+    'str'
+    >>> get_types([str, str, unicode, int])
+    'int, unicode, str'
+    '''
+    found_types = set()
+    for item in items:
+        found_types.add(type(item))
+    return ', '.join([typ.__name__ for typ in found_types])
 
 
 def _call(func):
@@ -405,7 +400,14 @@ def demo_colorama():
     sys.stdout.write(RESET_ALL)
 
 
-# Aliases for easier access. How lazy am I?
+def reload_pythonrc():
+    '''Reload this file to update current CLI session without exiting. Reloadception!'''
+    execfile(os.environ.get('PYTHONSTARTUP'))
+
+
+'''
+Aliases for easier access. How lazy am I?
+'''
 def print_tabulate(dicts):
     print tabulate(dicts, headers='keys')
 
