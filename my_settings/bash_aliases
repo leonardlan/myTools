@@ -44,8 +44,10 @@ runmeindirs () { for d in ./*/ ; do (cd "$d" && echo && _pwd_nice && $@); done }
 
 # Case-insensitive file/folder search
 f () { find . -iname "*$@*" | grep -i --color=auto $@; }
+
+# Recursive grep excluding images and hidden directories showing line number and no errors
 g () {
-    grep -nr --exclude=\*.{jpg,png} "$@" 2>/dev/null
+    grep -nr --exclude=\*.{jpg,png} --exclude-dir='.*' "$@" 2>/dev/null
 }
 
 alias find-executables-recursively='find . -type f -perm /u=x,g=x,o=x -exec ls -l {} \;'
@@ -250,9 +252,11 @@ ping_once () {
         echo -e "\e[31mHost $1 is down\e[39m"
     fi
 }
+complete -F _known_hosts ping_once
 
 # Ping multiple hosts simultaneously
 pings () {
     export -f ping_once;
     printf '%s\n' "$@" | xargs -P 10 -I host bash -c 'ping_once host';
 }
+complete -F _known_hosts pings
