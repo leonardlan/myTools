@@ -235,9 +235,9 @@ def _print_parent_types(typ):
 def get_types(items):
     '''String of unique types in items.
 
-    >>> get_types([str, str, str])
+    >>> get_types(['a', 'b', 'c'])
     'str'
-    >>> get_types([str, str, unicode, int])
+    >>> get_types(['apple', 'banana', u'peach', 2])
     'int, unicode, str'
     '''
     found_types = set()
