@@ -317,10 +317,13 @@ def history(n=50, c=False):
 
 
 def _append_history_file():
+    history = _history(include_current=True)
+    if not history:
+        return
     with open(PYTHON_HISTORY_PATH, "a+") as fil:
         fil.write(
             BRIGHT_BLUE("\n'''New session [%s]'''\n" % my_date_time_stamp()))
-        fil.write(_history(include_current=True) + "\n")
+        fil.write(history + "\n")
 
 
 h = history
