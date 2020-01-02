@@ -260,3 +260,17 @@ pings () {
     printf '%s\n' "$@" | xargs -P 10 -I host bash -c 'ping_once host';
 }
 complete -F _known_hosts pings
+
+
+#########
+# Files #
+#########
+# Keep last 1,000 lines of file(s) (will overwrite existing)
+keep_last_1k_lines () {
+    for file in "$@"
+    do
+        file=${file%/}
+        echo "Truncating $file"
+        echo "$(tail -1000 $file)" > $file
+    done
+}
