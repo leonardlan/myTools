@@ -9,6 +9,32 @@ import traceback
 from collections import OrderedDict
 
 
+# Make CLI beautiful with color-printing to terminal using colorama.
+try:
+    import colorama
+except ImportError:
+    print 'Module colorama not available.'
+    colorama = None
+finally:
+    # Adds color codes to global variables
+    type_to_code = {
+        'Fore': ['BLUE', 'CYAN', 'GREEN', 'MAGENTA', 'RED', 'LIGHTGREEN_EX', 'YELLOW', 'RESET',
+                 'LIGHTRED_EX'],
+        'Style': ['BRIGHT', 'NORMAL', 'DIM', 'RESET_ALL']
+    }
+    for typ, codes in type_to_code.iteritems():
+        for code in codes:
+            globals()[code] = getattr(getattr(colorama, typ), code) if colorama else ''
+
+    # Shortcut color global variables.
+    globals()['BRIGHT_BLUE'] = lambda s: BRIGHT + BLUE + str(s) + RESET_ALL
+    globals()['INFO'] = lambda s: BRIGHT + BLUE + 'INFO:' + RESET_ALL + ' ' + str(s)
+    globals()['WARN'] = lambda s: BRIGHT + YELLOW + 'WARNING:' + RESET_ALL + ' ' + str(s)
+    globals()['ERROR'] = lambda s: BRIGHT + LIGHTRED_EX + 'ERROR:' + RESET_ALL + ' ' + str(s)
+    globals()['CRITICAL'] = lambda s: BRIGHT + colorama.Back.RED + 'CRITICAL:' + RESET_ALL + ' ' + \
+        str(s)
+
+
 INTERVALS = OrderedDict([
     ('millennium', 31536000000),  # 60 * 60 * 24 * 365 * 1000
     ('century', 3153600000),      # 60 * 60 * 24 * 365 * 100
