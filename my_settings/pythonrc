@@ -3,6 +3,7 @@
 
 import math
 import os
+import pprint as pprint_module
 from pprint import pprint
 import re
 import subprocess
@@ -16,7 +17,21 @@ from lancore import *
 
 
 IGNORED_ATTRIBUTES = ["__builtins__", "__globals__", "func_globals"]
+MAX_LINES = 50
 PYTHON_HISTORY_PATH = os.path.join(os.environ['HOME'], '.python_history')
+
+
+def _var_name(var, locals=locals()):
+    '''Hacky way of getting variable name from variable. Empty string if not found.
+
+    >>> foo = 5
+    >>> _var_name(foo)
+    'foo'
+    '''
+    for name, val in locals.iteritems():
+        if val == var:
+            return name
+    return ''
 
 
 def _brighten_it_up(func):
@@ -95,21 +110,38 @@ def _wai_list(list_, typ):
             get_types(list_),
             "s" if len(list_) > 1 else ""
         )
-        print NORMAL + GREEN + "[0]: ",
+        print NORMAL + GREEN + "%s[0]: " % _var_name(list_),
         pprint(list_[0]), BRIGHT
         _print_parent_types(type(list_[0]))
     else:
         print DIM + "Empty %s: %s" % (typ.__name__, str(list_)) + RESET_ALL
 
 
-def _wai_dict(dict_, typ):
+def _wai_dict(dict_):
     '''What is this dict?'''
     if dict_:
-        print BLUE + "Just a dict of %i {%s: %s}" % (
-                len(dict_), get_types(dict_.keys()), get_types(dict_.values()))
-        print "Keys: " + GREEN + str(dict_.keys())
+        print BLUE + 'Just a dict of %i {%s: %s}' % (
+            len(dict_), get_types(dict_.keys()), get_types(dict_.values()))
+        print 'Keys: ' + colorama.Style.RESET_ALL + GREEN + str(sorted(dict_.keys()))
+
+        # Print dict with least number of depth that's less than MAX_LINES.
+        depth = 1
+        previous_output = ''
+        while True:
+            output = pprint_module.pformat(dict_, depth=depth)
+            if output.count('\n') > MAX_LINES:
+                break
+
+            # Check if everything expanded.
+            if output == previous_output:
+                break
+            previous_output = output
+            depth += 1
+        if previous_output:
+            print BRIGHT_BLUE('Dict:') + GREEN
+            print previous_output
     else:
-        print DIM + "Empty dict: {}" + RESET_ALL
+        print DIM + 'Empty dict: {}' + RESET_ALL
     return
 
 
@@ -138,7 +170,7 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
         elif typ in (int, float):
             return _wai_number(thing, typ)
         elif typ == dict:
-            return _wai_dict(thing, typ)
+            return _wai_dict(thing)
 
         from collections import defaultdict
         if typ == defaultdict:
@@ -275,7 +307,7 @@ def cb(content):
         clipboard.copy(str(content))
 
 
-def start_QApplication():
+def start_qt_application():
     from PyQt4 import QtGui
     return QtGui.QApplication(sys.argv)
 
@@ -326,8 +358,11 @@ def _append_history_file():
         fil.write(history + "\n")
 
 
-# Make h print history without having to call function.
+# Make h print history without having to call function. h() works too.
 class History:
+    def __call__(self):
+        history()
+
     def __repr__(self):
         history()
         return ''
@@ -350,61 +385,90 @@ def _is_text(s):
     return type(s) in [str, unicode]
 
 
-def find(haystack, needle):
-    """Recursively finds path to needle in haystack (can be list or dict).
+def find(haystack, needle, all_=True, ignore_case=True):
+    '''Recursively finds path to needle in haystack (can be list or dict).
 
     Args:
         haystack (dict or list): A dict or list.
         needle (anything): Target to find.
-    """
-    attrs = _find(haystack, needle)
-    if not attrs:
-        print "Not found"
+        all_ (bool): Returns all results if True. First result otherwise.
+        ignore_case (bool): Case-insensitive if True.
+    '''
+    results = _find(haystack, needle, all_, ignore_case)
+    if not results:
+        INFO('Not found')
         return
-    path = ""
-    for attr in attrs:
-        if _is_text(attr):
-            path += "['%s']" % attr
-        else:
-            path += "[%s]" % attr
-    print "%s:" % path,
-    print eval("haystack%s" % path)
+    for result in results:
+        path = ''
+        for attr in result:
+            if _is_text(attr):
+                path += "['%s']" % attr
+            else:
+                path += '[%s]' % attr
+        print '%s%s:' % (_var_name(haystack), path),
+        print eval('haystack%s' % path)
+    num_results = len(results)
+    if all_:
+        INFO('Found %i result%s' % (num_results, 's' if num_results > 1 else ''))
 
 
-def _find(haystack, needle, path=[]):
-    """Recursive helper for find()"""
+def _find(haystack, needle, all_, ignore_case):
+    '''Recursive helper for find().'''
+    results = []
     if isinstance(haystack, dict):
-        for key, val in haystack.iteritems():
-            if type(val) in (dict, list):
-                res = _find(val, needle, path=path + [key])
-                if res:
-                    return res
-            elif val:
-                if _is_text(val) and _is_text(needle) and needle.lower() in val.lower():
-                    return path + [key]
-                elif type(val) == int and needle == val:
-                    return path + [key]
+        iterable = haystack.iteritems()
     elif isinstance(haystack, list):
-        for index, item in enumerate(haystack):
-            if type(item) in (dict, list):
-                res = _find(item, needle, path=path + [index])
-                if res:
-                    return res
-            elif item:
-                if _is_text(item) and _is_text(needle) and needle.lower() in item.lower():
-                    return path + [index]
-                elif type(item) == int and needle == item:
-                    return path + [index]
+        iterable = enumerate(haystack)
+    else:
+        # Not sure how to iterate or if iterable.
+        return results
+
+    for key, val in iterable:
+        if isinstance(val, (dict, list)):
+            res = _find(val, needle, all_, ignore_case)
+            if res:
+                results.append([key] + res[0])
+                if not all_:
+                    break
+        elif val == needle:
+            results.append([key])
+            if not all_:
+                break
+        elif val:
+            if _is_text(val) and _is_text(needle):
+                if ignore_case:
+                    if needle.lower() in val.lower():
+                        # Is text and in val, case-insensitive.
+                        results.append([key])
+                        if not all_:
+                            break
+                else:
+                    if needle in val:
+                        # Is text and in val, case-sensitive.
+                        results.append([key])
+                        if not all_:
+                            break
+
+    return results
 
 
-def demo_colorama():
-    """Print every style and color possible with colorama"""
+def demo_colorama(case='upper'):
+    '''Print every style and color possible with colorama.
+
+    Args:
+        case (str): One of 'upper', 'title', or 'lower'.
+    '''
     for color in dir(colorama.Fore):
-        if color.isupper() and color != "RESET":
+        if color.isupper() and color != 'RESET':
             print getattr(colorama.Fore, color),
             for style in dir(colorama.Style):
-                if style.isupper() and style != "RESET_ALL":
-                    print getattr(colorama.Style, style), '"%s %s"' % (style, color),
+                if style.isupper() and style != 'RESET_ALL':
+                    text = '"%s %s"' % (style, color)
+                    if case == 'title':
+                        text = text.title()
+                    elif case == 'lower':
+                        text = text.lower()
+                    print getattr(colorama.Style, style), text,
             print
     sys.stdout.write(RESET_ALL)
 
@@ -438,6 +502,6 @@ else:
 class MyPrompt:
     def __repr__(self):
         now = datetime.datetime.now()
-        return '%s%s%s >>> ' % (MAGENTA, str(now.strftime('%I:%M:%S %p')), RESET)
+        return '%s >>> ' % str(now.strftime('%I:%M:%S %p'))
 
 sys.ps1 = MyPrompt()

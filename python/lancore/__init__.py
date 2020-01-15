@@ -1,12 +1,14 @@
 '''My useful core functions.'''
-import copy
 import datetime
+import json
+import os
 import numpy
 import sys
+import tempfile
 import time
 import traceback
 
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict, Counter
 
 
 # Make CLI beautiful with color-printing to terminal using colorama.
@@ -28,11 +30,23 @@ finally:
 
     # Shortcut color global variables.
     globals()['BRIGHT_BLUE'] = lambda s: BRIGHT + BLUE + str(s) + RESET_ALL
-    globals()['INFO'] = lambda s: BRIGHT + BLUE + 'INFO:' + RESET_ALL + ' ' + str(s)
-    globals()['WARN'] = lambda s: BRIGHT + YELLOW + 'WARNING:' + RESET_ALL + ' ' + str(s)
-    globals()['ERROR'] = lambda s: BRIGHT + LIGHTRED_EX + 'ERROR:' + RESET_ALL + ' ' + str(s)
-    globals()['CRITICAL'] = lambda s: BRIGHT + colorama.Back.RED + 'CRITICAL:' + RESET_ALL + ' ' + \
-        str(s)
+
+    # Logging functions.
+    def _log(header, color, content):
+        sys.stdout.write('%s%s%s: %s\n' % (BRIGHT + color, header, RESET_ALL, str(content)))
+    globals()['INFO'] = lambda s: _log('INFO', BLUE, s)
+    globals()['GREEN_INFO'] = lambda s: _log('INFO', GREEN, s)
+    globals()['WARNING'] = lambda s: _log('WARNING', YELLOW, s)
+    globals()['ERROR'] = lambda s: _log('ERROR', LIGHTRED_EX, s)
+    globals()['CRITICAL'] = lambda s: _log('CRITICAL', colorama.Back.RED, s)
+
+
+def demo_logging():
+    GREEN_INFO('Good stuff!')
+    INFO('Just wanted to let you know this is working')
+    WARNING('You might want to take a look at this')
+    ERROR("Uh, Houston, we've had a problem")
+    CRITICAL("I'll just put this over here with the rest of the fire")
 
 
 INTERVALS = OrderedDict([
@@ -126,6 +140,9 @@ def time_me(func, *args, **kwargs):
     Returns:
         Anything: Whatever function call returns. None if call failed on first try.
     '''
+    if not func:
+        ERROR('Invalid function: %s' % func)
+        return
     n = kwargs.pop('n', 1)
     args_str = [str(arg) for arg in args]
     params = ', '.join(args_str + ['%s=%s' % (key, str(val)) for key, val in kwargs.iteritems()])
@@ -141,7 +158,7 @@ def time_me(func, *args, **kwargs):
         except Exception, e:
             end = time.time()
             duration = end - start
-            print WARN('\nFunction errored after %s: %s' % (human_time(duration), e))
+            WARNING('\nFunction errored after %s: %s' % (human_time(duration), e))
             print traceback.format_exc().strip()
             return res
         end = time.time()
@@ -170,3 +187,33 @@ def similarities(dicts):
             if key in same_dict and same_dict[key] != val:
                 same_dict.pop(key)
     return same_dict
+
+
+'''JSON.'''
+TEMP_DATA_JSON_FILE = os.path.join(tempfile.gettempdir(), 'data.json')
+
+def dump_json(data, file_path=TEMP_DATA_JSON_FILE):
+    with open(file_path, 'w') as fp:
+        json.dump(data, fp, indent=4)
+    INFO('Data written to %s' % file_path)
+
+
+def load_json(file_path=TEMP_DATA_JSON_FILE):
+    with open(file_path, 'r') as fp:
+        return json.load(fp)
+
+
+'''Data structures.'''
+class SimpleNamespace:
+    '''Ported from Python 3. https://docs.python.org/3.3/library/types.html'''
+
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    def __repr__(self):
+        keys = sorted(self.__dict__)
+        items = ('{}={!r}'.format(k, self.__dict__[k]) for k in keys)
+        return 'SimpleNamespace({})'.format(', '.join(items))
+
+    def __eq__ (self, other):
+        return self.__dict__ == other.__dict__
