@@ -177,16 +177,40 @@ def time_me(func, *args, **kwargs):
     return res
 
 
-def similarities(dicts):
-    '''Dict shared in common among all dicts.'''
-    if not dicts:
-        return {}
-    same_dict = copy.deepcopy(dicts[0])
-    for dict_ in dicts[1:]:
+MAX_NUM_SIMILARITIES_TO_PRINT = 3
+
+
+def similarities(input_):
+    '''Dict shared in common among all dicts.
+
+    Args:
+        input_ (list or dict): List/dict to find similarities in.
+
+    Raises:
+        TypeError: Input not list or dict.
+    '''
+    from pprint import pprint
+    dd = defaultdict(list)
+
+    if isinstance(input_, dict):
+        iterable = sorted(input_.iteritems())
+    elif isinstance(input_, list):
+        iterable = enumerate(input_)
+    else:
+        raise TypeError('Not list or dict')
+
+    for key, dict_ in iterable:
         for key, val in dict_.iteritems():
-            if key in same_dict and same_dict[key] != val:
-                same_dict.pop(key)
-    return same_dict
+            if not val.__hash__:
+                # These values are unhashable.
+                continue
+            dd[key].append(val)
+    for key, vals in dd.iteritems():
+        counter = Counter(vals)
+        if len(counter) > MAX_NUM_SIMILARITIES_TO_PRINT:
+            continue
+        print '%s (%i): ' % (key, len(counter)),
+        pprint(dict(counter))
 
 
 '''JSON.'''

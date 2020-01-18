@@ -3,8 +3,7 @@
 
 import math
 import os
-import pprint as pprint_module
-from pprint import pprint
+from pprint import pprint, pformat
 import re
 import subprocess
 import sys
@@ -19,6 +18,16 @@ from lancore import *
 IGNORED_ATTRIBUTES = ["__builtins__", "__globals__", "func_globals"]
 MAX_LINES = 50
 PYTHON_HISTORY_PATH = os.path.join(os.environ['HOME'], '.python_history')
+TYPE_TO_REGEX = {
+    'E-mail': r'^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,5})$',
+    'Whole number': r'^\d+$',
+    'Negative int': r'^-\d+$',
+    'Negative float': r'^-\d+$',
+    'Decimal number (float)': r'^\d*\.\d+$',
+    'IP Address': r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}',
+    'MAC Address': r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$',
+    'UUID': r'[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}'
+}
 
 
 def _var_name(var, locals=locals()):
@@ -63,6 +72,7 @@ def _wai_text(str_, typ):
     '''What is this text? Can be unicode or str.'''
     if str_:
         if os.path.exists(str_):
+            # It's a file path.
             if os.path.isfile(str_):
                 if str_.endswith(".ma"):
                     print "Maya ascii file"
@@ -74,12 +84,14 @@ def _wai_text(str_, typ):
                     print "file path"
             else:
                 print "directory"
-        elif re.match(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", str_):
-            print "IP Address"
-        elif re.match(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$', str_):
-            print "MAC Address"
         else:
-            print "Just a %s:" % typ.__name__, str_
+            # Match by regex of what we know.
+            for type_, regex in TYPE_TO_REGEX.iteritems():
+                if re.match(regex, str_):
+                    print type_
+                    break
+            else:
+                print "Just a %s:" % typ.__name__, str_
     else:
         print "Empty %s: ''" % typ.__name__
 
@@ -120,15 +132,20 @@ def _wai_list(list_, typ):
 def _wai_dict(dict_):
     '''What is this dict?'''
     if dict_:
+        keys = dict_.keys()
         print BLUE + 'Just a dict of %i {%s: %s}' % (
-            len(dict_), get_types(dict_.keys()), get_types(dict_.values()))
-        print 'Keys: ' + colorama.Style.RESET_ALL + GREEN + str(sorted(dict_.keys()))
+            len(dict_), get_types(keys), get_types(dict_.values()))
+
+        keys_print = pformat(sorted(keys)).split('\n')
+        print 'Keys: ' + colorama.Style.RESET_ALL + GREEN + '\n'.join(keys_print[:50])
+        if len(keys_print) > MAX_LINES:
+            print '...'
 
         # Print dict with least number of depth that's less than MAX_LINES.
         depth = 1
         previous_output = ''
         while True:
-            output = pprint_module.pformat(dict_, depth=depth)
+            output = pformat(dict_, depth=depth)
             if output.count('\n') > MAX_LINES:
                 break
 
@@ -152,7 +169,7 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
 
     :param thing object: Anything and everything. That's what we're here to find out. :)
     :param ignore_private bool: Ignores attributes starting with underscore.
-    :param ignore_attrs list: List of attributes to ignore.
+    :param ignore_attrs list: Attributes to ignore.
     :param call bool: Calls attributes that are functions and thing itself if it is callable.
     :param skip_callable bool: Doesn't print callable attributes.
     :param skip_module bool: Skips module attributes.
@@ -385,7 +402,7 @@ def _is_text(s):
     return type(s) in [str, unicode]
 
 
-def find(haystack, needle, all_=True, ignore_case=True):
+def find(haystack, needle, all_=True, ignore_case=True, max_results=50):
     '''Recursively finds path to needle in haystack (can be list or dict).
 
     Args:
@@ -393,12 +410,20 @@ def find(haystack, needle, all_=True, ignore_case=True):
         needle (anything): Target to find.
         all_ (bool): Returns all results if True. First result otherwise.
         ignore_case (bool): Case-insensitive if True.
+        max_results (int): Max number of results to return. Unlimited if negative or zero.
     '''
+    INFO('Searching...')
     results = _find(haystack, needle, all_, ignore_case)
     if not results:
         INFO('Not found')
         return
-    for result in results:
+    for index, result in enumerate(results):
+        if index >= max_results > 0:
+            # Max number of results reached.
+            print 'Displayed first %i results...' % max_results
+            break
+
+        # Print path to value and value itself.
         path = ''
         for attr in result:
             if _is_text(attr):
@@ -409,14 +434,14 @@ def find(haystack, needle, all_=True, ignore_case=True):
         print eval('haystack%s' % path)
     num_results = len(results)
     if all_:
-        INFO('Found %i result%s' % (num_results, 's' if num_results > 1 else ''))
+        INFO('Found %s result%s' % (human_int(num_results), 's' if num_results > 1 else ''))
 
 
 def _find(haystack, needle, all_, ignore_case):
     '''Recursive helper for find().'''
     results = []
     if isinstance(haystack, dict):
-        iterable = haystack.iteritems()
+        iterable = sorted(haystack.iteritems())
     elif isinstance(haystack, list):
         iterable = enumerate(haystack)
     else:
