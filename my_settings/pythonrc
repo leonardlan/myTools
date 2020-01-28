@@ -26,7 +26,18 @@ TYPE_TO_REGEX = {
     'Decimal number (float)': r'^\d*\.\d+$',
     'IP Address': r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}',
     'MAC Address': r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$',
-    'UUID': r'[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}'
+    'UUID': r'[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}',
+}
+FILE_TYPE_TO_EXTENSION = {
+    'EXR image': 'exr',
+    'Katana file': 'katana',
+    'Log file': 'log',
+    'Markdown file': 'md',
+    'Maya ascii file': 'ma',
+    'Maya binary file': 'mb',
+    'Nuke script': 'nk',
+    'JSON file': 'json',
+    'Python file': 'py',
 }
 
 
@@ -74,16 +85,14 @@ def _wai_text(str_, typ):
         if os.path.exists(str_):
             # It's a file path.
             if os.path.isfile(str_):
-                if str_.endswith(".ma"):
-                    print "Maya ascii file"
-                elif str_.endswith(".mb"):
-                    print "Maya binary file"
-                elif str_.endswith(".exr"):
-                    print "EXR image"
+                for file_type, extension in FILE_TYPE_TO_EXTENSION.iteritems():
+                    if str_.endswith(extension):
+                        print file_type
+                        break
                 else:
-                    print "file path"
+                    print 'file path'
             else:
-                print "directory"
+                print 'directory'
         else:
             # Match by regex of what we know.
             for type_, regex in TYPE_TO_REGEX.iteritems():
@@ -91,7 +100,7 @@ def _wai_text(str_, typ):
                     print type_
                     break
             else:
-                print "Just a %s:" % typ.__name__, str_
+                print 'Just a %s:' % typ.__name__, str_
     else:
         print "Empty %s: ''" % typ.__name__
 
@@ -154,12 +163,11 @@ def _wai_dict(dict_):
                 break
             previous_output = output
             depth += 1
-        if previous_output:
+        if previous_output and depth > 2:
             print BRIGHT_BLUE('Dict:') + GREEN
             print previous_output
     else:
         print DIM + 'Empty dict: {}' + RESET_ALL
-    return
 
 
 @_brighten_it_up
@@ -386,6 +394,8 @@ class History:
 
 h = History()
 
+less_history = lambda : os.system('less -r +G %s' % PYTHON_HISTORY_PATH)
+
 
 def hs(str_, max_count=5):
     '''Search interactive python history using grep. Returns last max_count results.
@@ -402,23 +412,28 @@ def _is_text(s):
     return type(s) in [str, unicode]
 
 
-def find(haystack, needle, all_=True, ignore_case=True, max_results=50):
+def find(haystack, needle, all=False, first=False, ignore_case=True, max_results=50):
     '''Recursively finds path to needle in haystack (can be list or dict).
 
     Args:
         haystack (dict or list): A dict or list.
         needle (anything): Target to find.
-        all_ (bool): Returns all results if True. First result otherwise.
+        all (bool): Shows all results if True. Up to max_results otherwise.
+        first (bool): Returns first result if True. All results otherwise.
         ignore_case (bool): Case-insensitive if True.
         max_results (int): Max number of results to return. Unlimited if negative or zero.
+
+    Returns:
+        (list of paths to needle): Results as list of keys to needle.
     '''
     INFO('Searching...')
-    results = _find(haystack, needle, all_, ignore_case)
+    all_ = all
+    results = _find(haystack, needle, first, ignore_case)
     if not results:
         INFO('Not found')
         return
     for index, result in enumerate(results):
-        if index >= max_results > 0:
+        if not all_ and index >= max_results > 0:
             # Max number of results reached.
             print 'Displayed first %i results...' % max_results
             break
@@ -433,11 +448,11 @@ def find(haystack, needle, all_=True, ignore_case=True, max_results=50):
         print '%s%s:' % (_var_name(haystack), path),
         print eval('haystack%s' % path)
     num_results = len(results)
-    if all_:
+    if not first:
         INFO('Found %s result%s' % (human_int(num_results), 's' if num_results > 1 else ''))
 
 
-def _find(haystack, needle, all_, ignore_case):
+def _find(haystack, needle, first, ignore_case):
     '''Recursive helper for find().'''
     results = []
     if isinstance(haystack, dict):
@@ -450,14 +465,14 @@ def _find(haystack, needle, all_, ignore_case):
 
     for key, val in iterable:
         if isinstance(val, (dict, list)):
-            res = _find(val, needle, all_, ignore_case)
+            res = _find(val, needle, first, ignore_case)
             if res:
                 results.append([key] + res[0])
-                if not all_:
+                if first:
                     break
         elif val == needle:
             results.append([key])
-            if not all_:
+            if first:
                 break
         elif val:
             if _is_text(val) and _is_text(needle):
@@ -465,13 +480,13 @@ def _find(haystack, needle, all_, ignore_case):
                     if needle.lower() in val.lower():
                         # Is text and in val, case-insensitive.
                         results.append([key])
-                        if not all_:
+                        if first:
                             break
                 else:
                     if needle in val:
                         # Is text and in val, case-sensitive.
                         results.append([key])
-                        if not all_:
+                        if first:
                             break
 
     return results
