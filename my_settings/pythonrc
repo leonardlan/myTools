@@ -278,7 +278,8 @@ def _func_name_args_kwargs(func):
                     varnames[index] = MAGENTA + varnames[index] + BLUE + "=" + YELLOW + \
                         str(default) + BLUE
             varnames_str = ", ".join(varnames)
-    return BLUE + "%s(%s):" % (func.__name__, varnames_str) + GREEN
+    func_name = func.__name__ if hasattr(func, '__name__') else str(func)
+    return BLUE + "%s(%s):" % (func_name, varnames_str) + GREEN
 
 
 def _print_parent_types(typ):
@@ -343,13 +344,16 @@ def my_date_time_stamp():
 
 
 def _history(include_current=False):
-    """Returns interactive python command history"""
+    """Returns current interactive python session command history"""
     msg = []
     history_len = readline.get_current_history_length()
     end = (history_len + 1) if include_current else history_len
     for i in range(1, end):
         msg.append(readline.get_history_item(i))
     return "\n".join(msg)
+
+
+current_history = _history
 
 
 def history(n=50, c=False):

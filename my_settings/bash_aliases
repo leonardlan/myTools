@@ -22,6 +22,7 @@ alias l='ls -lh'
 alias h='history'
 alias py='python'
 alias p='python' # Everyday, I get a little bit lazier
+alias pi='python -i'
 alias less-python-history='lg -r ~/.python_history'
 alias fp='readlink -f'
 
