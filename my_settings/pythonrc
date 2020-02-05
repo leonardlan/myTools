@@ -197,9 +197,10 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
         elif typ == dict:
             return _wai_dict(thing)
 
-        from collections import defaultdict
-        if typ == defaultdict:
-            print BLUE + "defaultdict with %i key(s): %s" % (len(thing), thing.keys())
+        from collections import defaultdict, Counter
+        if typ in (defaultdict, Counter):
+            print BLUE + "%s with %i key%s: %s" % (
+                typ.__name__.title(), len(thing), 's' if len(thing) > 1 else '', thing.keys())
             return
         elif typ in (list, tuple):
             return _wai_list(thing, typ)
