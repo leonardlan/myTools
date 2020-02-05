@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+'''Find Python tracebacks in given file paths using parallel processing.'''
+
+import argparse
+
+from debug_tools import find_traceback_in_files
+
+
+def main():
+    # Setup arguments.
+    parser = argparse.ArgumentParser(description='Finds tracebacks in log files.')
+    parser.add_argument('file_paths', nargs='+', help='Files to find tracebacks.')
+    parser.add_argument(
+        '-c', '--cpu', help='Number of CPUs to use. Defaults to system CPU count.', type=int)
+    args = parser.parse_args()
+
+    # Setup variables.
+    file_paths = args.file_paths
+    num_files = len(file_paths)
+
+    # Search files.
+    print 'Searching %s file%s for tracebacks\n' % (num_files, 's' if num_files > 1 else '')
+    results = find_traceback_in_files(file_paths)
+
+    # Print tracebacks found.
+    for index, tracebacks in enumerate(results):
+        if tracebacks:
+            print '%s [%i/%i (%i%%)]:' % (
+                file_paths[index], index + 1, num_files, int(float(index + 1) / num_files * 100))
+
+            # Print tracebacks found in file.
+            for traceback in tracebacks:
+                print traceback.get('match')
+                print '-'
+
+            count = len(tracebacks)
+            print 'Found %i traceback%s\n' % (count, 's' if count > 1 else '')
+
+    # Summarize tracebacks found. (ie. '6534 tracebacks across 1451 files')
+    tracebacks_counts = filter(None, [len(tracebacks) for tracebacks in results])
+    tracebacks_count = sum(tracebacks_counts)
+    if not tracebacks_count:
+        print 'No tracebacks found'
+    else:
+        print '%i traceback%s %s %i file%s' % (
+            tracebacks_count,
+            's' if tracebacks_count > 1 else '',
+            'in' if len(tracebacks_counts) == 1 else 'across',
+            len(tracebacks_counts),
+            's' if len(tracebacks_counts) > 1 else '')
+
+
+if __name__ == '__main__':
+    main()
