@@ -420,6 +420,24 @@ def _is_text(s):
 def find(haystack, needle, all=False, first=False, ignore_case=True, max_results=50):
     '''Recursively finds path to needle in haystack (can be list or dict).
 
+    Example:
+        >>> haystack = {
+            'fruits': ['banana', 'strawberry', 'apple'],
+            'vegetables': ['celery', 'artichoke', 'onion', 'green pepper']
+        }
+
+        >>> find(haystack, 'pepper')
+        INFO: Searching...
+        haystack['vegetables'][3]: green pepper
+        INFO: Found 1 result
+
+        >>> haystack['vegetables'][3]
+        'green pepper'
+
+        >>> find(haystack, 'cucumber')
+        INFO: Searching...
+        INFO: Not found
+
     Args:
         haystack (dict or list): A dict or list.
         needle (anything): Target to find.
