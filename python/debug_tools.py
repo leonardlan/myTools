@@ -31,8 +31,8 @@ def find_traceback(file_path):
 
     try:
         fil = open(file_path, 'r')
-    except IOError:
-        print 'Unable to open %s' % file_path
+    except IOError, exception:
+        print 'Unable to open {}: {}'.format(file_path, exception.strerror)
         return tracebacks
 
     with fil:
