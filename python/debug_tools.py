@@ -57,7 +57,7 @@ def find_traceback_in_files(file_paths, cpus=multiprocessing.cpu_count()):
 
     Args:
         file_paths (str or [str]): File paths or str of file path passed to glob.
-        cpus (int): Number of CPUs to use.
+        cpus (int): Number of CPUs to use. Defaults to system CPUs.
 
     Returns:
         [[dict]]: List of results from find_traceback().

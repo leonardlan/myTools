@@ -43,10 +43,10 @@ finally:
 
 def demo_logging():
     GREEN_INFO('Good stuff!')
-    INFO('Just wanted to let you know this is working')
-    WARNING('You might want to take a look at this')
-    ERROR("Uh, Houston, we've had a problem")
-    CRITICAL("I'll just put this over here with the rest of the fire")
+    INFO('Just wanted to let you know this is working.')
+    WARNING('You might want to take a look at this.')
+    ERROR("Uh, Houston, we've had a problem.")
+    CRITICAL("I'll just put this over here with the rest of the fire.")
 
 
 INTERVALS = OrderedDict([

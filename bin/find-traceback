@@ -29,22 +29,30 @@ def main():
     for index, tracebacks in enumerate(results):
         if not tracebacks:
             continue
-        print '\n{} [{:,}/{:,} ({}%)]:'.format(
-            file_paths[index], index + 1, num_files, int(float(index + 1) / num_files * 100))
+
+        # Print which file this is.
+        if num_files > 1:
+            print '\n{} [{:,}/{:,} ({}%)]:'.format(
+                file_paths[index], index + 1, num_files, int(float(index + 1) / num_files * 100))
 
         # Print tracebacks found in file.
         for traceback in tracebacks:
             print traceback.get('match')
             print '-'
 
-        count = len(tracebacks)
-        print 'Found {:,} traceback{}'.format(count, 's' if count > 1 else '')
-
-        # Print counts per exception.
+        # Print number of tracebacks found.
         counter = Counter([traceback['exception'] for traceback in tracebacks])
-        all_exceptions_counter.update(counter)
-        for exception, count in counter.most_common():
-            print '{:,} {}'.format(count, exception)
+        if len(counter) == 1:
+            key = counter.keys()[0]
+            print 'Found {:,} {}'.format(counter[key], key)
+        else:
+            count = len(tracebacks)
+            print 'Found {:,} traceback{}'.format(count, 's' if count > 1 else '')
+
+            # Print counts per exception.
+            all_exceptions_counter.update(counter)
+            for exception, count in counter.most_common():
+                print '{:,} {}'.format(count, exception)
 
     # Summarize tracebacks found. Example:
     # 16,973 tracebacks across 1,865 files
