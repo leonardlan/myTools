@@ -422,21 +422,32 @@ def find(haystack, needle, all=False, first=False, ignore_case=True, max_results
 
     Example:
         >>> haystack = {
-            'fruits': ['banana', 'strawberry', 'apple'],
-            'vegetables': ['celery', 'artichoke', 'onion', 'green pepper']
-        }
+            'fruits': [
+                {'color': 'yellow', 'name': 'banana'},
+                {'color': 'red', 'name': 'strawberry'},
+                {'color': 'yellow', 'name': 'lemon'}],
+            'vegetables': [
+                {'color': 'green', 'name': 'green pepper'}
+        ]}
+
 
         >>> find(haystack, 'pepper')
         INFO: Searching...
-        haystack['vegetables'][3]: green pepper
+        haystack['vegetables'][0]['name']: green pepper
         INFO: Found 1 result
 
-        >>> haystack['vegetables'][3]
+        >>> haystack['vegetables'][0]['name']
         'green pepper'
 
         >>> find(haystack, 'cucumber')
         INFO: Searching...
         INFO: Not found
+
+        >>> find(haystack, 'yellow')
+        INFO: Searching...
+        haystack['fruits'][0]['color']: yellow
+        haystack['fruits'][2]['color']: yellow
+        INFO: Found 2 results
 
     Args:
         haystack (dict or list): A dict or list.
@@ -488,9 +499,9 @@ def _find(haystack, needle, first, ignore_case):
 
     for key, val in iterable:
         if isinstance(val, (dict, list)):
-            res = _find(val, needle, first, ignore_case)
-            if res:
-                results.append([key] + res[0])
+            recursive_results = _find(val, needle, first, ignore_case)
+            if recursive_results:
+                results.extend([[key] + res for res in recursive_results])
                 if first:
                     break
         elif val == needle:
