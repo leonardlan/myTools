@@ -166,7 +166,7 @@ alias collectstatic='python manage.py collectstatic'
 alias djshell='python manage.py shell'
 
 # Testing
-alias nt='nosetests $@; ns'
+alias nt='nosetests $@; ns "Finished running nosetests :)"'
 
 # Python
 which_python () {

@@ -177,6 +177,28 @@ def time_me(func, *args, **kwargs):
     return res
 
 
+def _is_text(s):
+    return type(s) in [str, unicode]
+
+
+def _var_name(var, locals=locals()):
+    '''Hacky way of getting variable name from variable. Empty string if not found.
+
+    >>> foo = 5
+    >>> _var_name(foo)
+    'foo'
+    '''
+    for name, val in locals.iteritems():
+        if val == var:
+            return name
+    return ''
+
+
+def human_int(int_):
+    '''Add commas to int every 3 digits (ie. 1,234,567,890)'''
+    return '{:,}'.format(int_)
+
+
 MAX_NUM_SIMILARITIES_TO_PRINT = 3
 
 
