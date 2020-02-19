@@ -13,7 +13,7 @@ from types import ModuleType
 from tabulate import tabulate
 
 from lancore import *
-from cli_tools import find
+from cli_tools import find, get
 
 
 IGNORED_ATTRIBUTES = ["__builtins__", "__globals__", "func_globals"]
@@ -108,17 +108,17 @@ def _wai_number(num, typ):
 def _wai_list(list_, typ):
     '''What is this list/tuple?'''
     if list_:
-        print BLUE + "%s of %s %s%s" % (
+        print BLUE + '%s of %s %s%s' % (
             typ.__name__.title(),
             human_int(len(list_)),
             get_types(list_),
-            "s" if len(list_) > 1 else ""
+            's' if len(list_) > 1 else ''
         )
-        print NORMAL + GREEN + "%s[0]: " % _var_name(list_),
-        pprint(list_[0]), BRIGHT
+        print NORMAL + GREEN + '%s[0]: ' % var_name(list_),
+        wai(list_[0]), BRIGHT
         _print_parent_types(type(list_[0]))
     else:
-        print DIM + "Empty %s: %s" % (typ.__name__, str(list_)) + RESET_ALL
+        print DIM + 'Empty %s: %s' % (typ.__name__, str(list_)) + RESET_ALL
 
 
 def _wai_dict(dict_):
@@ -180,8 +180,8 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
         elif typ == dict:
             return _wai_dict(thing)
 
-        from collections import defaultdict, Counter
-        if typ in (defaultdict, Counter):
+        from collections import defaultdict, Counter, OrderedDict
+        if typ in (defaultdict, Counter, OrderedDict):
             print BLUE + "%s with %i key%s: %s" % (
                 typ.__name__.title(), len(thing), 's' if len(thing) > 1 else '', thing.keys())
             return
@@ -337,7 +337,17 @@ def _history(include_current=False):
     return "\n".join(msg)
 
 
-current_history = _history
+# Make current_history print current history without having to call function.
+# current_history() works too.
+class CurrentHistory:
+    def __call__(self):
+        print _history()
+
+    def __repr__(self):
+        print _history()
+        return ''
+
+current_history = CurrentHistory()
 
 
 def history(n=50, c=False):
@@ -386,7 +396,7 @@ less_history = lambda: os.system('less -r +G %s' % PYTHON_HISTORY_PATH)
 
 
 def hs(str_, max_count=5):
-    '''Search interactive python history using grep. Returns last max_count results.
+    '''Regex search interactive python history using grep. Returns last max_count results.
 
     Args:
         str_ (str): String to search for.
@@ -422,11 +432,71 @@ def reload_pythonrc():
     execfile(os.environ.get('PYTHONSTARTUP'))
 
 
-'''
-Aliases for easier access. How lazy am I?
-'''
-def print_tabulate(dicts):
-    print tabulate(dicts, headers='keys')
+def print_tabulate(
+        input_, keys=None, sorted_key=None, reverse=False, limit=MAX_LINES, headers='keys'):
+    '''Wrapper around tabulate() to print table from dict(s) with keys as headers.
+
+    Args:
+        input_ ([dict] or dict): Dict(s) to print.
+        keys (list): Print only these keys as columns in this order. Print all keys if None.
+            Supports dot notation '.' for nested dicts.
+        sorted_key (list of keys or whatever keys are): Key to sort rows by.
+        reverse (bool): Reverse row sort order if True. Passed to sorted().
+        limit (int): Limit number of results. Show all if negative.
+        headers (str): Passed to tabulate(). Show keys as headers by difficult.
+    '''
+    if isinstance(input_, dict):
+        from collections import OrderedDict
+        new_dicts = []
+        for key, val in input_.iteritems():
+            new_dict = OrderedDict()
+            new_dict['key'] = key
+            if isinstance(val, dict):
+                for key_1, val_1 in val.iteritems():
+                    new_dict[key_1] = val_1
+            new_dicts.append(new_dict)
+        dicts = new_dicts
+    else:
+        dicts = input_
+
+    # Sort by specified key(s.
+    if sorted_key:
+        if isinstance(sorted_key, list):
+            # List of keys to sort by.
+            sorted_key_func = lambda x: tuple(x.get(key) for key in sorted_key)
+        else:
+            sorted_key_func = lambda x: x.get(sorted_key)
+        dicts = sorted(dicts, key=sorted_key_func, reverse=reverse)
+
+    # Filter to only specified keys in order.
+    if keys:
+        from collections import OrderedDict
+        new_dicts = []
+        for dict_ in dicts:
+            new_dict = OrderedDict()
+            for key in keys:
+                if isinstance(key, str) and '.' in key:
+                    # Handle dot notation for getting attributes within sub dicts.
+                    new_dict[key] = get(dict_, *key.split('.'))
+                else:
+                    new_dict[key] = dict_.get(key)
+            new_dicts.append(new_dict)
+    else:
+        new_dicts = dicts
+
+    # Limit rows to show.
+    is_limited = False
+    if len(new_dicts) > limit >= 0:
+        is_limited = True
+        new_dicts = new_dicts[:limit]
+
+    # Print table.
+    print tabulate(new_dicts, headers)
+
+    # Print results are limited.
+    if is_limited:
+        print '...'
+        print 'Only showing %i results' % limit
 
 
 # Enable syntax completion and append history file on exit

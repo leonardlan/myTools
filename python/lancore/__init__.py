@@ -7,6 +7,7 @@ import sys
 import tempfile
 import time
 import traceback
+from functools import wraps
 
 from collections import OrderedDict, defaultdict, Counter
 
@@ -177,15 +178,23 @@ def time_me(func, *args, **kwargs):
     return res
 
 
+def time_me_wrapper(func):
+    '''Decorator for time_me().'''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        time_me(func, *args, **kwargs)
+    return wrapper
+
+
 def _is_text(s):
     return type(s) in [str, unicode]
 
 
-def _var_name(var, locals=locals()):
+def var_name(var, locals=locals()):
     '''Hacky way of getting variable name from variable. Empty string if not found.
 
     >>> foo = 5
-    >>> _var_name(foo)
+    >>> var_name(foo)
     'foo'
     '''
     for name, val in locals.iteritems():
@@ -199,6 +208,29 @@ def human_int(int_):
     return '{:,}'.format(int_)
 
 
+BASE_10 = 1000  # How many bytes in 1 kilobyte.
+BASE_10_SUFFIXES = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+BASE_2 = 1024   # How many bytes in 1 kibibyte.
+BASE_2_SUFFIXES = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+
+
+def human_size(nbytes, base=BASE_10):
+    '''Human-readable file size (ex. 10.02 GB). Traditional base 2 (1024 bytes) AKA binary unit.
+    SI unit using base 10 (1000 bytes).
+
+    Args:
+        nbytes (int): Number of bytes.
+        base (int): How many bytes in 1 kilobyte/kibibyte? 1000 or 1024.
+    '''
+    i = 0
+    while nbytes >= base and i < len(BASE_2_SUFFIXES) - 1:
+        nbytes /= base
+        i += 1
+    f = ('%.2f' % nbytes).rstrip('0').rstrip('.')
+    return '%s %s' % (f, BASE_2_SUFFIXES[i])
+
+
+'''Nested dict/list related functions.'''
 MAX_NUM_SIMILARITIES_TO_PRINT = 3
 
 
@@ -261,5 +293,5 @@ class SimpleNamespace:
         items = ('{}={!r}'.format(k, self.__dict__[k]) for k in keys)
         return 'SimpleNamespace({})'.format(', '.join(items))
 
-    def __eq__ (self, other):
+    def __eq__(self, other):
         return self.__dict__ == other.__dict__
