@@ -234,6 +234,16 @@ def human_size(nbytes, base=BASE_10):
 MAX_NUM_SIMILARITIES_TO_PRINT = 3
 
 
+def _get_iterable(input_):
+    '''Key-value iterable of dict/list.'''
+    if isinstance(input_, dict):
+        return sorted(input_.iteritems())
+    elif isinstance(input_, list):
+        return enumerate(input_)
+    else:
+        raise TypeError('Not list or dict')
+
+
 def similarities(input_):
     '''Dict shared in common among all dicts.
 
@@ -246,20 +256,14 @@ def similarities(input_):
     from pprint import pprint
     dd = defaultdict(list)
 
-    if isinstance(input_, dict):
-        iterable = sorted(input_.iteritems())
-    elif isinstance(input_, list):
-        iterable = enumerate(input_)
-    else:
-        raise TypeError('Not list or dict')
-
-    for key, dict_ in iterable:
+    for _, dict_ in _get_iterable(input_):
         for key, val in dict_.iteritems():
+            # Skip unhashable.
             if not val.__hash__:
-                # These values are unhashable.
                 continue
+
             dd[key].append(val)
-    for key, vals in dd.iteritems():
+    for key, vals in sorted(dd.iteritems()):
         counter = Counter(vals)
         if len(counter) > MAX_NUM_SIMILARITIES_TO_PRINT:
             continue
@@ -268,7 +272,7 @@ def similarities(input_):
 
 
 '''JSON.'''
-TEMP_DATA_JSON_FILE = os.path.join(tempfile.gettempdir(), 'data.json')
+TEMP_DATA_JSON_FILE = os.path.join(tempfile.gettempdir(), 'python_interactive_data_dump.json')
 
 def dump_json(data, file_path=TEMP_DATA_JSON_FILE):
     with open(file_path, 'w') as fp:

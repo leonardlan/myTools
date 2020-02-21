@@ -123,34 +123,35 @@ def _wai_list(list_, typ):
 
 def _wai_dict(dict_):
     '''What is this dict?'''
-    if dict_:
-        keys = dict_.keys()
-        print BLUE + 'Just a dict of %i {%s: %s}' % (
-            len(dict_), get_types(keys), get_types(dict_.values()))
-
-        keys_print = pformat(sorted(keys)).split('\n')
-        print 'Keys: ' + colorama.Style.RESET_ALL + GREEN + '\n'.join(keys_print[:50])
-        if len(keys_print) > MAX_LINES:
-            print '...'
-
-        # Print dict with least number of depth that's less than MAX_LINES.
-        depth = 1
-        previous_output = ''
-        while True:
-            output = pformat(dict_, depth=depth)
-            if output.count('\n') > MAX_LINES:
-                break
-
-            # Check if everything expanded.
-            if output == previous_output:
-                break
-            previous_output = output
-            depth += 1
-        if previous_output and depth > 2:
-            print BRIGHT_BLUE('Dict:') + GREEN
-            print previous_output
-    else:
+    if not dict_:
         print DIM + 'Empty dict: {}' + RESET_ALL
+        return
+
+    keys = dict_.keys()
+    print BLUE + 'Just a dict of %i {%s: %s}' % (
+        len(dict_), get_types(keys), get_types(dict_.values()))
+
+    keys_print = pformat(sorted(keys)).split('\n')
+    print 'Keys: ' + colorama.Style.RESET_ALL + GREEN + '\n'.join(keys_print[:50])
+    if len(keys_print) > MAX_LINES:
+        print '...'
+
+    # Print dict with least number of depth that's less than MAX_LINES.
+    depth = 1
+    previous_output = ''
+    while True:
+        output = pformat(dict_, depth=depth)
+        if output.count('\n') > MAX_LINES:
+            break
+
+        # Check if everything expanded.
+        if output == previous_output:
+            break
+        previous_output = output
+        depth += 1
+    if previous_output and depth > 2:
+        print BRIGHT_BLUE('Dict:') + GREEN
+        print previous_output
 
 
 @_brighten_it_up
@@ -434,7 +435,7 @@ def reload_pythonrc():
 
 def print_tabulate(
         input_, keys=None, sorted_key=None, reverse=False, limit=MAX_LINES, headers='keys'):
-    '''Wrapper around tabulate() to print table from dict(s) with keys as headers.
+    '''Wrapper around tabulate() to print table from dicts or dict of dicts with keys as headers.
 
     Args:
         input_ ([dict] or dict): Dict(s) to print.
@@ -445,7 +446,16 @@ def print_tabulate(
         limit (int): Limit number of results. Show all if negative.
         headers (str): Passed to tabulate(). Show keys as headers by difficult.
     '''
-    if isinstance(input_, dict):
+    if isinstance(input_, dict) and all(isinstance(val, dict) for val in input_.values()):
+        # Convert dict of dicts to list of dicts with new 'key' value as key of original dict.
+        # {
+        #     'fruits': {'apple': 'red', 'banana': 'yellow'},
+        #     'vegetables': {'kale': 'green'}
+        # } =>
+        # [
+        #     {'key': 'fruits', 'apple': 'red', 'banana': 'yellow'},
+        #     {'key': 'vegetables', 'kale': 'green'}
+        # ]
         from collections import OrderedDict
         new_dicts = []
         for key, val in input_.iteritems():
@@ -486,8 +496,10 @@ def print_tabulate(
 
     # Limit rows to show.
     is_limited = False
+    len_before_limit = -1
     if len(new_dicts) > limit >= 0:
         is_limited = True
+        len_before_limit = len(new_dicts)
         new_dicts = new_dicts[:limit]
 
     # Print table.
@@ -496,7 +508,7 @@ def print_tabulate(
     # Print results are limited.
     if is_limited:
         print '...'
-        print 'Only showing %i results' % limit
+        print 'Only showing %i/%i results' % (limit, len_before_limit)
 
 
 # Enable syntax completion and append history file on exit

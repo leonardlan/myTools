@@ -17,6 +17,20 @@ fi
 
 echo_and_run () { echo "\$ $*" ; "$@" ; }
 
+# Print seconds as days/hours/mins/seconds (Copied from https://unix.stackexchange.com/questions/27013/displaying-seconds-as-days-hours-mins-seconds)
+display_time () {
+    local T=$1
+    local D=$((T/60/60/24))
+    local H=$((T/60/60%24))
+    local M=$((T/60%60))
+    local S=$((T%60))
+    (( $D > 0 )) && printf '%d days ' $D
+    (( $H > 0 )) && printf '%d hours ' $H
+    (( $M > 0 )) && printf '%d minutes ' $M
+    (( $D > 0 || $H > 0 || $M > 0 )) && printf 'and '
+    printf '%d seconds\n' $S
+}
+
 alias ls='ls --color=auto'
 alias l='ls -lh'
 alias h='history'
@@ -24,6 +38,7 @@ alias py='python'
 alias p='python' # Everyday, I get a little bit lazier
 alias pi='python -i'
 alias less-python-history='lg -r ~/.python_history'
+alias python-vanilla='PYTHONPATH= PYTHONSTARTUP= python'
 alias fp='readlink -f'
 
 # How lazy am I?
@@ -151,11 +166,28 @@ listenv () {
 }
 complete -v listenv
 
+# Processes
+
 # Kill process
 alias ks='kill -9'
 alias pk='killall -9'
 alias pkp='pk python'
 alias pkt='pk tail'
+
+# Notify me within the second when process with given pid is done.
+_notify-when-done () {
+    start=$SECONDS;
+    command=`cat /proc/$1/cmdline | xargs -0 echo`;  # Get command from pid.
+    process="$1 ($command)";
+    echo "[`date`] Waiting for process $process to finish...";
+    while kill -0 $1; do sleep 1; printf .; done
+    msg="Process $process is done. Waited for `display_time $(( SECONDS - start ))`."
+    echo;
+    echo "$msg";
+    ns "$msg";
+}
+
+alias notify-when-done='_notify-when-done $@ 2>/dev/null'
 
 # Django
 alias migrate='python manage.py migrate'
