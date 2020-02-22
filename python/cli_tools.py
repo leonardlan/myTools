@@ -40,9 +40,6 @@ def find(haystack, needle, all=False, first=False, ignore_case=True, max_results
         first (bool): Returns first result if True. All results otherwise.
         ignore_case (bool): Case-insensitive if True.
         max_results (int): Max number of results to return. Unlimited if negative or zero.
-
-    Returns:
-        (list of paths to needle): Results as list of keys to needle.
     '''
     INFO('Searching...')
     all_ = all

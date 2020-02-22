@@ -440,7 +440,7 @@ def print_tabulate(
     Args:
         input_ ([dict] or dict): Dict(s) to print.
         keys (list): Print only these keys as columns in this order. Print all keys if None.
-            Supports dot notation '.' for nested dicts.
+            Supports char-delimited string for nested dicts.
         sorted_key (list of keys or whatever keys are): Key to sort rows by.
         reverse (bool): Reverse row sort order if True. Passed to sorted().
         limit (int): Limit number of results. Show all if negative.
@@ -473,7 +473,7 @@ def print_tabulate(
     if sorted_key:
         if isinstance(sorted_key, list):
             # List of keys to sort by.
-            sorted_key_func = lambda x: tuple(x.get(key) for key in sorted_key)
+            sorted_key_func = lambda x: tuple(get(x, key) for key in sorted_key)
         else:
             sorted_key_func = lambda x: x.get(sorted_key)
         dicts = sorted(dicts, key=sorted_key_func, reverse=reverse)
@@ -485,11 +485,7 @@ def print_tabulate(
         for dict_ in dicts:
             new_dict = OrderedDict()
             for key in keys:
-                if isinstance(key, str) and '.' in key:
-                    # Handle dot notation for getting attributes within sub dicts.
-                    new_dict[key] = get(dict_, *key.split('.'))
-                else:
-                    new_dict[key] = dict_.get(key)
+                new_dict[key] = get(dict_, key)
             new_dicts.append(new_dict)
     else:
         new_dicts = dicts
