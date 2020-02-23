@@ -78,6 +78,21 @@ class TestHumanTime(unittest.TestCase):
         self.assertEqual(human_time(86401.1), '1 day and 1 second')
         self.assertEqual(human_time(86460), '1 day and 1 minute')
 
+    def test_week(self):
+        self.assertEqual(human_time(604800), '1 week')
+
+    def test_month(self):
+        self.assertEqual(human_time(2627424), '1 month')
+
+    def test_year(self):
+        self.assertEqual(human_time(31536000), '1 year')
+
+    def test_century(self):
+        self.assertEqual(human_time(3153600000), '1 century')
+
+    def test_millennium(self):
+        self.assertEqual(human_time(31536000000), '1 millennium')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -54,6 +54,7 @@ INTERVALS = OrderedDict([
     ('millennium', 31536000000),  # 60 * 60 * 24 * 365 * 1000
     ('century', 3153600000),      # 60 * 60 * 24 * 365 * 100
     ('year', 31536000),           # 60 * 60 * 24 * 365
+    ('month', 2627424),           # 60 * 60 * 24 * 30.41 (assuming 30.41 days in a month)
     ('week', 604800),             # 60 * 60 * 24 * 7
     ('day', 86400),               # 60 * 60 * 24
     ('hour', 3600),               # 60 * 60
@@ -82,6 +83,8 @@ def human_time(seconds, decimals=1):
         '100 milliseconds'
         >>> human_time(1)
         '1 second'
+        >>> human_time(1.234, 2)
+        '1.23 seconds'
 
     Args:
         seconds (int or float): Duration in seconds.
