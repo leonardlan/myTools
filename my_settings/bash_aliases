@@ -51,6 +51,10 @@ alias uuuuu='cd ../../../../..'
 alias a='alias'  # Aliasception
 complete -a a
 
+# Popular folders.
+alias Downloads='cd ~/Downloads'
+alias Pictures='cd ~/Pictures'
+
 alias less='less -R'    # Color me less
 alias lg='less +G'
 
