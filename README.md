@@ -13,9 +13,10 @@ from working as a Software Developer and Pipeline TD in VFX industry.
 
 # Honourable Mentions
 ## Python Functions
-### Seconds to Human-Readable Time
+### Convert Seconds to Human-Readable Time
 
 ```python
+>>> from lancore import human_time
 >>> human_time(15)
 '15 seconds'
 >>> human_time(3600)
