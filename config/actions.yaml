@@ -1,0 +1,115 @@
+# text:
+    # value: 'separator' if separator
+    # cmd: Terminal command to run OR
+    # path: Path to file/folder to open in sublime OR
+    # kwargs: If cmd or path, specifies key-value pairs to pass as kwargs to function call.
+    # actions: recursive key-val of actions in sub-menu.
+    # icon: icon name or path to icon.
+
+# My settings/aliases.
+Bash &Aliases:
+    icon: bash
+    path: myTools/my_settings/bash_aliases
+my bashrc:
+    icon: bash
+    path: myTools/my_settings/my_bashrc
+bashrc:
+    icon: bash
+    path: .bashrc
+'&pythonrc':
+    icon: python_logo
+    path: myTools/my_settings/pythonrc
+'&Cron jobs':
+    cmd: crontab -l
+    icon: cron
+    kwargs:
+        keep_open: True
+    title: Cron jobs
+git:
+    icon: git
+    actions:
+        gitconfig:
+            icon: git
+            path: myTools/my_settings/gitconfig
+        gitignore_global:
+            icon: git
+            path: myTools/my_settings/gitignore_global
+
+# Can't seem to have multiple separators with same key in same level.
+separator1: separator
+
+What time is it?:
+    cmd: notify-time
+    icon: time
+Change desktop &wallpaper:
+    cmd: change-desktop-wallpaper
+    icon: doge
+
+separator2: separator
+
+Open &myTools:
+    icon: sublime-text
+    path: myTools
+    kwargs:
+        toggle_side_bar: True
+
+Open my&Tools:
+    icon: terminal
+    terminal_path: ~/myTools
+    kwargs:
+        title: myTools
+
+separator3: separator
+
+'&Sandbox':
+    icon: sandbox
+    actions:
+        Open &sandbox:
+            icon: sublime-text
+            path: dev/sandbox
+            kwargs:
+                toggle_side_bar: True
+        Open sand&box dir:
+            icon: terminal
+            terminal_path: ~/dev/sandbox
+            kwargs:
+                title: Sandbox
+        separator1: separator
+
+separator5: separator
+
+'&Useful Commands':
+    icon: command
+    path: myTools/docs/useful_commands.md
+TODO List:
+    icon: todo_list
+    path: my_todo_list.md
+'&Debug Checklist':
+    icon: debug
+    path: myTools/docs/debug_checklist.md
+
+separator6: separator
+
+Print Env Vars:
+    cmd: env | sort
+    icon: terminal
+    kwargs:
+        keep_open: True
+
+separator7: separator
+
+Open main.py:
+    icon: python_logo
+    path: myTools/python/main.py
+    kwargs:
+        n: True
+Open utils.py:
+    icon: python_logo
+    path: myTools/python/utils.py
+    kwargs:
+        n: True
+Open stylesheet.qss:
+    icon: Qt
+    path: myTools/python/stylesheet.qss
+
+separator4: separator

@@ -1,0 +1,27 @@
+QMenu {
+    background-color: white;
+    font-family: "Arial";
+    margin: 0px;
+}
+
+QMenu::item {
+    border: 1px solid transparent; /* reserve space for selection border */
+    padding: 2px 25px 2px 20px;
+}
+
+QMenu::item:selected, QMenu::tearoff:selected {
+    background: qlineargradient(
+        x1:0.5, y1:0, x2:0.5, y2:1,
+        stop:0 white, stop:1 lightblue
+    )
+}
+
+QMenu::separator {
+    height: 5px;
+}
+
+QToolTip {
+    background: lightgrey;
+    font-family: "Arial";
+    padding: 1px;
+}
