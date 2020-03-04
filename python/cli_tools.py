@@ -3,7 +3,7 @@ from lancore import INFO, _is_text, var_name, human_int
 
 
 def find(haystack, needle, all=False, first=False, ignore_case=True, max_results=50):
-    '''Recursively finds path to needle in haystack (can be list or dict).
+    '''Prints path to needle in haystack (can be nested list or dict).
 
     Example:
         >>> haystack = {
@@ -33,8 +33,13 @@ def find(haystack, needle, all=False, first=False, ignore_case=True, max_results
         haystack['fruits'][2]['color']: yellow
         INFO: Found 2 results
 
+        # Case-sensitive
+        >>> find(haystack, 'YeLLow', ignore_case=False)
+        INFO: Searching...
+        INFO: Not found
+
     Args:
-        haystack (dict or list): A dict or list.
+        haystack (dict or list): Nested dict or list.
         needle (anything): Target to find.
         all (bool): Shows all results if True. Up to max_results otherwise.
         first (bool): Returns first result if True. All results otherwise.
