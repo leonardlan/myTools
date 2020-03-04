@@ -78,6 +78,42 @@ Bye!
 1.0 seconds
 ```
 
+### Finding Element in Nested Dict(s)/List(s)
+```python
+>>> from cli_tools import find
+>>> haystack = {
+    'fruits': [
+        {'color': 'yellow', 'name': 'banana'},
+        {'color': 'red', 'name': 'strawberry'},
+        {'color': 'yellow', 'name': 'lemon'}],
+    'vegetables': [
+        {'color': 'green', 'name': 'green pepper'}
+]}
+
+>>> find(haystack, 'pepper')
+INFO: Searching...
+haystack['vegetables'][0]['name']: green pepper
+INFO: Found 1 result
+
+>>> haystack['vegetables'][0]['name']
+'green pepper'
+
+>>> find(haystack, 'cucumber')
+INFO: Searching...
+INFO: Not found
+
+>>> find(haystack, 'yellow')
+INFO: Searching...
+haystack['fruits'][0]['color']: yellow
+haystack['fruits'][2]['color']: yellow
+INFO: Found 2 results
+
+# Case-sensitive
+>>> find(haystack, 'YeLLow', ignore_case=False)
+INFO: Searching...
+INFO: Not found
+```
+
 ## Aliases
 
 - lssmart - Prints path to file color-indicating up to where it exists.
