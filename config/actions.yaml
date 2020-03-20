@@ -98,6 +98,7 @@ Print Env Vars:
 
 separator7: separator
 
+# Shortcut to edit QSystemTray.
 Open main.py:
     icon: python_logo
     path: myTools/python/main.py
@@ -106,6 +107,10 @@ Open main.py:
 Open utils.py:
     icon: python_logo
     path: myTools/python/utils.py
+    kwargs:
+        n: True
+Open actions.yaml:
+    path: myTools/config/actions.yaml
     kwargs:
         n: True
 Open stylesheet.qss:
