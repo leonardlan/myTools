@@ -22,14 +22,19 @@ class TestHumanTime(unittest.TestCase):
         self.assertEqual(human_time(0), '0 seconds')
         self.assertEqual(human_time(0.0), '0 seconds')
 
-    def test_between_0_and_1(self):
+    def test_millisecond(self):
         self.assertEqual(human_time(0.001), '1 millisecond')
         self.assertEqual(human_time(0.01), '10 milliseconds')
         self.assertEqual(human_time(0.1), '100 milliseconds')
         self.assertEqual(human_time(0.123), '123 milliseconds')
-        self.assertEqual(human_time(0.1234), '123 milliseconds')
-        self.assertEqual(human_time(0.1235), '123 milliseconds')
+        self.assertEqual(human_time(0.1234), '123.4 milliseconds')
+        self.assertEqual(human_time(0.1235), '123.5 milliseconds')
         self.assertEqual(human_time(0.999), '999 milliseconds')
+
+    def test_microsecond(self):
+        self.assertEqual(human_time(0.000001), '1 microsecond')
+        self.assertEqual(human_time(0.0000011), '1.1 microseconds')
+        self.assertEqual(human_time(0.000002), '2 microseconds')
 
     def test_1(self):
         self.assertEqual(human_time(1), '1 second')
