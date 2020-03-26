@@ -231,7 +231,7 @@ chown USER:GROUP FILE
 
 ## Symbolic link
 ```bash
-    ln -s REAL LINK_NAME
+    ln -s link_from link_to
     unlink LINK_NAME
     rm LINK_NAME
 ```
