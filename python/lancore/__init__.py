@@ -122,8 +122,6 @@ def human_time(seconds, decimals=1):
                     res = int(quotient)
                 else:
                     res = round(seconds, decimals)
-                print quotient, remainder
-                print res
                 return '%s %s%s' % (str(res), interval, 's' if res != 1 else '')
         # Less than a microsecond.
         return '0 seconds'
