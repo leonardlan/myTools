@@ -52,6 +52,7 @@ alias a='alias'  # Aliasception
 complete -a a
 
 # Popular folders.
+alias Documents='cd ~/Documents'
 alias Downloads='cd ~/Downloads'
 alias Pictures='cd ~/Pictures'
 
