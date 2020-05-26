@@ -7,6 +7,7 @@ import tempfile
 import time
 import traceback
 from functools import wraps
+from sys import platform
 
 from collections import OrderedDict, defaultdict, Counter
 
@@ -17,6 +18,10 @@ try:
 except ImportError:
     print 'Module colorama not available.'
     colorama = None
+else:
+    # Need to call init() on Windows.
+    if platform.startswith('win'):
+        colorama.init()
 finally:
     # Adds color codes to global variables
     type_to_code = {

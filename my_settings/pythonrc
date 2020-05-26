@@ -8,6 +8,7 @@ import re
 import subprocess
 import sys
 import time
+from sys import platform
 from types import ModuleType
 
 from tabulate import tabulate
@@ -16,9 +17,10 @@ from lancore import *
 from cli_tools import find, get
 
 
-IGNORED_ATTRIBUTES = ["__builtins__", "__globals__", "func_globals"]
+IGNORED_ATTRIBUTES = ['__builtins__', '__globals__', 'func_globals']
+HOME = os.environ['HOME'] if platform.startswith('linux') else os.environ['HOMEPATH']
 MAX_LINES = 50
-PYTHON_HISTORY_PATH = os.path.join(os.environ['HOME'], '.python_history')
+PYTHON_HISTORY_PATH = os.path.join(HOME, '.python_history')
 TYPE_TO_REGEX = {
     'E-mail': r'^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,5})$',
     'Whole number': r'^\d+$',
