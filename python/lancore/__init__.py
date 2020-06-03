@@ -181,8 +181,10 @@ def time_me(func, *args, **kwargs):
     Args:
         func (function): Function to call.
         args (list): Args to pass to function.
-        kwargs (dict): Kwargs to pass to function.
-        n (int): Number of times to run func. Default to 1.
+        kwargs (dict): Kwargs to pass to function. Contains these special ones for time_me():
+            n (int): Number of times to run func. Default to 1. If multiple, prints out simple stats
+                (ie. average time, total time).
+            return_time (bool): If True, returns a tuple with result and time in seconds.
 
     Returns:
         Anything: Whatever function call returns. None if call failed on first try.
@@ -191,6 +193,7 @@ def time_me(func, *args, **kwargs):
         ERROR('Invalid function: %s' % func)
         return
     n = kwargs.pop('n', 1)
+    return_time = kwargs.pop('return_time', False)
 
     # Print nice function call.
     args_str = [str(arg) for arg in args]
@@ -212,7 +215,8 @@ def time_me(func, *args, **kwargs):
             # Function call errored.
             end = time.time()
             duration = end - start
-            WARNING('\nFunction errored after %s: %s' % (human_time(duration), e))
+            print  # Newline before warning.
+            WARNING('Function errored after %s: %s' % (human_time(duration), e))
             print traceback.format_exc().strip()
             return res
 
@@ -235,7 +239,13 @@ def time_me(func, *args, **kwargs):
         print 'Slowest time: %s' % human_time(max(run_times))
         print 'Standard deviation: %.2f' % numpy.std(run_times)
 
-    return res
+    if return_time:
+        if n == 1:
+            return res, duration
+        elif n > 1:
+            return res, run_times
+    else:
+        return res
 
 
 def time_me_wrapper(func):
