@@ -5,7 +5,7 @@
 :: REG QUERY "HKEY_LOCAL_MACHINE\Software\Microsoft\Command Processor" /v AutoRun
 
 :: Make prompt nice
-set prompt=[%time:~0,-3% %username%@%computername%]$_$p$_$+$g$s
+set prompt=[$t$h$h$h %username%@%computername%]$_$p$_$+$g$s
 
 :: Python env vars
 set PYTHONPATH=%PYTHONPATH%;%USERPROFILE%\myTools\python
