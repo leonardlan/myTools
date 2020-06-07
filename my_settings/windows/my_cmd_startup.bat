@@ -55,3 +55,6 @@ doskey git-stash-show=git stash show -p
 doskey s="C:\Program Files\Sublime Text 3\sublime_text" $*
 
 doskey useful-commands=s %MYTOOLS%\docs\useful_commands.md
+
+:: Python
+doskey nt=nosetests $*
