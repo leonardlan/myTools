@@ -35,7 +35,7 @@ doskey Documents=cd %USERPROFILE%\Documents
 doskey Downloads=cd %USERPROFILE%\Downloads
 doskey Pictures=cd %USERPROFILE%\Pictures
 
-doskey myTools=cd %USERPROFILE%\myTools
+doskey myTools=cd %MYTOOLS%
 
 :: Git
 doskey gg=git gui
@@ -53,3 +53,5 @@ doskey git-show-origin=git remote show origin
 doskey git-stash-show=git stash show -p
 
 doskey s="C:\Program Files\Sublime Text 3\sublime_text" $*
+
+doskey useful-commands=s %MYTOOLS%\docs\useful_commands.md
