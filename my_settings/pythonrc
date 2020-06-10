@@ -3,11 +3,14 @@
 
 import math
 import os
-from pprint import pprint, pformat
 import re
 import subprocess
 import sys
 import time
+
+start = time.time()
+
+from pprint import pprint, pformat
 from sys import platform
 from types import ModuleType
 
@@ -18,7 +21,7 @@ from cli_tools import find, get
 
 
 IGNORED_ATTRIBUTES = ['__builtins__', '__globals__', 'func_globals']
-HOME = os.environ['HOME'] if platform.startswith('linux') else os.environ['HOMEPATH']
+HOME = os.environ['HOME'] if platform.startswith('linux') else os.environ['USERPROFILE']
 MAX_LINES = 50
 PYTHON_HISTORY_PATH = os.path.join(HOME, '.python_history')
 TYPE_TO_REGEX = {
@@ -362,6 +365,7 @@ def history(n=50, c=False):
     """
     if c:
         open(PYTHON_HISTORY_PATH, "w").close()
+        print INFO('History cleared ;)')
         return
 
     if not os.path.exists(PYTHON_HISTORY_PATH):
@@ -529,3 +533,6 @@ class MyPrompt:
         return '%s >>> ' % str(now.strftime('%I:%M:%S %p'))
 
 sys.ps1 = MyPrompt()
+
+
+print 'Loading .pythonrc took %s' % human_time(time.time() - start)
