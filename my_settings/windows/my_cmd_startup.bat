@@ -53,6 +53,7 @@ doskey git-show-origin=git remote show origin
 doskey git-stash-show=git stash show -p
 
 doskey s="C:\Program Files\Sublime Text 3\sublime_text" $*
+doskey sm="C:\Program Files\Sublime Merge\sublime_merge.exe" $*
 
 doskey useful-commands=s %MYTOOLS%\docs\useful_commands.md
 
