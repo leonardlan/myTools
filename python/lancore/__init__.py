@@ -1,9 +1,7 @@
 '''My useful core functions.'''
 import datetime
-import json
 import os
 import sys
-import tempfile
 import time
 import traceback
 from functools import wraps
@@ -33,20 +31,25 @@ finally:
         for code in codes:
             globals()[code] = getattr(getattr(colorama, typ), code) if colorama else ''
 
+    BACK_RED = colorama.Back.RED
+
     # Shortcut color global variables.
     globals()['BRIGHT_BLUE'] = lambda s: BRIGHT + BLUE + str(s) + RESET_ALL
 
     # Logging functions.
     def _log(header, color, content):
         sys.stdout.write('%s%s%s: %s\n' % (BRIGHT + color, header, RESET_ALL, str(content)))
+
+    globals()['DEBUG'] = lambda s: _log('DEBUG', CYAN, s)
     globals()['INFO'] = lambda s: _log('INFO', BLUE, s)
     globals()['GREEN_INFO'] = lambda s: _log('INFO', GREEN, s)
     globals()['WARNING'] = lambda s: _log('WARNING', YELLOW, s)
     globals()['ERROR'] = lambda s: _log('ERROR', LIGHTRED_EX, s)
-    globals()['CRITICAL'] = lambda s: _log('CRITICAL', colorama.Back.RED, s)
+    globals()['CRITICAL'] = lambda s: _log('CRITICAL', BACK_RED, s)
 
 
 def demo_logging():
+    DEBUG('Just ignore me :/')
     GREEN_INFO('Good stuff!')
     INFO('Just wanted to let you know this is working.')
     WARNING('You might want to take a look at this.')
@@ -339,20 +342,6 @@ def similarities(input_):
             continue
         print '%s (%i): ' % (key, len(counter)),
         pprint(dict(counter))
-
-
-'''JSON.'''
-TEMP_DATA_JSON_FILE = os.path.join(tempfile.gettempdir(), 'python_interactive_data_dump.json')
-
-def dump_json(data, file_path=TEMP_DATA_JSON_FILE):
-    with open(file_path, 'w') as fp:
-        json.dump(data, fp, indent=4)
-    INFO('Data written to %s' % file_path)
-
-
-def load_json(file_path=TEMP_DATA_JSON_FILE):
-    with open(file_path, 'r') as fp:
-        return json.load(fp)
 
 
 '''YAML.'''

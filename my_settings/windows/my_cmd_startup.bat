@@ -52,8 +52,29 @@ doskey git-show-devs=git shortlog -sn
 doskey git-show-origin=git remote show origin
 doskey git-stash-show=git stash show -p
 
-doskey s="C:\Program Files\Sublime Text 3\sublime_text" $*
-doskey sm="C:\Program Files\Sublime Merge\sublime_merge.exe" $*
+SETLOCAL
+
+:: Add s doskey.
+set sublime_path="C:\Program Files\Sublime Text 3\sublime_text.exe"
+IF EXIST %sublime_path% (
+    doskey s=%sublime_path% $*
+) ELSE (
+    @echo on
+    echo Sublime Text not installed at %sublime_path%
+    @echo off
+)
+
+:: Add sm doskey.
+set sublime_merge_path="C:\Program Files\Sublime Merge\sublime_merge.exe"
+IF EXIST %sublime_merge_path% (
+    doskey sm=%sublime_merge_path% $*
+) ELSE (
+    @echo on
+    echo Sublime Merge not installed at %sublime_merge_path%
+    @echo off
+)
+
+ENDLOCAL
 
 doskey useful-commands=s %MYTOOLS%\docs\useful_commands.md
 

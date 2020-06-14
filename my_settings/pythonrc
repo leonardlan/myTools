@@ -19,6 +19,7 @@ from tabulate import tabulate
 
 from lancore import *
 from cli_tools import find, get
+from json_tools import dump_json, load_json
 
 
 IGNORED_ATTRIBUTES = ['__builtins__', '__globals__', 'func_globals']
@@ -48,9 +49,27 @@ FILE_TYPE_TO_EXTENSION = {
 }
 
 
-# Setup basic logging.
-logging.basicConfig()
-logging.getLogger().setLevel(logging.DEBUG)
+LOGGING_LEVEL_TO_COLOR = {
+    logging.DEBUG: GREEN,
+    logging.INFO: BLUE,
+    logging.WARNING: YELLOW,
+    logging.ERROR: RED,
+    logging.CRITICAL: BACK_RED,
+}
+
+
+def _setup_my_logging():
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s [%(levelname)-8s] %(message)s',
+        datefmt='%Y-%m-%d %I:%M:%S')
+
+    # Add color to log levels.
+    for level, color in LOGGING_LEVEL_TO_COLOR.iteritems():
+        logging.addLevelName(level, BRIGHT + color + logging.getLevelName(level) + RESET_ALL)
+
+
+_setup_my_logging()
 
 
 def _brighten_it_up(func):
