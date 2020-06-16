@@ -1,3 +1,4 @@
+'''Useful functions, variables to use in Python CLI.'''
 #!/usr/bin/env python
 # ~/.pythonrc
 

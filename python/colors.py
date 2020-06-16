@@ -1,3 +1,4 @@
+'''Global colored text variables and functions for console/terminal.'''
 import sys
 
 
@@ -11,22 +12,26 @@ else:
     # Need to call init() on Windows.
     if sys.platform.startswith('win'):
         colorama.init()
-finally:
-    # Adds color codes to global variables
-    TYPE_TO_CODE = {
-        'Fore': ['BLUE', 'CYAN', 'GREEN', 'MAGENTA', 'RED', 'LIGHTGREEN_EX', 'YELLOW', 'RESET',
-                 'LIGHTRED_EX'],
-        'Style': ['BRIGHT', 'NORMAL', 'DIM', 'RESET_ALL']
-    }
-    for typ, codes in TYPE_TO_CODE.iteritems():
-        for code in codes:
-            globals()[code] = getattr(getattr(colorama, typ), code) if colorama else ''
-    del TYPE_TO_CODE
 
-    BACK_RED = colorama.Back.RED
 
-    # Shortcut color global variables.
-    bright_blue = lambda s: BRIGHT + BLUE + str(s) + RESET_ALL
+# Adds color codes to global variables
+TYPE_TO_CODE = {
+    'Fore': ['BLUE', 'CYAN', 'GREEN', 'MAGENTA', 'RED', 'LIGHTGREEN_EX', 'YELLOW', 'RESET',
+             'LIGHTRED_EX'],
+    'Style': ['BRIGHT', 'NORMAL', 'DIM', 'RESET_ALL']
+}
+for typ, codes in TYPE_TO_CODE.iteritems():
+    for code in codes:
+        globals()[code] = getattr(getattr(colorama, typ), code) if colorama else ''
+del TYPE_TO_CODE
+
+
+BACK_RED = colorama.Back.RED
+
+
+# Shortcut color global variables.
+def bright_blue(str_):
+    return BRIGHT + BLUE + str(str_) + RESET_ALL
 
 
 def demo_colorama(case='upper'):

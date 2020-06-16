@@ -1,3 +1,5 @@
+'''My logging configurations/functions.'''
+
 import logging
 
 from colors import GREEN, BLUE, YELLOW, RED, BACK_RED, BRIGHT, RESET_ALL
@@ -22,7 +24,7 @@ logging.basicConfig(
     format='%(asctime)s [%(levelname)-8s] %(message)s',
     datefmt='%Y-%m-%d %I:%M:%S')
 
-# Functions for easier access.
+# Shortcut functions for easier access.
 debug = logging.debug
 info = logging.info
 warning = logging.warning
