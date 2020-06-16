@@ -1,6 +1,7 @@
-'''Useful functions, variables to use in Python CLI.'''
 #!/usr/bin/env python
 # ~/.pythonrc
+
+'''Useful functions, variables, and setup configs to use in Python CLI.'''
 
 import math
 import os
@@ -26,6 +27,7 @@ from json_tools import dump_json, load_json
 IGNORED_ATTRIBUTES = ['__builtins__', '__globals__', 'func_globals']
 HOME = os.environ['HOME'] if platform.startswith('linux') else os.environ['USERPROFILE']
 MAX_LINES = 50
+MYTOOLS = os.path.join(HOME, 'myTools')
 PYTHON_HISTORY_PATH = os.path.join(HOME, '.python_history')
 TYPE_TO_REGEX = {
     'E-mail': r'^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,5})$',
@@ -48,6 +50,10 @@ FILE_TYPE_TO_EXTENSION = {
     'JSON file': 'json',
     'Python file': 'py',
 }
+
+# Example data to fiddle around with.
+PEOPLE = load_json(os.path.join(MYTOOLS, 'mock_data', 'people.json'))
+PEOPLE_DICT = {people['id']: people for people in PEOPLE}
 
 
 def _brighten_it_up(func):
