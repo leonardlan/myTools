@@ -5,56 +5,10 @@ import sys
 import time
 import traceback
 from functools import wraps
-from sys import platform
 
 from collections import OrderedDict, defaultdict, Counter
 
-
-# Make CLI beautiful with color-printing to terminal using colorama.
-try:
-    import colorama
-except ImportError:
-    print 'Module colorama not available.'
-    colorama = None
-else:
-    # Need to call init() on Windows.
-    if platform.startswith('win'):
-        colorama.init()
-finally:
-    # Adds color codes to global variables
-    type_to_code = {
-        'Fore': ['BLUE', 'CYAN', 'GREEN', 'MAGENTA', 'RED', 'LIGHTGREEN_EX', 'YELLOW', 'RESET',
-                 'LIGHTRED_EX'],
-        'Style': ['BRIGHT', 'NORMAL', 'DIM', 'RESET_ALL']
-    }
-    for typ, codes in type_to_code.iteritems():
-        for code in codes:
-            globals()[code] = getattr(getattr(colorama, typ), code) if colorama else ''
-
-    BACK_RED = colorama.Back.RED
-
-    # Shortcut color global variables.
-    globals()['BRIGHT_BLUE'] = lambda s: BRIGHT + BLUE + str(s) + RESET_ALL
-
-    # Logging functions.
-    def _log(header, color, content):
-        sys.stdout.write('%s%s%s: %s\n' % (BRIGHT + color, header, RESET_ALL, str(content)))
-
-    globals()['DEBUG'] = lambda s: _log('DEBUG', CYAN, s)
-    globals()['INFO'] = lambda s: _log('INFO', BLUE, s)
-    globals()['GREEN_INFO'] = lambda s: _log('INFO', GREEN, s)
-    globals()['WARNING'] = lambda s: _log('WARNING', YELLOW, s)
-    globals()['ERROR'] = lambda s: _log('ERROR', LIGHTRED_EX, s)
-    globals()['CRITICAL'] = lambda s: _log('CRITICAL', BACK_RED, s)
-
-
-def demo_logging():
-    DEBUG('Just ignore me :/')
-    GREEN_INFO('Good stuff!')
-    INFO('Just wanted to let you know this is working.')
-    WARNING('You might want to take a look at this.')
-    ERROR("Uh, Houston, we've had a problem.")
-    CRITICAL("I'll just put this over here with the rest of the fire.")
+from my_logging import debug, info, warning, error, critical, demo_logging
 
 
 INTERVALS = OrderedDict([
@@ -72,6 +26,7 @@ LESS_THAN_A_SECOND = [
     'millisecond',
     'microsecond',
 ]
+
 
 def human_time(seconds, decimals=1):
     '''Human-readable time from seconds (ie. 3600 -> '1 hour').
@@ -193,7 +148,7 @@ def time_me(func, *args, **kwargs):
         Anything: Whatever function call returns. None if call failed on first try.
     '''
     if not func:
-        ERROR('Invalid function: %s' % func)
+        error('Invalid function: %s' % func)
         return
     n = kwargs.pop('n', 1)
     return_time = kwargs.pop('return_time', False)
@@ -219,7 +174,7 @@ def time_me(func, *args, **kwargs):
             end = time.time()
             duration = end - start
             print  # Newline before warning.
-            WARNING('Function errored after %s: %s' % (human_time(duration), e))
+            warning('Function errored after %s: %s' % (human_time(duration), e))
             print traceback.format_exc().strip()
             return res
 

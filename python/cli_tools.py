@@ -1,5 +1,6 @@
 '''Useful functions in Python CLI.'''
-from lancore import INFO, _is_text, var_name, human_int
+from lancore import _is_text, var_name, human_int
+from my_logging import info
 
 
 def find(haystack, needle, all=False, first=False, ignore_case=True, max_results=50):
@@ -46,11 +47,11 @@ def find(haystack, needle, all=False, first=False, ignore_case=True, max_results
         ignore_case (bool): Case-insensitive if True.
         max_results (int): Max number of results to return. Unlimited if negative or zero.
     '''
-    INFO('Searching...')
+    info('Searching...')
     all_ = all
     results = _find(haystack, needle, first, ignore_case)
     if not results:
-        INFO('Not found')
+        info('Not found')
         return
     for index, result in enumerate(results):
         if not all_ and index >= max_results > 0:
@@ -69,7 +70,7 @@ def find(haystack, needle, all=False, first=False, ignore_case=True, max_results
         print eval('haystack%s' % path)
     num_results = len(results)
     if not first:
-        INFO('Found %s result%s' % (human_int(num_results), 's' if num_results > 1 else ''))
+        info('Found %s result%s' % (human_int(num_results), 's' if num_results > 1 else ''))
 
 
 def _find(haystack, needle, first, ignore_case):

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # ~/.pythonrc
 
-import logging
 import math
 import os
 import re
@@ -17,6 +16,7 @@ from types import ModuleType
 
 from tabulate import tabulate
 
+from colors import *
 from lancore import *
 from cli_tools import find, get
 from json_tools import dump_json, load_json
@@ -47,29 +47,6 @@ FILE_TYPE_TO_EXTENSION = {
     'JSON file': 'json',
     'Python file': 'py',
 }
-
-
-LOGGING_LEVEL_TO_COLOR = {
-    logging.DEBUG: GREEN,
-    logging.INFO: BLUE,
-    logging.WARNING: YELLOW,
-    logging.ERROR: RED,
-    logging.CRITICAL: BACK_RED,
-}
-
-
-def _setup_my_logging():
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(asctime)s [%(levelname)-8s] %(message)s',
-        datefmt='%Y-%m-%d %I:%M:%S')
-
-    # Add color to log levels.
-    for level, color in LOGGING_LEVEL_TO_COLOR.iteritems():
-        logging.addLevelName(level, BRIGHT + color + logging.getLevelName(level) + RESET_ALL)
-
-
-_setup_my_logging()
 
 
 def _brighten_it_up(func):
@@ -180,7 +157,7 @@ def _wai_dict(dict_):
         previous_output = output
         depth += 1
     if previous_output and depth > 2:
-        print BRIGHT_BLUE('Dict:') + GREEN
+        print bright_blue('Dict:') + GREEN
         print previous_output
 
 
@@ -399,7 +376,7 @@ def history(n=50, c=False):
         os.system("tail -%i %s" % (n, PYTHON_HISTORY_PATH))
     except IOError:
         pass
-    print BRIGHT_BLUE("\nCurrent session [%s]:" % my_date_time_stamp())
+    print bright_blue("\nCurrent session [%s]:" % my_date_time_stamp())
     print _history()
 
 
@@ -409,7 +386,7 @@ def _append_history_file():
         return
     with open(PYTHON_HISTORY_PATH, "a+") as fil:
         fil.write(
-            BRIGHT_BLUE("\n'''New session [%s]'''\n" % my_date_time_stamp()))
+            bright_blue("\n'''New session [%s]'''\n" % my_date_time_stamp()))
         fil.write(history + "\n")
 
 
@@ -436,27 +413,6 @@ def hs(str_, max_count=5):
     '''
     os.system('grep "%s" %s | tail -%i | grep --color=auto "%s"' % (
         str_, PYTHON_HISTORY_PATH, max_count, str_))
-
-
-def demo_colorama(case='upper'):
-    '''Print every style and color possible with colorama.
-
-    Args:
-        case (str): One of 'upper', 'title', or 'lower'.
-    '''
-    for color in dir(colorama.Fore):
-        if color.isupper() and color != 'RESET':
-            print getattr(colorama.Fore, color),
-            for style in dir(colorama.Style):
-                if style.isupper() and style != 'RESET_ALL':
-                    text = '"%s %s"' % (style, color)
-                    if case == 'title':
-                        text = text.title()
-                    elif case == 'lower':
-                        text = text.lower()
-                    print getattr(colorama.Style, style), text,
-            print
-    sys.stdout.write(RESET_ALL)
 
 
 def reload_pythonrc():
