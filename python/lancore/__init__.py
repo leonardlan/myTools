@@ -22,6 +22,8 @@ INTERVALS = OrderedDict([
     ('minute', 60),
     ('second', 1)
 ])
+HOME = os.environ['HOME'] if sys.platform.startswith('linux') else os.environ['USERPROFILE']
+MYTOOLS = os.path.join(HOME, 'myTools')
 LESS_THAN_A_SECOND = [
     'millisecond',
     'microsecond',
