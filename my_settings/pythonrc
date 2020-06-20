@@ -24,7 +24,7 @@ from cli_tools import find, get
 from json_tools import dump_json, load_json
 
 # For playing around in CLI.
-from mock_data import PEOPLE, PEOPLE_DICT
+from mock_data import DOGS, DOGS_DICT, PEOPLE, PEOPLE_DICT
 
 
 IGNORED_ATTRIBUTES = ['__builtins__', '__globals__', 'func_globals']
