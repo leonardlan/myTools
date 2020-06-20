@@ -5,7 +5,7 @@ from json_tools import load_json
 from lancore import MYTOOLS
 
 
-MOCK_DATA = os.path.join(MYTOOLS, 'mock_data')
+MOCK_DATA = os.path.join(MYTOOLS, 'test', 'mock_data')
 
 # Example data to fiddle around with.
 DOGS = load_json(os.path.join(MOCK_DATA, 'dogs.json'))
