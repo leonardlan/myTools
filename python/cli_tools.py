@@ -4,7 +4,7 @@ from my_logging import info
 
 
 def find(haystack, needle, all=False, first=False, ignore_case=True, max_results=50):
-    '''Prints path to needle in haystack (can be nested list or dict).
+    '''Prints path to needle in iterable haystack (can be nested list or dict).
 
     Example:
         >>> haystack = {
@@ -85,30 +85,35 @@ def _find(haystack, needle, first, ignore_case):
         return results
 
     for key, val in iterable:
-        if isinstance(val, (dict, list)):
-            recursive_results = _find(val, needle, first, ignore_case)
-            if recursive_results:
-                results.extend([[key] + res for res in recursive_results])
+        # Check both key and val.
+        for item in [key, val]:
+            if isinstance(item, (dict, list)):
+                # It's a dict/list. Check recursively.
+                recursive_results = _find(item, needle, first, ignore_case)
+                if recursive_results:
+                    results.extend([[key] + res for res in recursive_results])
+                    if first:
+                        break
+            elif item == needle:
+                # Found exact match.
+                results.append([key])
                 if first:
                     break
-        elif val == needle:
-            results.append([key])
-            if first:
-                break
-        elif val:
-            if _is_text(val) and _is_text(needle):
-                if ignore_case:
-                    if needle.lower() in val.lower():
-                        # Is text and in val, case-insensitive.
-                        results.append([key])
-                        if first:
-                            break
-                else:
-                    if needle in val:
-                        # Is text and in val, case-sensitive.
-                        results.append([key])
-                        if first:
-                            break
+            elif item:
+                # Check if in text.
+                if _is_text(item) and _is_text(needle):
+                    if ignore_case:
+                        if needle.lower() in item.lower():
+                            # Is text and in item, case-insensitive.
+                            results.append([key])
+                            if first:
+                                break
+                    else:
+                        if needle in item:
+                            # Is text and in item, case-sensitive.
+                            results.append([key])
+                            if first:
+                                break
 
     return results
 

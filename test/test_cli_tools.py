@@ -26,7 +26,23 @@ EXAMPLE_DATA = {
 
 class TestFind(unittest.TestCase):
 
-    def test_find_simple(self):
+    def test_find_key(self):
+        self.assertEqual(_find(EXAMPLE_DATA, 'fruits', False, True), [['fruits']])
+        self.assertEqual(
+            _find(EXAMPLE_DATA,'smith', False, True),
+            [
+                ['contacts', 'Jane Smithers'],
+                ['contacts', 'Jane Smithers', 'email'],
+                ['contacts', 'John Smith'],
+                ['contacts', 'John Smith', 'email']
+            ])
+        self.assertEqual(
+            _find(EXAMPLE_DATA, 'jane', False, True),
+            [
+                ['contacts', 'Jane Smithers'],
+                ['contacts', 'Jane Smithers', 'email']])
+
+    def test_find_val(self):
         self.assertEqual(_find(EXAMPLE_DATA, 'lemon', False, True), [['fruits', 2, 'name']])
         self.assertEqual(_find(EXAMPLE_DATA, 'pepper', False, True), [['vegetables', 0, 'name']])
 
