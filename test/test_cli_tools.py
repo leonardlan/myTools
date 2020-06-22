@@ -21,7 +21,9 @@ EXAMPLE_DATA = {
             'gender': 'female',
             'email': 'jane.smithers.gmail.com'
         }
-    }}
+    },
+    'comment': 'Some comment'
+}
 
 
 class TestFind(unittest.TestCase):
@@ -32,19 +34,19 @@ class TestFind(unittest.TestCase):
             _find(EXAMPLE_DATA,'smith', False, True),
             [
                 ['contacts', 'Jane Smithers'],
-                ['contacts', 'Jane Smithers', 'email'],
                 ['contacts', 'John Smith'],
-                ['contacts', 'John Smith', 'email']
             ])
         self.assertEqual(
             _find(EXAMPLE_DATA, 'jane', False, True),
             [
-                ['contacts', 'Jane Smithers'],
-                ['contacts', 'Jane Smithers', 'email']])
+                ['contacts', 'Jane Smithers']])
 
     def test_find_val(self):
         self.assertEqual(_find(EXAMPLE_DATA, 'lemon', False, True), [['fruits', 2, 'name']])
         self.assertEqual(_find(EXAMPLE_DATA, 'pepper', False, True), [['vegetables', 0, 'name']])
+
+    def test_find_target_both_in_key_and_val(self):
+        self.assertEqual(_find(EXAMPLE_DATA, 'comment', False, True), [['comment']])
 
     def test_find_multiple_results(self):
         self.assertEqual(
@@ -54,6 +56,10 @@ class TestFind(unittest.TestCase):
     def test_case_sensitive(self):
         self.assertEqual(_find(EXAMPLE_DATA, 'Strawberry', False, False), [])
         self.assertEqual(_find(EXAMPLE_DATA, 'strawberry', False, False), [['fruits', 1, 'name']])
+
+    def test_first(self):
+        self.assertEqual(
+            _find(EXAMPLE_DATA, 'smith', True, True), [['contacts', 'Jane Smithers']])
 
 
 class TestGet(unittest.TestCase):

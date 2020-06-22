@@ -93,11 +93,15 @@ def _find(haystack, needle, first, ignore_case):
                 if recursive_results:
                     results.extend([[key] + res for res in recursive_results])
                     if first:
+                        return results
+                    if item == key:
                         break
             elif item == needle:
                 # Found exact match.
                 results.append([key])
                 if first:
+                    return results
+                if item == key:
                     break
             elif item:
                 # Check if in text.
@@ -107,12 +111,16 @@ def _find(haystack, needle, first, ignore_case):
                             # Is text and in item, case-insensitive.
                             results.append([key])
                             if first:
+                                return results
+                            if item == key:
                                 break
                     else:
                         if needle in item:
                             # Is text and in item, case-sensitive.
                             results.append([key])
                             if first:
+                                return results
+                            if item == key:
                                 break
 
     return results
