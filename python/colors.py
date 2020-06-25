@@ -26,7 +26,7 @@ for typ, codes in TYPE_TO_CODE.iteritems():
 del TYPE_TO_CODE
 
 
-BACK_RED = colorama.Back.RED
+BACK_RED = colorama.Back.RED if colorama else ''
 
 
 # Shortcut color global variables.
@@ -40,6 +40,9 @@ def demo_colorama(case='upper'):
     Args:
         case (str): One of 'upper', 'title', or 'lower'.
     '''
+    if not colorama:
+        print 'Cannot demonstrate colorama because module not imported'
+        return
     for color in dir(colorama.Fore):
         if color.isupper() and color != 'RESET':
             print getattr(colorama.Fore, color),
