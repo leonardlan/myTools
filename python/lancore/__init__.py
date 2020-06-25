@@ -22,8 +22,6 @@ INTERVALS = OrderedDict([
     ('minute', 60),
     ('second', 1)
 ])
-HOME = os.environ['HOME'] if sys.platform.startswith('linux') else os.environ['USERPROFILE']
-MYTOOLS = os.path.join(HOME, 'myTools')
 LESS_THAN_A_SECOND = [
     'millisecond',
     'microsecond',
@@ -212,6 +210,7 @@ def time_me_wrapper(func):
     '''Decorator for time_me().'''
     @wraps(func)
     def wrapper(*args, **kwargs):
+        '''Wrapper func.'''
         time_me(func, *args, **kwargs)
     return wrapper
 

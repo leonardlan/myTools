@@ -2,7 +2,7 @@
 import os
 
 from json_tools import load_json
-from lancore import MYTOOLS
+from my_settings import MYTOOLS
 
 
 MOCK_DATA = os.path.join(MYTOOLS, 'test', 'mock_data')
