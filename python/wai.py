@@ -1,4 +1,4 @@
-'''What am I? Call wai(anything) and find out what it is in the best way possible.'''
+'''What am I? Call wai(anything) and find out what it is.'''
 import math
 import os
 import re
@@ -137,7 +137,7 @@ def _wai_dict(dict_):
 
 
 def _brighten_it_up(func):
-    """Brighten up the output"""
+    '''Brighten up the output.'''
     def wrapper(*args, **kwargs):
         sys.stdout.write(BRIGHT)
         res = func(*args, **kwargs)
@@ -260,7 +260,7 @@ def _func_name_args_kwargs(func):
 
 
 def _print_parent_types(typ):
-    '''Print types of all parent classes'''
+    '''Print types of all parent classes.'''
     import inspect
     print typ
     print CYAN + 'Parents:' + GREEN, ' -> '.join([t.__name__ for t in inspect.getmro(typ)[1:]])
