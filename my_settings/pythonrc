@@ -21,7 +21,7 @@ from colors import *
 from json_tools import dump_json, load_json
 from lancore import *
 from my_settings import HOME, MAX_LINES
-from wai import wai
+from wai import wai, call_gets
 
 # For playing around in CLI.
 from mock_data import DOGS, DOGS_DICT, PEOPLE, PEOPLE_DICT

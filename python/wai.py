@@ -1,4 +1,5 @@
 '''What am I? Call wai(anything) and find out what it is.'''
+import inspect
 import math
 import os
 import re
@@ -139,6 +140,7 @@ def _wai_dict(dict_):
 def _brighten_it_up(func):
     '''Brighten up the output.'''
     def wrapper(*args, **kwargs):
+        '''Wrapper func.'''
         sys.stdout.write(BRIGHT)
         res = func(*args, **kwargs)
         sys.stdout.write(RESET_ALL)
@@ -294,3 +296,20 @@ def get_types(items):
     for item in items:
         found_types.add(type(item))
     return ', '.join([typ.__name__ for typ in found_types])
+
+
+def call_gets(obj):
+    '''Calls all methods of object starting with 'get' and requiring no args.'''
+    called_count = 0
+    for attr_name in dir(obj):
+        attr = getattr(obj, attr_name)
+        if callable(attr) and attr_name.startswith('get'):
+            try:
+                args = inspect.getargspec(attr)[0]
+            except:
+                print 'Could not get args of callable %s' % attr_name
+                continue
+            if len(args) == 1:  # No args other than 'self'.
+                print '%s: %s' % (attr_name, attr())
+                called_count += 1
+    print 'Called %i get function(s)' % called_count
