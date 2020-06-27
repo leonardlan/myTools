@@ -33,6 +33,7 @@ critical = logging.critical
 
 
 def demo_logging():
+    '''Prints all log levels.'''
     debug('Just ignore me :/')
     info('Just wanted to let you know this is working.')
     warning('You might want to take a look at this.')

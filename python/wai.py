@@ -6,6 +6,7 @@ import re
 import sys
 import time
 
+from collections import defaultdict, Counter, OrderedDict
 from pprint import pprint, pformat
 from types import ModuleType
 
@@ -153,13 +154,14 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
          skip_module=True, skip_known=False):
     '''What Am I? Prints type and attributes of object thing.
 
-    :param thing object: Anything and everything. That's what we're here to find out. :)
-    :param ignore_private bool: Ignores attributes starting with underscore.
-    :param ignore_attrs list: Attributes to ignore.
-    :param call bool: Calls attributes that are functions and thing itself if it is callable.
-    :param skip_callable bool: Doesn't print callable attributes.
-    :param skip_module bool: Skips module attributes.
-    :param skip_known bool: If True, prints every attribute even if we know what it is.
+    Args:
+        thing (object): Anything and everything. That's what we're here to find out. :)
+        ignore_private (bool): Ignores attributes starting with underscore.
+        ignore_attrs (list): Attributes to ignore.
+        call (bool): Calls attributes that are functions and thing itself if it is callable.
+        skip_callable (bool): Doesn't print callable attributes.
+        skip_module (bool): Skips module attributes.
+        skip_known (bool): If True, prints every attribute even if we know what it is.
     '''
     typ = type(thing)
 
@@ -174,19 +176,23 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
             return _wai_number(thing, typ)
         elif typ == dict:
             return _wai_dict(thing)
-
-        from collections import defaultdict, Counter, OrderedDict
-        if typ in (defaultdict, Counter, OrderedDict):
+        elif typ in (defaultdict, Counter, OrderedDict):
             print BLUE + '%s with %i key%s: %s' % (
                 typ.__name__.title(), len(thing), 's' if len(thing) > 1 else '', thing.keys())
             return
         elif typ in (list, tuple):
             return _wai_list(thing, typ)
+        elif typ == bool:
+            print 'Just a boolean: %s' % thing
+            return
+
+        # Out of ideas. We don't know what it is.
 
     if callable(thing):
         print _func_name_args_kwargs(thing)
         if thing.__doc__:
             print thing.__doc__
+            return
 
     # So we don't know what it is. Let's print everything we can find about it.
     thing_name = getattr(thing, '__name__', '')
