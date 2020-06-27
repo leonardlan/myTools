@@ -11,7 +11,7 @@ from pprint import pprint, pformat
 from types import ModuleType
 
 from colors import (BLUE, BRIGHT, CYAN, DIM, GREEN, NORMAL, MAGENTA, RED, RESET, RESET_ALL, YELLOW,
-                    bright_blue)
+                    bright_blue, brighten_it_up)
 from lancore import human_int, var_name
 from my_settings import MAX_LINES
 
@@ -41,9 +41,106 @@ TYPE_TO_REGEX = {
 
 
 def wai(*things, **kwargs):
-    '''What am I? Feed me anything. I'll tell you what it is.'''
+    '''What am I? Feed me anything(s). I'll tell you what it is.
+
+    Args:
+        thing (object): Anything and everything. That's what we're here to find out. :)
+        ignore_private (bool): Ignores attributes starting with underscore. Defaults to False.
+        ignore_attrs (list): Attributes to ignore.
+        call (bool): Calls attributes that are functions and thing itself if it is callable.
+            Defaults to False.
+        skip_callable (bool): Doesn't print callable attributes. Defaults to False.
+        skip_module (bool): Skips module attributes. Defaults to True.
+        skip_known (bool): If True, prints every attribute even if we know what it is. Defaults to
+            False.
+    '''
     for thing in things:
         _wai(thing, **kwargs)
+
+
+@brighten_it_up
+def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False,
+         skip_module=True, skip_known=False):
+    '''Real logic behind wai(). See wai() for docs.'''
+    typ = type(thing)
+
+    if not skip_known:
+        # Let's see if we know what it is first.
+        if thing is None:
+            print "It's just None!"
+            return
+        elif typ in (str, unicode):
+            return _wai_text(thing, typ)
+        elif typ in (int, float):
+            return _wai_number(thing, typ)
+        elif typ == dict:
+            return _wai_dict(thing)
+        elif typ in (defaultdict, Counter, OrderedDict):
+            print BLUE + '%s with %i key%s: %s' % (
+                typ.__name__.title(), len(thing), 's' if len(thing) > 1 else '', thing.keys())
+            return
+        elif typ in (list, tuple):
+            return _wai_list(thing, typ)
+        elif typ == bool:
+            print 'Just a boolean: %s' % thing
+            return
+
+        # Out of ideas. We don't know what it is.
+
+    if callable(thing):
+        print _func_name_args_kwargs(thing)
+        if thing.__doc__:
+            print thing.__doc__
+            return
+
+    # So we don't know what it is. Let's print everything we can find about it.
+    thing_name = getattr(thing, '__name__', '')
+    call_count = private_count = total = 0
+    ignore_attrs += IGNORED_ATTRIBUTES
+    for attr in dir(thing):
+        if attr in ignore_attrs:
+            continue
+        if attr.startswith('_'):
+            private_count += 1
+            if ignore_private:
+                continue
+        total += 1
+        try:
+            res = getattr(thing, attr)
+        except Exception, err:
+            print RED + str(err)
+            continue
+
+        # Skip if module
+        if isinstance(res, ModuleType) and skip_module:
+            continue
+
+        # Skip if callable
+        is_callable = callable(res)
+        long_name = '%s.%s' % (thing_name, attr)
+        if is_callable and skip_callable:
+            continue
+        elif is_callable:
+            # Print *args, **kwargs
+            print _func_name_args_kwargs(res),
+            call_count += 1
+            if call:
+                _call(res)
+            else:
+                print getattr(res, '__doc__')
+        else:
+            print BLUE + '%s:' % long_name + GREEN,
+            _print(res)
+    if call and callable(thing):
+        _call(thing)
+    sys.stdout.write(CYAN)
+    if not skip_callable:
+        print 'Callable: %i,' % call_count,
+    print 'Uncallable: %i' % (total - call_count)
+    print 'Private: %i, Public: %i' % (private_count, total - private_count)
+    print 'Total: %i' % total
+
+    _print_parent_types(typ)
 
 
 def _wai_text(str_, typ):
@@ -136,112 +233,6 @@ def _wai_dict(dict_):
     if previous_output and depth > 2:
         print bright_blue('Dict:') + GREEN
         print previous_output
-
-
-def _brighten_it_up(func):
-    '''Brighten up the output.'''
-    def wrapper(*args, **kwargs):
-        '''Wrapper func.'''
-        sys.stdout.write(BRIGHT)
-        res = func(*args, **kwargs)
-        sys.stdout.write(RESET_ALL)
-        return res
-    return wrapper
-
-
-@_brighten_it_up
-def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False,
-         skip_module=True, skip_known=False):
-    '''What Am I? Prints type and attributes of object thing.
-
-    Args:
-        thing (object): Anything and everything. That's what we're here to find out. :)
-        ignore_private (bool): Ignores attributes starting with underscore.
-        ignore_attrs (list): Attributes to ignore.
-        call (bool): Calls attributes that are functions and thing itself if it is callable.
-        skip_callable (bool): Doesn't print callable attributes.
-        skip_module (bool): Skips module attributes.
-        skip_known (bool): If True, prints every attribute even if we know what it is.
-    '''
-    typ = type(thing)
-
-    if not skip_known:
-        # Let's see if we know what it is first.
-        if thing is None:
-            print "It's just None!"
-            return
-        elif typ in (str, unicode):
-            return _wai_text(thing, typ)
-        elif typ in (int, float):
-            return _wai_number(thing, typ)
-        elif typ == dict:
-            return _wai_dict(thing)
-        elif typ in (defaultdict, Counter, OrderedDict):
-            print BLUE + '%s with %i key%s: %s' % (
-                typ.__name__.title(), len(thing), 's' if len(thing) > 1 else '', thing.keys())
-            return
-        elif typ in (list, tuple):
-            return _wai_list(thing, typ)
-        elif typ == bool:
-            print 'Just a boolean: %s' % thing
-            return
-
-        # Out of ideas. We don't know what it is.
-
-    if callable(thing):
-        print _func_name_args_kwargs(thing)
-        if thing.__doc__:
-            print thing.__doc__
-            return
-
-    # So we don't know what it is. Let's print everything we can find about it.
-    thing_name = getattr(thing, '__name__', '')
-    call_count = private_count = total = 0
-    ignore_attrs += IGNORED_ATTRIBUTES
-    for attr in dir(thing):
-        if attr in ignore_attrs:
-            continue
-        if attr.startswith('_'):
-            private_count += 1
-            if ignore_private:
-                continue
-        total += 1
-        try:
-            res = getattr(thing, attr)
-        except Exception, err:
-            print RED + str(err)
-            continue
-
-        # Skip if module
-        if isinstance(res, ModuleType) and skip_module:
-            continue
-
-        # Skip if callable
-        is_callable = callable(res)
-        long_name = '%s.%s' % (thing_name, attr)
-        if is_callable and skip_callable:
-            continue
-        elif is_callable:
-            # Print *args, **kwargs
-            print _func_name_args_kwargs(res),
-            call_count += 1
-            if call:
-                _call(res)
-            else:
-                print getattr(res, '__doc__')
-        else:
-            print BLUE + '%s:' % long_name + GREEN,
-            _print(res)
-    if call and callable(thing):
-        _call(thing)
-    sys.stdout.write(CYAN)
-    if not skip_callable:
-        print 'Callable: %i,' % call_count,
-    print 'Uncallable: %i' % (total - call_count)
-    print 'Private: %i, Public: %i' % (private_count, total - private_count)
-    print 'Total: %i' % total
-
-    _print_parent_types(typ)
 
 
 def _func_name_args_kwargs(func):

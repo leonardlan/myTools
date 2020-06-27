@@ -56,3 +56,14 @@ def demo_colorama(case='upper'):
                     print getattr(colorama.Style, style), text,
             print
     sys.stdout.write(RESET_ALL)
+
+
+def brighten_it_up(func):
+    '''Brighten up the output.'''
+    def wrapper(*args, **kwargs):
+        '''Wrapper func.'''
+        sys.stdout.write(BRIGHT)
+        res = func(*args, **kwargs)
+        sys.stdout.write(RESET_ALL)
+        return res
+    return wrapper
