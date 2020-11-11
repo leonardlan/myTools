@@ -1,32 +1,32 @@
 [
-  {
-    "age": 1,
-    "breed": "dachshund",
-    "gender": "male",
-    "name": "Lucky",
-    "id": 1
-  },
-  {
-    "age": "2",
-    "breed": "german shepherd",
-    "gender": "male",
-    "name": "Max",
-    "id": 2
-  },
-  {
-    "age": "not sure",
-    "breed": "samoyed",
-    "color": "white",
-    "gender": "male",
-    "name": "Bolt",
-    "id": 3
-  },
-  {
-    "age": "not sure",
-    "breed": "corgi",
-    "gender": "male",
-    "name": "Gatsby",
-    "youtube_channel": "https://www.youtube.com/user/GreatGatsbyCorgi",
-    "id": 4
-  }
+    {
+        "age": 1,
+        "breed": "dachshund",
+        "gender": "male",
+        "name": "Lucky",
+        "id": 1
+    },
+    {
+        "age": "two",
+        "breed": "german shepherd",
+        "gender": "male",
+        "name": "Max",
+        "id": 2
+    },
+    {
+        "age": "not sure",
+        "breed": "samoyed",
+        "color": "white",
+        "gender": "male",
+        "name": "Bolt",
+        "id": 3
+    },
+    {
+        "age": "not sure",
+        "breed": "corgi",
+        "gender": "male",
+        "name": "Gatsby",
+        "youtube_channel": "https://www.youtube.com/user/GreatGatsbyCorgi",
+        "id": 4
+    }
 ]
