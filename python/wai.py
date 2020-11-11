@@ -307,6 +307,6 @@ def call_gets(obj):
                 print 'Could not get args of callable %s' % attr_name
                 continue
             if len(args) == 1:  # No args other than 'self'.
-                print '%s: %s' % (attr_name, attr())
+                print '%s(): %s' % (attr_name, attr())
                 called_count += 1
     print 'Called %i get function(s)' % called_count
