@@ -1,10 +1,9 @@
 {
 	"color_scheme": "Packages/Color Scheme - Default/Mariana.sublime-color-scheme",
 	"draw_white_space": "all",
-	"font_size": 10,
+	"font_size": 11,
 	"ignored_packages":
 	[
-		"SublimeLinter",
 		"Vintage"
 	],
 	"rulers":
