@@ -14,8 +14,6 @@ from pprint import pprint
 
 from tabulate import tabulate
 
-import schematize
-
 from cli_tools import find, get
 from colors import *
 from json_tools import dump_json, load_json
