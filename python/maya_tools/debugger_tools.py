@@ -6,8 +6,7 @@ def print_attrs(node=None, **kwargs):
 
 	Args:
 		node (str or [str] or None): Maya node(s).
-		attr_filter (str): Attribute filter. Only shows attributes that contain this filter.
-		val_filter (str, int, float, etc): Value filter. Only shows values equal to this filter.
+		See print_attrs_for_single_node() for kwargs.
 
 	Raises:
 		ValueError: No object matches name.
@@ -52,6 +51,10 @@ def print_attrs_for_single_node(node, **kwargs):
 	# Loop attributes.
 	count = 0
 	for attr in attrs:
+		# Skip attributes with period. (ie. type TdataCompound)
+		if '.' in attr:
+			continue
+
 		# Filter by attr.
 		if attr_filter and attr_filter.lower() not in attr.lower():
 			continue
@@ -60,15 +63,15 @@ def print_attrs_for_single_node(node, **kwargs):
 
 		# Get type.
 		try:
-			type_ = cmds.getAttr(plug, type=True)
+			typ = cmds.getAttr(plug, type=True)
 		except Exception, err:
-			type_ = str(err),
+			typ = str(err),
 
 		# Get and print value.
 		try:
 			val = cmds.getAttr(plug)
 		except Exception:
-			# Probably a connection attribute.
+			# Error getting attribute. Probably a connection attribute.
 
 			# Skip if filter speciifed.
 			if attr_filter or has_val_filter:
@@ -81,17 +84,31 @@ def print_attrs_for_single_node(node, **kwargs):
 			else:
 				print '{} not connected to anything'.format(attr)
 		else:
-			# Filter by value.
-			if has_val_filter and (val_filter != val or type(val_filter) != type(val)):
-				continue
+			# If enum, get it as string too.
+			if typ == 'enum':
+				val = '{} [{}]'.format(cmds.getAttr(plug, asString=True), val)
+
+			# Filter by value, if specified.
+			if has_val_filter:
+				# Skip if not same type.
+				if type(val_filter) != type(val):
+					continue
+
+				# If string, match with "in" operator.
+				if isinstance(val_filter, str):
+					if val_filter.lower() not in val.lower():
+						continue
+				elif val_filter != val or type(val_filter) != type(val):
+					# Match by same type and value.
+					continue
 
 			# Add single quote around string.
-			if type_ == 'string':
+			if typ == 'string':
 				if val is not None:
 					val = "'{}'".format(val)
 
 			# Print value.
-			print '{} ({}): {}'.format(attr, type_, val)
+			print '{} ({}): {}'.format(attr, typ, val)
 
 		count += 1
 
