@@ -98,7 +98,7 @@ def print_attrs_for_single_node(node, **kwargs):
 				if isinstance(val_filter, str):
 					if val_filter.lower() not in val.lower():
 						continue
-				elif val_filter != val or type(val_filter) != type(val):
+				elif val_filter != val:
 					# Match by same type and value.
 					continue
 
