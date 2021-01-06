@@ -14,7 +14,7 @@ from pprint import pprint
 
 from tabulate import tabulate
 
-from cli_tools import find, get
+from cli_tools import find, get, print_sys_path
 from colors import *
 from json_tools import dump_json, load_json
 from lancore import *

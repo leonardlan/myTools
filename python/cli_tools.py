@@ -1,4 +1,6 @@
 '''Useful functions in Python CLI.'''
+import sys
+
 from lancore import _is_text, var_name, human_int
 from my_logging import info
 
@@ -177,3 +179,13 @@ def get(data, *keys, **kwargs):
         except (KeyError, TypeError):
             return
     return data
+
+
+def print_sys_path(key=''):
+    '''Print sys.path. Able to filter by case-insensitive search.'''
+    count = 0
+    for path in sys.path:
+        if not key or key.lower() in path.lower():
+            print path
+            count += 1
+    print '{} path{}'.format(count, 's' if count != 1 else '')
