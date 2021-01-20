@@ -29,9 +29,25 @@ del TYPE_TO_CODE
 BACK_RED = colorama.Back.RED if colorama else ''
 
 
-# Shortcut color global variables.
+# Shortcut color global functions.
 def bright_blue(str_):
     return BRIGHT + BLUE + str(str_) + RESET_ALL
+
+
+def green(str_):
+    return GREEN + str(str_) + RESET
+
+
+def bright_green(str_):
+    return BRIGHT + GREEN + str(str_) + RESET_ALL
+
+
+def red(str_):
+    return RED + str(str_) + RESET
+
+
+def bright_red(str_):
+    return BRIGHT + RED + str(str_) + RESET_ALL
 
 
 def demo_colorama(case='upper'):
@@ -59,7 +75,7 @@ def demo_colorama(case='upper'):
 
 
 def brighten_it_up(func):
-    '''Brighten up the output.'''
+    '''Wrapper that brightens up the output.'''
     def wrapper(*args, **kwargs):
         '''Wrapper func.'''
         sys.stdout.write(BRIGHT)
