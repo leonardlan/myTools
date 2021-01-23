@@ -1,4 +1,7 @@
-'''Useful functions in Python CLI.'''
+'''Useful functions in Python CLI (terminal, CMD, or Maya).'''
+import datetime
+import os
+import subprocess
 import sys
 
 from lancore import _is_text, var_name, human_int
@@ -189,3 +192,19 @@ def print_sys_path(key=''):
             print path
             count += 1
     print '{} path{}'.format(count, 's' if count != 1 else '')
+
+
+def ns(title='Hello!', msg=''):
+    '''Sends a desktop notification.'''
+    msg = msg or 'Have a good {}!'.format(datetime.datetime.now().strftime('%A'))
+    if os.name == 'nt':
+        # Attemp to use ToastNotifier (if installed) on Windows.
+        try:
+            from win10toast import ToastNotifier
+        except ImportError:
+            print 'No ToastNotifier module installed for notifications'
+        else:
+            toaster = ToastNotifier()
+            toaster.show_toast(title=title, msg=msg, threaded=True)
+    else:
+        subprocess.call("ns '%s'" % msg, shell=True)

@@ -4,7 +4,6 @@
 '''Useful functions, variables, and setup configs to use in Python CLI.'''
 
 import os
-import subprocess
 import sys
 import time
 
@@ -14,7 +13,7 @@ from pprint import pprint
 
 from tabulate import tabulate
 
-from cli_tools import find, get, print_sys_path
+from cli_tools import find, get, ns, print_sys_path
 from colors import *
 from json_tools import dump_json, load_json
 from lancore import *
@@ -31,11 +30,6 @@ PYTHON_HISTORY_PATH = os.path.join(HOME, '.python_history')
 def _num_lines(str_):
     '''Number of lines in string'''
     return str_.count('\n') + 1
-
-
-def ns(msg=""):
-    """Sends a desktop notification using alias ns"""
-    subprocess.call("ns '%s'" % msg, shell=True)
 
 
 def cb(content):
