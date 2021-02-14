@@ -153,28 +153,30 @@ def diff(apple, orange):
                 continue
 
             if apple_val != orange_val:
-                print '{}: {} ({}) | {} ({})'.format(
+                diff = '{}: {} ({}) | {} ({})'.format(
                     attr, apple_val, apple, orange_val, orange)
-                differences.append(differences)
+                differences.append(diff)
         else:
-            print '{} does not have {}'.format(orange, attr)
             not_in_orange.append(attr)
+
+    # Print summary.
+    if differences:
+        print '\n{} different attr{}:\n{}'.format(
+            len(differences), 's' if len(differences) != 1 else '', '\n'.join(differences))
 
     # Print attributes not in apple.
     not_in_apple = [attr for attr in orange_attrs if attr not in orange_attrs]
     if not_in_apple:
-        print '{} attr{} not in {}:\n{}'.format(
+        print '\n{} attr{} not in {}: {}'.format(
             len(not_in_apple),
             's' if len(not_in_apple) != 1 else '',
             apple,
-            '\n'.join(not_in_apple))
+            not_in_apple)
 
-    # Print summary.
-    if differences:
-        print '{} different attr{}'.format(len(differences), 's' if len(differences) != 1 else '')
-    if not_in_apple:
-        print '{} attr{} not in {}'.format(
-            len(not_in_apple), 's' if len(not_in_apple) != 1 else '', apple)
+    # Print attributes not in orange.
     if not_in_orange:
-        print '{} attr{} not in {}'.format(
-            len(not_in_orange), 's' if len(not_in_orange) != 1 else '', orange)
+        print '\n{} attr{} not in {}: {}'.format(
+            len(not_in_orange),
+            's' if len(not_in_orange) != 1 else '',
+            orange,
+            not_in_orange)
