@@ -108,8 +108,10 @@ def print_attrs_for_single_node(node, **kwargs):
                 if val is not None:
                     val = "'{}'".format(val)
 
+            locked = cmds.getAttr(plug, lock=True)
+
             # Print value.
-            print '{} ({}): {}'.format(attr, typ, val)
+            print '{} ({}){}: {}'.format(attr, typ, ' [locked]' if locked else '', val)
 
         count += 1
 
@@ -141,7 +143,7 @@ def diff(apple, orange):
             try:
                 apple_val = cmds.getAttr(apple_plug)
             except RuntimeError, err:
-                print 'Could not get {}: {}'.format(apple_plug, err)
+                print 'Could not get {}: {}'.format(apple_plug, str(err).strip())
                 continue
 
             # Get orange attribute.
@@ -149,20 +151,32 @@ def diff(apple, orange):
             try:
                 orange_val = cmds.getAttr(orange_plug)
             except RuntimeError, err:
-                print 'Could not get {}: {}'.format(orange_plug, err)
+                print 'Could not get {}: {}'.format(orange_plug, str(err).strip())
                 continue
 
+            # Print if values are different.
             if apple_val != orange_val:
-                diff = '{}: {} ({}) | {} ({})'.format(
+                diff_str = '{}: {} ({}) | {} ({})'.format(
                     attr, apple_val, apple, orange_val, orange)
-                differences.append(diff)
+                differences.append(diff_str)
+
+            # Print if one is locked and other is not.
+            apple_plug_locked = 'locked' if cmds.getAttr(apple_plug, lock=True) else 'unlocked'
+            orange_plug_locked = 'locked' if cmds.getAttr(orange_plug, lock=True) else 'unlocked'
+            if apple_plug_locked != orange_plug_locked:
+                diff_str = '{} is {} and {} is {}'.format(
+                    apple, apple_plug_locked, orange, orange_plug_locked)
+                differences.append(diff_str)
+
         else:
             not_in_orange.append(attr)
 
     # Print summary.
     if differences:
-        print '\n{} different attr{}:\n{}'.format(
+        print '\n{} difference{}:\n{}'.format(
             len(differences), 's' if len(differences) != 1 else '', '\n'.join(differences))
+    else:
+        print 'No differences found between {} and {}'.format(apple, orange)
 
     # Print attributes not in apple.
     not_in_apple = [attr for attr in orange_attrs if attr not in orange_attrs]
