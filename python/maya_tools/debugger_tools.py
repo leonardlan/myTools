@@ -42,6 +42,8 @@ def print_attrs_for_single_node(node, **kwargs):
     Raises:
         ValueError: No object matches name.
     '''
+    print '{}:'.format(node)
+
     attrs = list_attrs(node)
 
     # Get filters.
