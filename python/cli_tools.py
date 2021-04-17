@@ -208,3 +208,14 @@ def ns(title='Hello!', msg=''):
             toaster.show_toast(title=title, msg=msg, threaded=True)
     else:
         subprocess.call("ns '%s'" % msg, shell=True)
+
+
+def cb(content=None):
+    '''Copies content to clipboard. If no content, returns clipboard content.'''
+    import clipboard, pyperclip
+    if content is None:
+        return clipboard.paste()
+    try:
+        clipboard.copy(content)
+    except pyperclip.PyperclipException:
+        clipboard.copy(str(content))

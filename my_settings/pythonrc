@@ -13,7 +13,7 @@ from pprint import pprint
 
 from tabulate import tabulate
 
-from cli_tools import find, get, ns, print_sys_path
+from cli_tools import cb, find, get, ns, print_sys_path
 from colors import *
 from json_tools import dump_json, load_json
 from lancore import *
@@ -30,15 +30,6 @@ PYTHON_HISTORY_PATH = os.path.join(HOME, '.python_history')
 def _num_lines(str_):
     '''Number of lines in string'''
     return str_.count('\n') + 1
-
-
-def cb(content):
-    """Copies content to clipboard"""
-    import clipboard, pyperclip
-    try:
-        clipboard.copy(content)
-    except pyperclip.PyperclipException:
-        clipboard.copy(str(content))
 
 
 def start_qt_application():
