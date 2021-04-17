@@ -1,6 +1,6 @@
 '''My tools for debugging in Maya.'''
 
-from maya import cmds
+from maya import cmds, mel
 
 
 def print_attrs(node=None, **kwargs):
@@ -14,11 +14,10 @@ def print_attrs(node=None, **kwargs):
         ValueError: No object matches name.
     '''
     if not node:
-        selected_nodes = cmds.ls(selection=True)
-        if not selected_nodes:
+        node = mel.eval('$gAECurrentTab = $gAECurrentTab')
+        if not node:
             print 'No node specified and nothing is selected'
             return
-        node = selected_nodes
 
     if isinstance(node, list):
         if len(node) == 1:
@@ -42,7 +41,11 @@ def print_attrs_for_single_node(node, **kwargs):
     Raises:
         ValueError: No object matches name.
     '''
-    print '{}:'.format(node)
+    if cmds.objExists(node):
+        print '{}:'.format(node)
+    else:
+        print '{}: Does not exist'.format(node)
+        return
 
     attrs = list_attrs(node)
 
