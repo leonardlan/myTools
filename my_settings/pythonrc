@@ -13,7 +13,7 @@ from pprint import pprint
 
 from tabulate import tabulate
 
-from cli_tools import cb, find, get, ns, print_sys_path
+from cli_tools import cb, confirm, find, get, ns, print_sys_path
 from colors import *
 from json_tools import dump_json, load_json
 from lancore import *

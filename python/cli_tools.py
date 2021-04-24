@@ -219,3 +219,14 @@ def cb(content=None):
         clipboard.copy(content)
     except pyperclip.PyperclipException:
         clipboard.copy(str(content))
+
+
+def confirm(question):
+    '''True if user confirms yes/no question. False otherwise. Will keep asking if not y/n.'''
+    reply = str(raw_input('{} (y/n): '.format(question))).lower().strip()
+    if reply[0] == 'y':
+        return True
+    if reply[0] == 'n':
+        return False
+    else:
+        return confirm('Please enter')
