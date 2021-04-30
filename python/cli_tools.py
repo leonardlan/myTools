@@ -224,9 +224,9 @@ def cb(content=None):
 def confirm(question):
     '''True if user confirms yes/no question. False otherwise. Will keep asking if not y/n.'''
     reply = str(raw_input('{} (y/n): '.format(question))).lower().strip()
-    if reply[0] == 'y':
-        return True
-    if reply[0] == 'n':
-        return False
-    else:
-        return confirm('Please enter')
+    if reply:
+        if reply[0] == 'y':
+            return True
+        if reply[0] == 'n':
+            return False
+    return confirm('Please enter')
