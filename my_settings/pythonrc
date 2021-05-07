@@ -37,11 +37,6 @@ def start_qt_application():
     return QtGui.QApplication(sys.argv)
 
 
-def my_date_time_stamp():
-    '''Date time stamp the way I like it.'''
-    return datetime.datetime.now().strftime('%c')
-
-
 def _history(include_current=False):
     """Returns current interactive python session command history"""
     msg = []
@@ -66,24 +61,28 @@ current_history = CurrentHistory()
 
 
 def history(n=50, c=False):
-    """Python version of bash history command
+    '''Python version of bash history command
 
     Args:
         n (int): Lines to print
         c (bool): Clears history if True
-    """
+    '''
     if c:
-        open(PYTHON_HISTORY_PATH, "w").close()
+        open(PYTHON_HISTORY_PATH, 'w').close()
         print INFO('History cleared ;)')
         return
 
     if not os.path.exists(PYTHON_HISTORY_PATH):
         return
-    try:
-        os.system("tail -%i %s" % (n, PYTHON_HISTORY_PATH))
-    except IOError:
-        pass
-    print bright_blue("\nCurrent session [%s]:" % my_date_time_stamp())
+
+    # Tail history if on linux.
+    if sys.platform.startswith('linux'):
+        try:
+            os.system('tail -%i %s' % (n, PYTHON_HISTORY_PATH))
+        except IOError:
+            pass
+
+    print bright_blue('\nCurrent session [%s]:' % my_timestamp())
     print _history()
 
 
@@ -93,7 +92,7 @@ def _append_history_file():
         return
     with open(PYTHON_HISTORY_PATH, "a+") as fil:
         fil.write(
-            bright_blue("\n'''New session [%s]'''\n" % my_date_time_stamp()))
+            bright_blue("\n'''New session [%s]'''\n" % my_timestamp()))
         fil.write(history + "\n")
 
 

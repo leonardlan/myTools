@@ -259,6 +259,16 @@ def human_size(nbytes, base=BASE_10):
     return '%s %s' % (f, BASE_2_SUFFIXES[i])
 
 
+def my_timestamp():
+    '''Timestamp without milliseconds (ie. '[2021-05-06 20:45:27]').'''
+    return '[%s]' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
+
+def my_timestamp_nice():
+    '''Timestamp in human-readable format (ie. 'Thu May 6, 9:16:18 PM').'''
+    return datetime.datetime.now().strftime('%a %b %#d, %#I:%M:%S %p')
+
+
 '''Nested dict/list related functions.'''
 MAX_NUM_SIMILARITIES_TO_PRINT = 3
 
