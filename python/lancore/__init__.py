@@ -260,13 +260,13 @@ def human_size(nbytes, base=BASE_10):
 
 
 def my_timestamp():
-    '''Timestamp without milliseconds (ie. '[2021-05-06 20:45:27]').'''
-    return '[%s]' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    '''Timestamp without milliseconds (ie. '2021-05-06 20:45:27'). Can be easily sorted.'''
+    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 
 def my_timestamp_nice():
-    '''Timestamp in human-readable format (ie. 'Thu May 6, 9:16:18 PM').'''
-    return datetime.datetime.now().strftime('%a %b %#d, %#I:%M:%S %p')
+    '''Timestamp in human-readable format (ie. 'Thu May 6, 9:16 PM').'''
+    return datetime.datetime.now().strftime('%a %b %#d, %#I:%M %p')
 
 
 '''Nested dict/list related functions.'''
