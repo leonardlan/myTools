@@ -223,4 +223,8 @@ class MyPrompt:
 sys.ps1 = MyPrompt()
 
 
+# Shortcuts cause I'm lazy and forgetful.
+ls = print_path
+
+
 print 'Loading .pythonrc took %s' % human_time(time.time() - start)
