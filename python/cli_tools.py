@@ -211,13 +211,25 @@ def ns(title='Hello!', msg=''):
 
 
 def cb(content=None):
-    '''Copies content to clipboard. If no content, returns clipboard content.'''
-    import clipboard, pyperclip
-    if content is None:
-        return clipboard.paste()
+    '''Copies content to clipboard. If no content, returns clipboard content.
+    Supports Windows and Linux.
+    '''
     try:
-        clipboard.copy(content)
-    except pyperclip.PyperclipException:
+        import clipboard, pyperclip
+    except ImportError:
+        # Try win32clipboard.
+        import win32clipboard as clip
+        clip.OpenClipboard()
+        if content is None:
+            data = clip.GetClipboardData()
+            clip.CloseClipboard()
+            return data
+        clip.EmptyClipboard()
+        clip.SetClipboardText(content, clip.CF_UNICODETEXT)
+        clip.CloseClipboard()
+    else:
+        if content is None:
+            return clipboard.paste()
         clipboard.copy(str(content))
 
 
