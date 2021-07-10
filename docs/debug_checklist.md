@@ -164,5 +164,10 @@ export COMMAND='env'
     (╯°□°）╯︵ ┻━┻
 - Latest code is pushed to production repo but not deployed
 
+## But It Works On My Machine
+- Check for different Maya setting or preferences
+- Check for different devices connected (ie. via USB)
+- Check for Maya loaded/unloaded plug-in(s)
+
 ## General debug
 - Try closing and opening the software:laughing:
