@@ -128,8 +128,16 @@ def list_attrs(node):
     return sorted(list(set(cmds.listAttr(node))))
 
 
-def diff(apple, orange):
-    '''Shows difference(s) between two nodes.'''
+def diff(apple=None, orange=None):
+    '''Shows difference(s) between two nodes. Uses selection if no two nodes supplied.'''
+    # Try selection if no apple and orange.
+    if apple is None and orange is None:
+        selection = cmds.ls(selection=True)
+        if len(selection) == 2:
+            apple, orange = selection
+        else:
+            raise ValueError('No two nodes specified')
+
     apple_attrs = list_attrs(apple)
     orange_attrs = list_attrs(orange)
     not_in_orange = []
