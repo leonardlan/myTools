@@ -2,9 +2,12 @@
 
 from maya import cmds, mel
 
+from cli_tools import cb
+
 
 def print_attrs(node=None, **kwargs):
-    '''Print attributes of node(s). If no node specified, prints attributes of nodes in selection.
+    '''Print attributes of node(s). If no node specified, prints nodes in selection. If none
+    selected, try clipboard.
 
     Args:
         node (str or [str] or None): Maya node(s).
@@ -16,8 +19,10 @@ def print_attrs(node=None, **kwargs):
     if not node:
         node = mel.eval('$gAECurrentTab = $gAECurrentTab')
         if not node:
-            print 'No node specified and nothing is selected'
-            return
+            node = cb()
+            if not node or not cmds.objExists(node):
+                print 'No node specified and nothing is selected'
+                return
 
     if isinstance(node, list):
         if len(node) == 1:
