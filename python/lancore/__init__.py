@@ -310,15 +310,6 @@ def similarities(input_):
         pprint(dict(counter))
 
 
-'''YAML.'''
-def load_yaml(file_path):
-    from ruamel.yaml import YAML
-    yaml = YAML()
-    with open(file_path, 'r') as fil:
-        return yaml.load(fil)
-
-
-
 '''Data structures.'''
 class SimpleNamespace:
     '''Ported from Python 3. https://docs.python.org/3.3/library/types.html'''

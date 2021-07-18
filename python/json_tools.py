@@ -1,8 +1,9 @@
 '''JSON related util functions.'''
 
+import collections
 import json
-import os
 import logging
+import os
 import tempfile
 
 
@@ -16,7 +17,22 @@ def dump_json(data, file_path=TEMP_DATA_JSON_FILE, indent=4, sort_keys=True, **d
     logging.info('Data written to %s' % file_path)
 
 
-def load_json(file_path=TEMP_DATA_JSON_FILE):
+def load_json(file_path=TEMP_DATA_JSON_FILE, as_string=False):
     '''Load data from JSON file.'''
     with open(file_path, 'r') as fil:
-        return json.load(fil)
+        data = json.load(fil)
+    return _convert(data) if as_string else data
+
+
+def _convert(data):
+    '''Convert unicode to string in dict.
+
+    https://stackoverflow.com/questions/1254454/fastest-way-to-convert-a-dicts-keys-values-from-unicode-to-str
+    '''
+    if isinstance(data, basestring):
+        return str(data)
+    elif isinstance(data, collections.Mapping):
+        return dict(map(_convert, data.iteritems()))
+    elif isinstance(data, collections.Iterable):
+        return type(data)(map(_convert, data))
+    return data

@@ -36,6 +36,7 @@ doskey Downloads=cd %USERPROFILE%\Downloads
 doskey Pictures=cd %USERPROFILE%\Pictures
 
 doskey myTools=cd %MYTOOLS%
+doskey sandbox=cd %USERPROFILE%\sandbox
 
 :: Git
 doskey gg=git gui
