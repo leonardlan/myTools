@@ -2,6 +2,8 @@
 import os
 import sys
 
+from maya import utils
+
 
 def add_to_sys_path(path):
     '''Add path to sys.path if exists.'''
@@ -26,6 +28,11 @@ def add_my_python_tools():
 
     add_to_sys_path(r'C:\Python27\lib\site-packages')
     add_to_sys_path(r'C:\Python27\lib\site-packages\win32')
+
+    # Add my tools menu later.
+    print 'Adding my tools menu (execute deferred)'
+    from maya_tools import menu_tools
+    utils.executeDeferred(menu_tools.create_my_menu)
 
 
 add_my_python_tools()
