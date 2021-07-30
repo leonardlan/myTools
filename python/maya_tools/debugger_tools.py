@@ -2,6 +2,8 @@
 
 from maya import cmds, mel
 
+import maya_tools
+
 from cli_tools import cb
 
 
@@ -212,3 +214,13 @@ def diff(apple=None, orange=None):
             's' if len(not_in_orange) != 1 else '',
             orange,
             not_in_orange)
+
+
+def select_from_clipboard():
+    '''Select from node in clipboard.'''
+    content = maya_tools.cb()
+    if cmds.objExists(content):
+        maya_tools.print_to_status('Selecting {}'.format(content))
+        cmds.select(content)
+    else:
+        maya_tools.print_to_status('{} does not exist'.format(content))

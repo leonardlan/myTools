@@ -2,6 +2,7 @@
 
 from maya import cmds, mel
 
+import maya_tools
 from maya_tools import debugger_tools
 
 
@@ -33,9 +34,9 @@ def create_my_menu():
     main_window = get_main_window()
     menu = cmds.menu(parent=main_window, label=label, tearOff=True)
 
-    cmds.menuItem(parent=menu, divider=True, dividerLabel='Attributes')
 
     # Create menu items.
+    cmds.menuItem(parent=menu, divider=True, dividerLabel='Attributes')
     cmds.menuItem(
         parent=menu,
         label='Print Attributes',
@@ -58,13 +59,12 @@ def create_my_menu():
         annotation='View Difference Between Two Selected Nodes',
         command=diff_two_nodes)
 
-    cmds.menuItem(parent=menu, divider=True, dividerLabel='Debug')
-
+    cmds.menuItem(parent=menu, divider=True, dividerLabel='Select')
     cmds.menuItem(
         parent=menu,
-        label='Print args',
-        annotation='Print args passed to command function',
-        command=print_args)
+        label='Select From Clipboard',
+        annotation='Select Node in Clipboard',
+        command=select_from_clipboard)
 
     return menu
 
@@ -96,6 +96,7 @@ def diff_two_nodes(args):
     debugger_tools.diff()
 
 
-def print_args(args):
-    '''Print args.'''
-    print args
+def select_from_clipboard(args):
+    '''Select from clipboard.'''
+    reload(debugger_tools)
+    debugger_tools.select_from_clipboard()
