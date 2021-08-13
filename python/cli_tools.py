@@ -1,6 +1,8 @@
 '''Useful functions in Python CLI (terminal, CMD, or Maya).'''
+
 import datetime
 import os
+import re
 import subprocess
 import sys
 
@@ -210,20 +212,22 @@ def ns(title='Hello!', msg=''):
         subprocess.call("ns '%s'" % msg, shell=True)
 
 
-def cb(content=None):
-    '''Copies content to clipboard. If no content, returns clipboard content.
-    Supports Windows and Linux.
-    '''
+def _cb(content=None):
+    '''Helper for cb().'''
     try:
         import clipboard, pyperclip
     except ImportError:
         # Try win32clipboard.
         import win32clipboard as clip
         clip.OpenClipboard()
+
         if content is None:
+            # Return clipboard content.
             data = clip.GetClipboardData()
             clip.CloseClipboard()
             return data
+
+        # Copy content to clipboard.
         clip.EmptyClipboard()
         clip.SetClipboardText(content, clip.CF_UNICODETEXT)
         clip.CloseClipboard()
@@ -231,6 +235,25 @@ def cb(content=None):
         if content is None:
             return clipboard.paste()
         clipboard.copy(str(content))
+
+
+def cb(content=None, get_integer=False):
+    '''Copies content to clipboard. If no content, returns clipboard content as string.
+    Supports Windows and Linux.
+
+    Args:
+        content (str): Content to copy to clipboard.
+        get_integer (bool): Returns first integer in clipboard as int if True. None if no integers.
+    '''
+    res = _cb(content=content)
+
+    if content is None and get_integer:
+        match = re.match(r'\D*(\d+)', res)
+        if match:
+            return int(match.groups()[0])
+        return
+
+    return str(res)
 
 
 def confirm(question):
