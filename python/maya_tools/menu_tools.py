@@ -34,8 +34,20 @@ def create_my_menu():
     main_window = get_main_window()
     menu = cmds.menu(parent=main_window, label=label, tearOff=True)
 
+    # Selection.
+    cmds.menuItem(parent=menu, divider=True, dividerLabel='Selection')
+    cmds.menuItem(
+        parent=menu,
+        label='Select From Clipboard',
+        annotation='Select Node in Clipboard',
+        command=select_from_clipboard)
+    cmds.menuItem(
+        parent=menu,
+        label='Copy To Clipboard',
+        annotation='Copy Selected Nodes To Clipboard',
+        command=copy_to_clipboard)
 
-    # Create menu items.
+    # Attributes.
     cmds.menuItem(parent=menu, divider=True, dividerLabel='Attributes')
     cmds.menuItem(
         parent=menu,
@@ -58,13 +70,6 @@ def create_my_menu():
         label='Diff Two Nodes',
         annotation='View Difference Between Two Selected Nodes',
         command=diff_two_nodes)
-
-    cmds.menuItem(parent=menu, divider=True, dividerLabel='Select')
-    cmds.menuItem(
-        parent=menu,
-        label='Select From Clipboard',
-        annotation='Select Node in Clipboard',
-        command=select_from_clipboard)
 
     return menu
 
@@ -100,3 +105,9 @@ def select_from_clipboard(args):
     '''Select from clipboard.'''
     reload(debugger_tools)
     debugger_tools.select_from_clipboard()
+
+
+def copy_to_clipboard(args):
+    '''Copy selection to clipboard.'''
+    reload(debugger_tools)
+    debugger_tools.copy_to_clipboard()

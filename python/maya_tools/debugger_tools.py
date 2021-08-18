@@ -224,3 +224,18 @@ def select_from_clipboard():
         cmds.select(content)
     else:
         maya_tools.print_to_status('{} does not exist'.format(content))
+
+
+def copy_to_clipboard():
+    '''Copy selection to clipboard. Separated by ", " if multiple.'''
+    selection = cmds.ls(selection=True)
+    if not selection:
+        maya_tools.print_to_status('Nothing selected')
+        return
+    if len(selection) == 1:
+        cb(selection[0])
+        maya_tools.print_to_status('Copied to clipboard: {}'.format(selection[0]))
+        return
+    text = ', '.join(selection)
+    maya_tools.print_to_status('Copied to clipboard: {}'.format(text))
+    cb(text)
