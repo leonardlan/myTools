@@ -4,8 +4,6 @@ from maya import cmds, mel
 
 import maya_tools
 
-from cli_tools import cb
-
 
 def print_attrs(node=None, **kwargs):
     '''Print attributes of node(s). If no node specified, prints nodes in selection. If none
@@ -21,7 +19,7 @@ def print_attrs(node=None, **kwargs):
     if not node:
         node = mel.eval('$gAECurrentTab = $gAECurrentTab')
         if not node:
-            node = cb()
+            node = maya_tools.cb()
             if not node or not cmds.objExists(node):
                 print 'No node specified and nothing is selected'
                 return
@@ -233,9 +231,9 @@ def copy_to_clipboard():
         maya_tools.print_to_status('Nothing selected')
         return
     if len(selection) == 1:
-        cb(selection[0])
+        maya_tools.cb(selection[0])
         maya_tools.print_to_status('Copied to clipboard: {}'.format(selection[0]))
         return
     text = ', '.join(selection)
     maya_tools.print_to_status('Copied to clipboard: {}'.format(text))
-    cb(text)
+    maya_tools.cb(text)
