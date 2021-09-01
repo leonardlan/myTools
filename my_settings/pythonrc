@@ -201,7 +201,7 @@ def print_tabulate(
         print 'Only showing %i/%i results' % (limit, len_before_limit)
 
 
-# Enable syntax completion and append history file on exit
+# Enable syntax completion and append history file on exit.
 try:
     import readline
 except ImportError:

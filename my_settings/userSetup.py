@@ -26,9 +26,6 @@ def add_my_python_tools():
     mytools_python = os.path.join(home_dir, 'myTools', 'python')
     add_to_sys_path(mytools_python)
 
-    add_to_sys_path(r'C:\Python27\lib\site-packages')
-    add_to_sys_path(r'C:\Python27\lib\site-packages\win32')
-
     # Add my tools menu later.
     print 'Adding my tools menu (execute deferred)'
     from maya_tools import menu_tools

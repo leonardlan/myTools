@@ -63,7 +63,9 @@ def find_traceback_in_files(file_paths, cpus=multiprocessing.cpu_count()):
         [[dict]]: List of results from find_traceback().
     '''
     if isinstance(file_paths, str):
+        print 'Globbing {}...'.format(file_paths)
         file_paths = glob.glob(file_paths)
+        print 'Found {} path(s)'.format(len(file_paths))
 
     pool = multiprocessing.Pool(cpus)
     return pool.map(find_traceback, file_paths)
