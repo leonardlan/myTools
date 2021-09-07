@@ -125,11 +125,11 @@ def time_me(func, *args, **kwargs):
     Run multiple times
     >>> time_me(time.sleep, 1, n=5)
     Running sleep(1)
-    1/5 [2020-03-11 00:03:48.178749]: 1.0 seconds
-    2/5 [2020-03-11 00:03:49.179930]: 1.0 seconds
-    3/5 [2020-03-11 00:03:50.181081]: 1.0 seconds
-    4/5 [2020-03-11 00:03:51.182234]: 1.0 seconds
-    5/5 [2020-03-11 00:03:52.182661]: 1.0 seconds
+    1/5 [2020-03-11 00:03:48]: 1.0 seconds
+    2/5 [2020-03-11 00:03:49]: 1.0 seconds
+    3/5 [2020-03-11 00:03:50]: 1.0 seconds
+    4/5 [2020-03-11 00:03:51]: 1.0 seconds
+    5/5 [2020-03-11 00:03:52]: 1.0 seconds
     Total time: 5.0 seconds
     Average time: 1.0 seconds
     Fastest time: 1.0 seconds
@@ -162,7 +162,7 @@ def time_me(func, *args, **kwargs):
     run_times = []
     res = None
     for count in range(n):
-        sys.stdout.write('%i/%i [%s]: ' % (count + 1, n, str(datetime.datetime.now())))
+        sys.stdout.write('%i/%i [%s]: ' % (count + 1, n, my_timestamp()))
         sys.stdout.flush()
         start = time.time()
 
