@@ -237,21 +237,27 @@ def _cb(content=None):
         clipboard.copy(str(content))
 
 
-def cb(content=None, get_integer=False):
+def cb(content=None, as_int=False, as_ints=False):
     '''Copies content to clipboard. If no content, returns clipboard content as string.
     Supports Windows and Linux.
 
     Args:
         content (str): Content to copy to clipboard.
-        get_integer (bool): Returns first integer in clipboard as int if True. None if no integers.
+        as_int (bool): Returns first integer in clipboard as int if True. Raises ValueError if
+            no integers.
+        as_ints (bool): Returns list of integers in clipboard if True. Raises ValueError if no
+            integers.
     '''
     res = _cb(content=content)
 
-    if content is None and get_integer:
-        match = re.match(r'\D*(\d+)', res)
-        if match:
-            return int(match.groups()[0])
-        return
+    if content is None:
+        if as_int or as_ints:
+            ints = re.findall(r'\d+', res)  # Find all integers.
+            if ints:
+                if as_int:
+                    return int(ints[0])
+                return [int(num) for num in ints]
+            raise ValueError('No integer found in clipboard')
 
     return str(res)
 
