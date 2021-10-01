@@ -221,7 +221,17 @@ def select_from_clipboard():
         maya_tools.print_to_status('Selecting {}'.format(content))
         cmds.select(content)
     else:
-        maya_tools.print_to_status('{} does not exist'.format(content))
+        # Check namespace.
+        in_namespace = cmds.ls('*:{}'.format(content))
+        if in_namespace:
+            if len(in_namespace) == 1:
+                maya_tools.print_to_status('Selecting {}'.format(in_namespace[0]))
+            else:
+                maya_tools.print_to_status(
+                    'Selecting ({}): {}'.format(len(in_namespace), ', '.join(in_namespace)))
+            cmds.select(in_namespace)
+        else:
+            cmds.warning('{} does not exist'.format(content))
 
 
 def copy_to_clipboard():
