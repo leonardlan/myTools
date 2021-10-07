@@ -26,23 +26,24 @@ The things I've learned throughout years of debugging failed renders and bugs. M
     - Restart service as correct user
 
 ## Farm Issues
-### Render failing on farm:disappointed:
-#### Try:
-- Check hosts to see if it's happening on a [specific machine](#specific-machine-not-working)
-- Check time started to see if it's happening around the same time (Might be related to when something else broke)
-- Check memory usage to see where it is peaking
-- Check stdout and stderr logs for error code and traceback
-    - Check for pattern in logs among failed renders. (ie. Maybe they all were killed on a certain frame)
-- Check output renders with `rv output.exr`. List size. If zero, render failed.
-- `ssh` into machines and check status of rendering process
-- Check farm and local machine are using same version of software (ie. Nuke 10 on submitter but Nuke 9 on farm)
-- Run render command locally
-- Run render command as render user on remote machine that failed
-- Diff env var on farm and local
-- Run on higher CPU machine
+### Render Job Failing On Farm:disappointed:
+#### Debug Process
+1. Check stdout and stderr logs for error code and traceback.
+2. Check hosts to see if it's happening on a [specific machine](#specific-machine-not-working).
+3. Check time started to see if it's happening around the same time (Might be related to when something else broke).
+4. Check memory usage to see where it is peaking.
+5. Check output renders file size. If zero, render failed.
+6. Check farm and local machine are using same version of software (ie. Nuke 10 on submitter but Nuke 9 on farm).
+7. Retry job.
+8. Run render command locally.
+9. Run render command as render user on remote machine that failed.
+10. Diff env var on farm and local.
+11. Retry on higher CPU machine.
+12. Open scene and remove unused assets/nodes.
+13. Remove nodes using binary search until render successful or empty scene.
 
-#### Reasons for failure:
-- No Camera present in scene
+#### Reasons For Failure:
+- No camera present in scene
 - [No license found](#No-available-license) for renderer or plug-in (ie. Nuke Optical Flare)
 - License server going down may cause render to stop and sleep indefinitely. Example Katana log:
 ```
