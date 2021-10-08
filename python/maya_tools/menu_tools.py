@@ -71,6 +71,14 @@ def create_my_menu():
         annotation='View Difference Between Two Selected Nodes',
         command=diff_two_nodes)
 
+    # Misc.
+    cmds.menuItem(parent=menu, divider=True, dividerLabel='Misc')
+    cmds.menuItem(
+        parent=menu,
+        label='New Scene (No Prompt)',
+        annotation='Open New Scene Without Prompting Save',
+        command=new_scene_forced)
+
     return menu
 
 
@@ -111,3 +119,8 @@ def copy_to_clipboard(args):
     '''Copy selection to clipboard.'''
     reload(debugger_tools)
     debugger_tools.copy_to_clipboard()
+
+
+def new_scene_forced(args):
+    '''Open new scene without save prompt.'''
+    cmds.file(force=True, new=True)
