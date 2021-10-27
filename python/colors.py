@@ -30,8 +30,20 @@ BACK_RED = colorama.Back.RED if colorama else ''
 
 
 # Shortcut color global functions.
+def blue(str_):
+    return BLUE + str(str_) + RESET
+
+
 def bright_blue(str_):
     return BRIGHT + BLUE + str(str_) + RESET_ALL
+
+
+def cyan(str_):
+    return CYAN + str(str_) + RESET
+
+
+def bright_cyan(str_):
+    return BRIGHT + CYAN + str(str_) + RESET_ALL
 
 
 def green(str_):
@@ -50,10 +62,19 @@ def bright_red(str_):
     return BRIGHT + RED + str(str_) + RESET_ALL
 
 
-def demo_colorama(case='upper'):
+def yellow(str_):
+    return YELLOW + str(str_) + RESET
+
+
+def bright_yellow(str_):
+    return BRIGHT + YELLOW + str(str_) + RESET_ALL
+
+
+def demo_colorama(line='', case='upper'):
     '''Print every style and color possible with colorama.
 
     Args:
+        line (str): Text to print.
         case (str): One of 'upper', 'title', or 'lower'.
     '''
     if not colorama:
@@ -64,7 +85,11 @@ def demo_colorama(case='upper'):
             print getattr(colorama.Fore, color),
             for style in dir(colorama.Style):
                 if style.isupper() and style != 'RESET_ALL':
-                    text = '"%s %s"' % (style, color)
+                    if line:
+                        text = '{} ({} {})'.format(line, style, color)
+                    else:
+                        text = '"{} {}"'.format(style, color)
+
                     if case == 'title':
                         text = text.title()
                     elif case == 'lower':
