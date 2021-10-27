@@ -17,7 +17,7 @@ def delete_menu(label_or_path, main_window=None):
         cmds.deleteUI(label_or_path)
         return
 
-    main_window = mel.eval('$gMainWindow = $gMainWindow') if main_window is None else main_window
+    main_window = get_main_window() if main_window is None else main_window
     menus = cmds.window(main_window, query=True, menuArray=True)
     for menu in menus:
         if cmds.menu(menu, query=True, label=True) == label_or_path:
