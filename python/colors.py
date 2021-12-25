@@ -17,7 +17,7 @@ else:
 # Adds color codes to global variables
 TYPE_TO_CODE = {
     'Fore': ['BLUE', 'CYAN', 'GREEN', 'MAGENTA', 'RED', 'LIGHTGREEN_EX', 'YELLOW', 'RESET',
-             'LIGHTRED_EX'],
+             'LIGHTRED_EX', 'WHITE'],
     'Style': ['BRIGHT', 'NORMAL', 'DIM', 'RESET_ALL']
 }
 for typ, codes in TYPE_TO_CODE.iteritems():
@@ -27,47 +27,6 @@ del TYPE_TO_CODE
 
 
 BACK_RED = colorama.Back.RED if colorama else ''
-
-
-# Shortcut color global functions.
-def blue(str_):
-    return BLUE + str(str_) + RESET
-
-
-def bright_blue(str_):
-    return BRIGHT + BLUE + str(str_) + RESET_ALL
-
-
-def cyan(str_):
-    return CYAN + str(str_) + RESET
-
-
-def bright_cyan(str_):
-    return BRIGHT + CYAN + str(str_) + RESET_ALL
-
-
-def green(str_):
-    return GREEN + str(str_) + RESET
-
-
-def bright_green(str_):
-    return BRIGHT + GREEN + str(str_) + RESET_ALL
-
-
-def red(str_):
-    return RED + str(str_) + RESET
-
-
-def bright_red(str_):
-    return BRIGHT + RED + str(str_) + RESET_ALL
-
-
-def yellow(str_):
-    return YELLOW + str(str_) + RESET
-
-
-def bright_yellow(str_):
-    return BRIGHT + YELLOW + str(str_) + RESET_ALL
 
 
 def demo_colorama(line='', case='upper'):
@@ -108,3 +67,60 @@ def brighten_it_up(func):
         sys.stdout.write(RESET_ALL)
         return res
     return wrapper
+
+
+# Shortcut color global functions.
+def blue(str_):
+    return BLUE + str(str_) + RESET
+
+
+def bright_blue(str_):
+    return BRIGHT + BLUE + str(str_) + RESET_ALL
+
+
+def cyan(str_):
+    return CYAN + str(str_) + RESET
+
+
+def bright_cyan(str_):
+    return BRIGHT + CYAN + str(str_) + RESET_ALL
+
+
+def green(str_):
+    return GREEN + str(str_) + RESET
+
+
+def bright_green(str_):
+    return BRIGHT + GREEN + str(str_) + RESET_ALL
+
+
+def magenta(str_):
+    return MAGENTA + str(str_) + RESET
+
+
+def bright_magenta(str_):
+    return BRIGHT + MAGENTA + str(str_) + RESET_ALL
+
+
+def red(str_):
+    return RED + str(str_) + RESET
+
+
+def bright_red(str_):
+    return BRIGHT + RED + str(str_) + RESET_ALL
+
+
+def white(str_):
+    return WHITE + str(str_) + RESET
+
+
+def bright_white(str_):
+    return BRIGHT + WHITE + str(str_) + RESET_ALL
+
+
+def yellow(str_):
+    return YELLOW + str(str_) + RESET
+
+
+def bright_yellow(str_):
+    return BRIGHT + YELLOW + str(str_) + RESET_ALL
