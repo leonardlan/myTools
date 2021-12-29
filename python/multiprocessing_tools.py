@@ -3,7 +3,7 @@
 import multiprocessing
 
 
-def run_func(func, args, processes=None, ordered=False, print_result=True):
+def run_func(func, args, processes=None, ordered=False, print_result=True, chunksize=1):
     '''Creates multiprocessing pool and run function call on single arguments.
 
     Uses imap() to allow printing progress after each call, instead of having to wait for all calls
@@ -16,6 +16,10 @@ def run_func(func, args, processes=None, ordered=False, print_result=True):
         args ([arg]): List of single arguments to pass to func.
         processes (int or None): Number of CPUs to use. Uses system CPUs if None.
         ordered (bool): Uses imap() if True. imap_unordered() otherwise.
+        print_result (bool): Prints result with progress if True.
+        chunksize (int): Same as the one used by the map() method. For very long iterables using a
+            large value for chunksize can make the job complete much faster than using the default
+            value of 1.
 
     Returns:
         list: List of results from function call. None if failed.
@@ -28,7 +32,7 @@ def run_func(func, args, processes=None, ordered=False, print_result=True):
     count = len(args)
     imap_func = pool.imap if ordered else pool.imap_unordered
     try:
-        for ind, result in enumerate(imap_func(func, args)):
+        for ind, result in enumerate(imap_func(func, args, chunksize=chunksize)):
             # Print progress.
             print '{}/{}: {}'.format(ind + 1, count, result if print_result else '')
 
