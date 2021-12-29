@@ -192,10 +192,8 @@ def time_me(func, *args, **kwargs):
 
     if n >= 3:
         # Print simple stats.
-        import numpy
         print 'Fastest time: %s' % human_time(min(run_times))
         print 'Slowest time: %s' % human_time(max(run_times))
-        print 'Standard deviation: %.2f' % numpy.std(run_times)
 
     if return_time:
         if n == 1:
