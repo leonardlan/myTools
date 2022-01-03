@@ -237,29 +237,41 @@ def _cb(content=None):
         clipboard.copy(str(content))
 
 
-def cb(content=None, as_int=False, as_ints=False):
+def cb(content=None, type='string'):
     '''Copies content to clipboard. If no content, returns clipboard content as string.
     Supports Windows and Linux.
 
     Args:
         content (str): Content to copy to clipboard.
-        as_int (bool): Returns first integer in clipboard as int if True. Raises ValueError if
-            no integers.
-        as_ints (bool): Returns list of integers in clipboard if True. Raises ValueError if no
-            integers.
+        type (str): Type of content. One of "string", "strings", "int", "ints".
+            string: String as is.
+            strings: String split by newline.
+            int: First integer as int.
+            ints: Integers.
     '''
     res = _cb(content=content)
 
+    type = type.lower()
+    if type not in ['string', 'strings', 'int', 'ints']:
+        raise ValueError('Unrecognized type: {}'.format(type))
+
     if content is None:
-        if as_int or as_ints:
+        if type in ['int', 'ints']:
             ints = re.findall(r'\d+', res)  # Find all integers.
             if ints:
-                if as_int:
+                if type == 'int':
                     return int(ints[0])
                 return [int(num) for num in ints]
             raise ValueError('No integer found in clipboard')
-
-    return str(res)
+        elif type == 'strings':
+            # Strings split by newline. Filter out empty strings.
+            strings = []
+            for line in res.split('\n'):
+                line = line.strip()
+                if line:
+                    strings.append(str(line))
+            return strings
+        return str(res)
 
 
 def confirm(question):
