@@ -17,12 +17,14 @@ def print_attrs(node=None, **kwargs):
         ValueError: No object matches name.
     '''
     if not node:
-        node = mel.eval('$gAECurrentTab = $gAECurrentTab')
+        node = cmds.ls(selection=True)
         if not node:
-            node = maya_tools.cb()
-            if not node or not cmds.objExists(node):
-                print 'No node specified and nothing is selected'
-                return
+            node = mel.eval('$gAECurrentTab = $gAECurrentTab')
+            if not node:
+                node = maya_tools.cb()
+                if not node or not cmds.objExists(node):
+                    print 'No node specified and nothing is selected'
+                    return
 
     if isinstance(node, list):
         if len(node) == 1:
