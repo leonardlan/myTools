@@ -121,7 +121,9 @@ def print_attrs_for_single_node(node, **kwargs):
             locked = cmds.getAttr(plug, lock=True)
 
             # Print value.
-            print '{} ({}){}: {}'.format(attr, typ, ' [locked]' if locked else '', val)
+            full_name = cmds.attributeName(plug)
+            print '{} ({}) "{}" {}: {}'.format(
+                attr, typ, full_name, ' [locked]' if locked else '', val)
 
         count += 1
 
