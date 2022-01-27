@@ -229,7 +229,7 @@ def _cb(content=None):
 
         # Copy content to clipboard.
         clip.EmptyClipboard()
-        clip.SetClipboardText(content, clip.CF_UNICODETEXT)
+        clip.SetClipboardText(str(content), clip.CF_UNICODETEXT)
         clip.CloseClipboard()
     else:
         if content is None:
