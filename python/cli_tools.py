@@ -186,6 +186,23 @@ def get(data, *keys, **kwargs):
     return data
 
 
+def print_env_vars(filter_=''):
+    '''Print os.environ. Able to filter by case-insensitive search.'''
+    count = 0
+    for key in sorted(os.environ):
+        filter_lower = filter_.lower()
+        val = os.environ[key]
+        if not filter_ or filter_lower in key.lower() or filter_lower in val.lower():
+            if ';' in val:
+                # Split paths by semi-colon. Probably list of paths.
+                paths = val.split(';')
+                print '{} ({}):\n\t{}'.format(key, len(paths), '\n\t'.join(paths))
+            else:
+                print '{}: {}'.format(key, val)
+            count += 1
+    print '{} env var{}'.format(count, 's' if count != 1 else '')
+
+
 def print_sys_path(key=''):
     '''Print sys.path. Able to filter by case-insensitive search.'''
     count = 0

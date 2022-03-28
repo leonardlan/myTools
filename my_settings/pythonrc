@@ -13,7 +13,7 @@ from pprint import pprint
 
 from tabulate import tabulate
 
-from cli_tools import cb, confirm, find, get, ns, print_sys_path
+from cli_tools import cb, confirm, find, get, ns, print_env_vars, print_sys_path
 from colors import *
 from json_tools import dump_json, load_json
 from lancore import *
@@ -22,7 +22,7 @@ from path_tools import print_path
 from wai import wai, call_gets
 
 # For playing around in CLI.
-from mock_data import DOGS, DOGS_DICT, PEOPLE, PEOPLE_DICT
+from mock_data import DOGS, DOGS_DICT, PEOPLE, PEOPLE_DICT, TYPE_TO_VAL
 
 
 PYTHON_HISTORY_PATH = os.path.join(HOME, '.python_history')
