@@ -19,6 +19,7 @@ from json_tools import dump_json, load_json
 from lancore import *
 from my_settings import HOME, MAX_LINES
 from path_tools import print_path
+from smart_list import SmartList
 from wai import wai, call_gets
 
 # For playing around in CLI.
