@@ -15,7 +15,7 @@ LOGGING_LEVEL_TO_COLOR = {
 
 
 # Add color to log levels.
-for level, color in LOGGING_LEVEL_TO_COLOR.iteritems():
+for level, color in LOGGING_LEVEL_TO_COLOR.items():
     logging.addLevelName(level, BRIGHT + color + logging.getLevelName(level) + RESET_ALL)
 
 # Basic config.

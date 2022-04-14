@@ -34,10 +34,10 @@ def run_func(func, args, processes=None, ordered=False, print_result=True, chunk
     try:
         for ind, result in enumerate(imap_func(func, args, chunksize=chunksize)):
             # Print progress.
-            print '{}/{}: {}'.format(ind + 1, count, result if print_result else '')
+            print('{}/{}: {}'.format(ind + 1, count, result if print_result else ''))
 
             results.append(result)
     except Exception as err:
-        print 'One of the function calls errored: {}'.format(err)
+        print('One of the function calls errored: {}'.format(err))
 
     return results

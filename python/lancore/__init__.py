@@ -93,7 +93,7 @@ def human_time(seconds, decimals=1):
         return str(seconds if is_int else round(seconds, decimals)) + ' seconds'
 
     res = []
-    for interval, count in INTERVALS.iteritems():
+    for interval, count in INTERVALS.items():
         quotient, remainder = divmod(seconds, count)
         if quotient >= 1:
             seconds = remainder
@@ -155,8 +155,8 @@ def time_me(func, *args, **kwargs):
 
     # Print nice function call.
     args_str = [str(arg) for arg in args]
-    params = ', '.join(args_str + ['%s=%s' % (key, str(val)) for key, val in kwargs.iteritems()])
-    print 'Running %s(%s)' % (func.__name__, params)
+    params = ', '.join(args_str + ['%s=%s' % (key, str(val)) for key, val in kwargs.items()])
+    print('Running %s(%s)' % (func.__name__, params))
 
     # Run function n times.
     run_times = []
@@ -169,31 +169,31 @@ def time_me(func, *args, **kwargs):
         # Execute function call.
         try:
             res = func(*args, **kwargs)
-        except Exception, e:
+        except (Exception, e):
             # Function call errored.
             end = time.time()
             duration = end - start
             print  # Newline before warning.
             warning('Function errored after %s: %s' % (human_time(duration), e))
-            print traceback.format_exc().strip()
+            print(traceback.format_exc().strip())
             return res
 
         # Print how long did function call took
         end = time.time()
         duration = end - start
         run_times.append(duration)
-        print human_time(duration)
+        print(human_time(duration))
 
     if n >= 2:
         # Print total time and average time.
         total = sum(run_times)
-        print 'Total time: %s' % human_time(total)
-        print 'Average time: %s' % human_time(total / n)
+        print('Total time: %s' % human_time(total))
+        print('Average time: %s' % human_time(total / n))
 
     if n >= 3:
         # Print simple stats.
-        print 'Fastest time: %s' % human_time(min(run_times))
-        print 'Slowest time: %s' % human_time(max(run_times))
+        print('Fastest time: %s' % human_time(min(run_times)))
+        print('Slowest time: %s' % human_time(max(run_times)))
 
     if return_time:
         if n == 1:
@@ -213,10 +213,6 @@ def time_me_wrapper(func):
     return wrapper
 
 
-def _is_text(s):
-    return type(s) in [str, unicode]
-
-
 def var_name(var, locals=locals()):
     '''Hacky way of getting variable name from variable. Empty string if not found.
 
@@ -224,7 +220,7 @@ def var_name(var, locals=locals()):
     >>> var_name(foo)
     'foo'
     '''
-    for name, val in locals.iteritems():
+    for name, val in locals.items():
         if val == var:
             return name
     return ''
@@ -274,7 +270,7 @@ MAX_NUM_SIMILARITIES_TO_PRINT = 3
 def _get_iterable(input_):
     '''Key-value iterable of dict/list.'''
     if isinstance(input_, dict):
-        return sorted(input_.iteritems())
+        return sorted(input_.items())
     elif isinstance(input_, list):
         return enumerate(input_)
     else:
@@ -294,17 +290,17 @@ def similarities(input_):
     dd = defaultdict(list)
 
     for _, dict_ in _get_iterable(input_):
-        for key, val in dict_.iteritems():
+        for key, val in dict_.items():
             # Skip unhashable.
             if not val.__hash__:
                 continue
 
             dd[key].append(val)
-    for key, vals in sorted(dd.iteritems()):
+    for key, vals in sorted(dd.items()):
         counter = Counter(vals)
         if len(counter) > MAX_NUM_SIMILARITIES_TO_PRINT:
             continue
-        print '%s (%i): ' % (key, len(counter)),
+        print('%s (%i): ' % (key, len(counter)), end='')
         pprint(dict(counter))
 
 

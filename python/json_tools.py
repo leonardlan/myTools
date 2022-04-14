@@ -32,7 +32,7 @@ def _convert(data):
     if isinstance(data, basestring):
         return str(data)
     elif isinstance(data, collections.Mapping):
-        return dict(map(_convert, data.iteritems()))
+        return dict(map(_convert, data.items()))
     elif isinstance(data, collections.Iterable):
         return type(data)(map(_convert, data))
     return data

@@ -24,7 +24,7 @@ class Dog(object):
         return self.age >= self.too_old
 
     def bark(self):
-        print 'Woof!'
+        print('Woof!')
 
 
 # Setup DOGS.

@@ -28,7 +28,7 @@ def randomly_error(percentage=50):
 
 def infinite_loop():
     '''Hangs current process.'''
-    print 'Hanging in infinite loop...'
+    print('Hanging in infinite loop...')
     while True:
         pass
 
@@ -42,14 +42,14 @@ def memory_leak():
     Creates list where every value is the previous value times two. Can quit with Ctrl+C but will
     have to close session to clear memory.
     '''
-    print 'Starting memory leak...'
+    print('Starting memory leak...')
     items = [2]
     while True:
         items.append(items[-1] * 2)
 
 
 def memory_leak_2():
-    print 'Starting memory leak...'
+    print('Starting memory leak...')
     '''Infinite loop with memory leak. Memory rises slower than memory_leak().'''
     while True:
         def func(): pass
@@ -60,7 +60,7 @@ def overload_cpu():
     '''Maximize usage on all CPUs. Creates a pool and runs infinite loop of calcuations.'''
     cpus = multiprocessing.cpu_count()
     pool = multiprocessing.Pool(processes=cpus)
-    print 'Overloading {} CPUs. Quit with Ctrl+C...'.format(cpus)
+    print('Overloading {} CPUs. Quit with Ctrl+C...'.format(cpus))
     res = pool.map(_overload_cpu, [2] * cpus)
 
 
@@ -78,5 +78,5 @@ def crash():
     sys.setrecursionlimit(999999999)
     def func():
         func()
-    print 'Crashing using recursion...'
+    print('Crashing using recursion...')
     func()

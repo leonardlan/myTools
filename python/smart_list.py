@@ -77,7 +77,7 @@ class SmartList(list):
         '''
         new_list = SmartList()
         for item in self:
-            for key, val in kwargs.iteritems():
+            for key, val in kwargs.items():
                 if _get_attr(item, key) != val:
                     break
             else:

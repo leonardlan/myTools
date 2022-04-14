@@ -63,7 +63,7 @@ def find_traceback_in_files(file_paths, cpus=None):
         [[dict]]: List of results from find_traceback().
     '''
     if isinstance(file_paths, str):
-        print 'Globbing "{}"...'.format(file_paths)
+        print('Globbing "{}"...'.format(file_paths))
         file_paths = glob.glob(file_paths)
-        print 'Found {} path(s)'.format(len(file_paths))
+        print('Found {} path(s)'.format(len(file_paths)))
     return run_func(find_traceback, file_paths, cpus=cpus)

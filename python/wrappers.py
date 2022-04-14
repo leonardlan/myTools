@@ -17,7 +17,7 @@ def handle_list(func):
                 try:
                     res = func(*args, **kwargs)
                 except Exception:
-                    print traceback.format_exc()
+                    print(traceback.format_exc())
                     raise RuntimeError('Function call {}({}...) failed'.format(func.__name__, arg))
                 else:
                     results.append(res)

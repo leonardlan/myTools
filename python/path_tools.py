@@ -23,12 +23,12 @@ def print_path(path):
 
         # Already reached root and still doesn't exist. So entire path doesn't exist.
         if dirname == prev_dirname:
-            print bright_red(path)
+            print(bright_red(path))
             return
 
     # Print existing and non-existing parts of path.
     non_existing = path.replace(dirname, '')
     if non_existing:
-        print '{}{}'.format(bright_blue(dirname), bright_red(non_existing))
+        print('{}{}'.format(bright_blue(dirname), bright_red(non_existing)))
     else:
-        print bright_blue(path)
+        print(bright_blue(path))

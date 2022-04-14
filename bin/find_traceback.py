@@ -21,7 +21,8 @@ def main():
 
     # Search files.
     if num_files > 1:
-        print 'Searching {:,} file{} for tracebacks'.format(num_files, 's' if num_files > 1 else '')
+        print(
+            'Searching {:,} file{} for tracebacks'.format(num_files, 's' if num_files > 1 else ''))
     results = find_traceback_in_files(file_paths)
 
     # Print tracebacks found.
@@ -32,27 +33,27 @@ def main():
 
         # Print which file this is.
         if num_files > 1:
-            print '\n{} [{:,}/{:,} ({}%)]:'.format(
+            print('\n{} [{:,}/{:,} ({}%)]:'.format()
                 file_paths[index], index + 1, num_files, int(float(index + 1) / num_files * 100))
 
         # Print tracebacks found in file.
         for traceback in tracebacks:
-            print traceback.get('match')
-            print '-'
+            print(traceback.get('match'))
+            print('-')
 
         # Print number of tracebacks found.
         counter = Counter([traceback['exception'] for traceback in tracebacks])
         if len(counter) == 1:
             key = counter.keys()[0]
-            print 'Found {:,} {}'.format(counter[key], key)
+            print('Found {:,} {}'.format(counter[key], key))
         else:
             count = len(tracebacks)
-            print 'Found {:,} traceback{}'.format(count, 's' if count > 1 else '')
+            print('Found {:,} traceback{}'.format(count, 's' if count > 1 else ''))
 
             # Print counts per exception.
             all_exceptions_counter.update(counter)
             for exception, count in counter.most_common():
-                print '{:,} {}'.format(count, exception)
+                print('{:,} {}'.format(count, exception))
 
     # Summarize tracebacks found. Example:
     # 16,973 tracebacks across 1,865 files
@@ -67,9 +68,9 @@ def main():
     tracebacks_counts = filter(None, [len(tracebacks) for tracebacks in results])
     tracebacks_count = sum(tracebacks_counts)
     if not tracebacks_count:
-        print '\nNo tracebacks found'
+        print('\nNo tracebacks found')
     elif num_files > 1:
-        print '\n{:,} traceback{} {} {:,} file{}'.format(
+        print('\n{:,} traceback{} {} {:,} file{}'.format()
             tracebacks_count,
             's' if tracebacks_count > 1 else '',
             'in' if len(tracebacks_counts) == 1 else 'across',
@@ -78,7 +79,7 @@ def main():
 
         # Print counter per exception.
         for exception, count in all_exceptions_counter.most_common():
-            print '{:,} {}'.format(count, exception)
+            print('{:,} {}'.format(count, exception))
 
 
 if __name__ == '__main__':

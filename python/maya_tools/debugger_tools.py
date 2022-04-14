@@ -23,7 +23,7 @@ def print_attrs(node=None, **kwargs):
             if not node:
                 node = maya_tools.cb()
                 if not node or not cmds.objExists(node):
-                    print 'No node specified and nothing is selected'
+                    print('No node specified and nothing is selected')
                     return
 
     if isinstance(node, list):
@@ -31,7 +31,7 @@ def print_attrs(node=None, **kwargs):
             print_attrs_for_single_node(node[0], **kwargs)
         else:
             for node_ in node:
-                print '{}:'.format(node_)
+                print('{}:'.format(node_))
                 print_attrs_for_single_node(node_, **kwargs)
     else:
         print_attrs_for_single_node(node, **kwargs)
@@ -49,9 +49,9 @@ def print_attrs_for_single_node(node, **kwargs):
         ValueError: No object matches name.
     '''
     if cmds.objExists(node):
-        print '{}:'.format(node)
+        print('{}:'.format(node))
     else:
-        print '{}: Does not exist'.format(node)
+        print('{}: Does not exist'.format(node))
         return
 
     attrs = list_attrs(node)
@@ -77,7 +77,7 @@ def print_attrs_for_single_node(node, **kwargs):
         # Get type.
         try:
             typ = cmds.getAttr(plug, type=True)
-        except Exception, err:
+        except (Exception, err):
             typ = str(err),
 
         # Get and print value.
@@ -92,10 +92,10 @@ def print_attrs_for_single_node(node, **kwargs):
 
             connections = cmds.listConnections(plug, plugs=True)
             if connections:
-                print '{} connected to ({}): {}'.format(
+                print('{} connected to ({}): {}'.format()
                     attr, len(connections), ', '.join(connections))
             else:
-                print '{} not connected to anything'.format(attr)
+                print('{} not connected to anything'.format(attr))
         else:
             # If enum, get it as string too.
             if typ == 'enum':
@@ -124,12 +124,12 @@ def print_attrs_for_single_node(node, **kwargs):
 
             # Print value.
             full_name = cmds.attributeName(plug)
-            print '{} ({}) "{}" {}: {}'.format(
+            print('{} ({}) "{}" {}: {}'.format()
                 attr, typ, full_name, ' [locked]' if locked else '', val)
 
         count += 1
 
-    print 'Found {} attr{}'.format(count, 's' if count > 1 else '')
+    print('Found {} attr{}'.format(count, 's' if count > 1 else ''))
 
 
 def list_attrs(node):
@@ -165,7 +165,7 @@ def diff(apple=None, orange=None):
             try:
                 apple_val = cmds.getAttr(apple_plug)
             except RuntimeError, err:
-                print 'Could not get {}: {}'.format(apple_plug, str(err).strip())
+                print('Could not get {}: {}'.format(apple_plug, str(err).strip()))
                 continue
 
             # Get orange attribute.
@@ -173,7 +173,7 @@ def diff(apple=None, orange=None):
             try:
                 orange_val = cmds.getAttr(orange_plug)
             except RuntimeError, err:
-                print 'Could not get {}: {}'.format(orange_plug, str(err).strip())
+                print('Could not get {}: {}'.format(orange_plug, str(err).strip()))
                 continue
 
             # Print if values are different.
@@ -195,15 +195,15 @@ def diff(apple=None, orange=None):
 
     # Print summary.
     if differences:
-        print '\n{} difference{}:\n{}'.format(
+        print('\n{} difference{}:\n{}'.format()
             len(differences), 's' if len(differences) != 1 else '', '\n'.join(differences))
     else:
-        print 'No differences found between {} and {}'.format(apple, orange)
+        print('No differences found between {} and {}'.format(apple, orange))
 
     # Print attributes not in apple.
     not_in_apple = [attr for attr in orange_attrs if attr not in orange_attrs]
     if not_in_apple:
-        print '\n{} attr{} not in {}: {}'.format(
+        print('\n{} attr{} not in {}: {}'.format()
             len(not_in_apple),
             's' if len(not_in_apple) != 1 else '',
             apple,
@@ -211,7 +211,7 @@ def diff(apple=None, orange=None):
 
     # Print attributes not in orange.
     if not_in_orange:
-        print '\n{} attr{} not in {}: {}'.format(
+        print('\n{} attr{} not in {}: {}'.format()
             len(not_in_orange),
             's' if len(not_in_orange) != 1 else '',
             orange,

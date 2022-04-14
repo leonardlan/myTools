@@ -26,13 +26,13 @@ def run(cmd, keep_open=False, title=''):
         cmd = "mate-terminal -e 'bash -i -c \"%s; bash\"'" % cmd
     if title:
         cmd += " -t '%s'" % title
-    print 'Running:', cmd
+    print('Running:', cmd)
     subprocess.Popen(cmd, shell=True)
 
 
 def open_sublime(path, chrome=False, n=False, a=False, toggle_side_bar=False):
     '''Open file in sublime.'''
-    print 'Opening', path
+    print('Opening', path)
     path = os.path.join(HOME, path)
     cmd = [os.path.expanduser('~/sublime_text_3/sublime_text'), path]
     if n:
@@ -77,7 +77,7 @@ class TrayIcon(QSystemTrayIcon):
 
     def _setup_actions(self, menu, actions):
         '''Setup actions.'''
-        for text, data in actions.items():
+        for text, data in actions.items()():
             # Separator.
             if data == 'separator':
                 menu.addSeparator()

@@ -32,10 +32,10 @@ class App:
 
     def reload(self):
         '''Reloads utils and redraws menu'''
-        print 'Reloading app'
+        print('Reloading app')
         try:
             reload(utils)
-        except Exception, e:
+        except (Exception, e):
             self.tray.showMessage(
                 'Error',
                 'Unable to reload utils module!\n%s' % e,

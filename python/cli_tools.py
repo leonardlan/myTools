@@ -6,7 +6,7 @@ import re
 import subprocess
 import sys
 
-from lancore import _is_text, var_name, human_int
+from lancore import var_name, human_int
 from my_logging import info
 
 
@@ -63,18 +63,18 @@ def find(haystack, needle, all=False, first=False, ignore_case=True, max_results
     for index, result in enumerate(results):
         if not all_ and index >= max_results > 0:
             # Max number of results reached.
-            print 'Displayed first %i results...' % max_results
+            print('Displayed first %i results...' % max_results)
             break
 
         # Print path to value and value itself.
         path = ''
         for attr in result:
-            if _is_text(attr):
+            if isinstance(attr, str):
                 path += "['%s']" % attr
             else:
                 path += '[%s]' % attr
-        print '%s%s:' % (var_name(haystack), path),
-        print eval('haystack%s' % path)
+        print('%s%s:' % (var_name(haystack), path), end='')
+        print(eval('haystack%s' % path))
     num_results = len(results)
     if not first:
         info('Found %s result%s' % (human_int(num_results), 's' if num_results > 1 else ''))
@@ -84,7 +84,7 @@ def _find(haystack, needle, first, ignore_case):
     '''Recursive helper for find().'''
     results = []
     if isinstance(haystack, dict):
-        iterable = sorted(haystack.iteritems())
+        iterable = sorted(haystack.items())
     elif isinstance(haystack, list):
         iterable = enumerate(haystack)
     else:
@@ -112,7 +112,7 @@ def _find(haystack, needle, first, ignore_case):
                     break
             elif item:
                 # Check if in text.
-                if _is_text(item) and _is_text(needle):
+                if isinstance(item, str) and isinstance(needle, str):
                     if ignore_case:
                         if needle.lower() in item.lower():
                             # Is text and in item, case-insensitive.
@@ -196,11 +196,11 @@ def print_env_vars(filter_=''):
             if ';' in val:
                 # Split paths by semi-colon. Probably list of paths.
                 paths = val.split(';')
-                print '{} ({}):\n\t{}'.format(key, len(paths), '\n\t'.join(paths))
+                print('{} ({}):\n\t{}'.format(key, len(paths), '\n\t'.join(paths)))
             else:
-                print '{}: {}'.format(key, val)
+                print('{}: {}'.format(key, val))
             count += 1
-    print '{} env var{}'.format(count, 's' if count != 1 else '')
+    print('{} env var{}'.format(count, 's' if count != 1 else ''))
 
 
 def print_sys_path(key=''):
@@ -208,9 +208,9 @@ def print_sys_path(key=''):
     count = 0
     for path in sys.path:
         if not key or key.lower() in path.lower():
-            print path
+            print(path)
             count += 1
-    print '{} path{}'.format(count, 's' if count != 1 else '')
+    print('{} path{}'.format(count, 's' if count != 1 else ''))
 
 
 def ns(title='Hello!', msg=''):
@@ -221,7 +221,7 @@ def ns(title='Hello!', msg=''):
         try:
             from win10toast import ToastNotifier
         except ImportError:
-            print 'No ToastNotifier module installed for notifications'
+            print('No ToastNotifier module installed for notifications')
         else:
             toaster = ToastNotifier()
             toaster.show_toast(title=title, msg=msg, threaded=True)

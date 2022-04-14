@@ -6,7 +6,7 @@ import sys
 try:
     import colorama
 except ImportError:
-    print 'Module colorama not available.'
+    print('Module colorama not available.')
     colorama = None
 else:
     # Need to call init() on Windows.
@@ -20,7 +20,7 @@ TYPE_TO_CODE = {
              'LIGHTRED_EX', 'WHITE'],
     'Style': ['BRIGHT', 'NORMAL', 'DIM', 'RESET_ALL']
 }
-for typ, codes in TYPE_TO_CODE.iteritems():
+for typ, codes in TYPE_TO_CODE.items():
     for code in codes:
         globals()[code] = getattr(getattr(colorama, typ), code) if colorama else ''
 del TYPE_TO_CODE
@@ -37,11 +37,11 @@ def demo_colorama(line='', case='upper'):
         case (str): One of 'upper', 'title', or 'lower'.
     '''
     if not colorama:
-        print 'Cannot demonstrate colorama because module not imported'
+        print('Cannot demonstrate colorama because module not imported')
         return
     for color in dir(colorama.Fore):
         if color.isupper() and color != 'RESET':
-            print getattr(colorama.Fore, color),
+            print(getattr(colorama.Fore, color), end='')
             for style in dir(colorama.Style):
                 if style.isupper() and style != 'RESET_ALL':
                     if line:
@@ -53,8 +53,8 @@ def demo_colorama(line='', case='upper'):
                         text = text.title()
                     elif case == 'lower':
                         text = text.lower()
-                    print getattr(colorama.Style, style), text,
-            print
+                    print(getattr(colorama.Style, style), text, end='')
+            print()
     sys.stdout.write(RESET_ALL)
 
 

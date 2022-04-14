@@ -53,10 +53,10 @@ def _history(include_current=False):
 # current_history() works too.
 class CurrentHistory:
     def __call__(self):
-        print _history()
+        print(_history())
 
     def __repr__(self):
-        print _history()
+        print(_history())
         return ''
 
 current_history = CurrentHistory()
@@ -71,7 +71,7 @@ def history(n=50, c=False):
     '''
     if c:
         open(PYTHON_HISTORY_PATH, 'w').close()
-        print INFO('History cleared ;)')
+        print(INFO('History cleared ;)'))
         return
 
     if not os.path.exists(PYTHON_HISTORY_PATH):
@@ -84,8 +84,8 @@ def history(n=50, c=False):
         except IOError:
             pass
 
-    print bright_blue('\nCurrent session [%s]:' % my_timestamp())
-    print _history()
+    print(bright_blue('\nCurrent session [%s]:' % my_timestamp()))
+    print(_history())
 
 
 def _append_history_file():
@@ -194,19 +194,25 @@ def print_tabulate(
         new_dicts = new_dicts[:limit]
 
     # Print table.
-    print tabulate(new_dicts, headers)
+    print(tabulate(new_dicts, headers))
 
     # Print results are limited.
     if is_limited:
-        print '...'
-        print 'Only showing %i/%i results' % (limit, len_before_limit)
+        print('...')
+        print('Only showing %i/%i results' % (limit, len_before_limit))
 
 
 # Enable syntax completion and append history file on exit.
 try:
     import readline
 except ImportError:
-    print "Module readline not available."
+    # Try pyreadline.
+    try:
+        from pyreadline import Readline
+    except ImportError:
+        print("Module readline not available.")
+    else:
+        readline = Readline()
 else:
     import atexit
     import rlcompleter
@@ -228,4 +234,4 @@ sys.ps1 = MyPrompt()
 ls = print_path
 
 
-print 'Loading .pythonrc took %s' % human_time(time.time() - start)
+print('Loading .pythonrc took %s' % human_time(time.time() - start))
