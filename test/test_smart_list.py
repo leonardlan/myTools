@@ -21,7 +21,7 @@ class Dog(object):
 
     @property
     def is_old(self):
-        return self.age >= self.too_old
+        return self.age is not None and self.age >= self.too_old
 
     def bark(self):
         print('Woof!')
@@ -75,8 +75,10 @@ class TestFind(unittest.TestCase):
     def test_dogs_attrs(self):
         self.assertEqual(DOGS.attr('name'),
             ['Lulu', 'QiWan', 'Snowy', 'Scooby Doo', 'Fluffy', 'Snoopy', 'Maya'])
-        self.assertIsNone(DOGS.min('age'))
+        self.assertEqual(DOGS.attr('age', ignored_values=[None]), [10, 5])
+        self.assertEqual(DOGS.min('age'), 5)
         self.assertEqual(DOGS.max('age'), 10)
+        self.assertEqual(DOGS.average('age'), 7.5)
         self.assertEqual(
             DOGS.attr_counter('breed'),
             Counter({'Samoyed': 2, 'Wire Fox Terrier': 1, 'Bichon Frise': 1, 'Great Dane': 1, 'Maltese': 1, 'Spotted White Beagle': 1}))

@@ -21,12 +21,11 @@ class SmartList(list):
     max_repr_chars = 50
 
     def __init__(self, *args):
-        if isinstance(args, list):
-            if len(args) > 1:
-                super(SmartList, self).__init__(args)
-            elif len(args) == 1:
-                super(SmartList, self).__init__(args[0])
-        super(SmartList, self).__init__(args)
+        if len(args) > 1:
+            args = (list(args),)
+        elif len(args) == 1 and not isinstance(args[0], list):
+            args = (list(args),)
+        super(SmartList, self).__init__(*args)
 
     def __repr__(self):
         '''If too many characters, print length and type.'''
@@ -49,9 +48,17 @@ class SmartList(list):
                 keys.update(item.keys())
         return list(keys)
 
-    def attr(self, attr):
+    def attr(self, attr, ignored_values=None, types=None):
         '''Returns list of attribute values.'''
-        return [_get_attr(item, attr) for item in self]
+        values = []
+        for item in self:
+            val = _get_attr(item, attr)
+            if types:
+                if isinstance(val, types):
+                    values.append(val)
+            elif not ignored_values or val not in ignored_values:
+                values.append(val)
+        return values
 
     def attrs(self, attrs):
         '''Returns lists of attribute values. Can be used to print table.'''
@@ -65,12 +72,19 @@ class SmartList(list):
         return Counter(_get_attr(item, attr) for item in self)
 
     def min(self, attr):
-        '''Minimum of attribute values.'''
-        return min(self.attr(attr))
+        '''Minimum of attribute values of type int/float.'''
+        return min(self.attr(attr, types=(int, float)))
+
+    def average(self, attr):
+        '''Average of attribute values as float. Only sums from ints, floats and longs.'''
+        values = self.attr(attr, types=(int, float))
+        if not values:
+            return
+        return float(sum(values)) / len(values)
 
     def max(self, attr):
-        '''Maximum of attribute values.'''
-        return max(self.attr(attr))
+        '''Maximum of attribute values of type int/float.'''
+        return max(self.attr(attr, types=(int, float)))
 
     def filter(self, **kwargs):
         '''Returns new SmartList instance filtered by attributes/values using an AND operation.
