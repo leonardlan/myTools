@@ -1,4 +1,7 @@
 '''My useful core functions.'''
+
+from __future__ import print_function
+
 import datetime
 import os
 import sys

@@ -1,4 +1,7 @@
 '''Global colored text variables and functions for console/terminal.'''
+
+from __future__ import print_function
+
 import sys
 
 

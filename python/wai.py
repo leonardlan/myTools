@@ -1,4 +1,7 @@
 '''What am I? Call wai(anything) and find out what it is.'''
+
+from __future__ import print_function
+
 import inspect
 import math
 import os
