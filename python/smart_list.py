@@ -40,6 +40,11 @@ class SmartList(list):
         return list(set([type(item) for item in self]))
 
     @property
+    def all_same_type(self):
+        '''True if all items are same type.'''
+        return len(self.types) == 1
+
+    @property
     def keys(self):
         '''Unique list of all keys in list.'''
         keys = set()

@@ -59,11 +59,13 @@ class TestFind(unittest.TestCase):
         one_item = SmartList('By myself')
         self.assertEqual(len(one_item), 1)
         self.assertEqual(one_item.types, [str])
+        self.assertEqual(one_item.all_same_type, True)
         self.assertEqual(one_item.keys, [])
 
     def test_dogs_basic(self):
         self.assertEqual(str(DOGS), 'SmartList(7 Dog)')
         self.assertEqual(DOGS.types, [Dog])
+        self.assertEqual(DOGS.all_same_type, True)
         self.assertEqual(DOGS.keys, [])
 
     def test_dogs_filter(self):
