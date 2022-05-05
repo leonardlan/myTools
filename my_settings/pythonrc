@@ -4,6 +4,7 @@
 '''Useful functions, variables, and setup configs to use in Python CLI.'''
 
 import os
+import re
 import sys
 import time
 
@@ -13,7 +14,7 @@ from pprint import pprint
 
 from tabulate import tabulate
 
-from cli_tools import cb, confirm, find, get, ns, print_env_vars, print_sys_path
+from cli_tools import cb, confirm, diff, find, get, ns, print_env_vars, print_sys_path
 from colors import *
 from json_tools import dump_json, load_json
 from lancore import *

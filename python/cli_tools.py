@@ -302,3 +302,39 @@ def confirm(question):
         if reply[0] == 'n':
             return False
     return confirm('Please enter')
+
+
+def diff(apple, orange):
+    '''Print difference between two dicts (apple vs. orange).
+
+    Example:
+    >>> diff(
+        {'a': 1, 'c': 3, 'name': 'Andrew', 'age': 20},
+        {'a': 1, 'b': 2, 'name': 'Mark', 'age': 25})
+    Key age: 20 | 25
+    Key name: Andrew | Mark
+    Apple only keys (1)
+            c: 3
+    Orange only keys (1)
+            b: 2
+    '''
+    apple_only_keys = []
+    for key in apple:
+        if key not in orange:
+            apple_only_keys.append(key)
+        else:
+            apple_val = apple[key]
+            orange_val = orange[key]
+            if apple_val != orange_val:
+                print('Key {}: {} | {}'.format(key, apple_val, orange_val))
+
+    # Print mutually exclusive keys.
+    if apple_only_keys:
+        print('Apple only keys ({})'.format(len(apple_only_keys)))
+        for key in apple_only_keys:
+            print('\t{}: {}'.format(key, apple[key]))
+    orange_only_keys = set(orange.keys()) - set(apple.keys())
+    if orange_only_keys:
+        print('Orange only keys ({})'.format(len(orange_only_keys)))
+        for key in orange_only_keys:
+            print('\t{}: {}'.format(key, orange[key]))
