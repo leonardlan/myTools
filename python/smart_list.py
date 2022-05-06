@@ -1,6 +1,27 @@
 '''My list class with filtering, counting, and sorting.'''
 
+import re
+
 from collections import Counter
+
+
+_OPERATOR_TO_FUNC = {
+    '': lambda a, b : a == b,  # Default compare.
+    'in': lambda a, b : a in b,
+    'is': lambda a, b : a is b,
+    'is_not': lambda a, b : a is not b,
+    'not_in': lambda a, b : a not in b,
+    'startswith': lambda a, b: a.startswith(b),
+    'endswith': lambda a, b: a.endswith(b),
+    'has': lambda a, b: b in a,
+}
+# Matches attribute and operator separated by double underscore "__" in key passed to
+# SmartList.filter().
+# "color" -> attr: "color", operator: "".
+# "car_make__in" -> attr: "car_make", operator: "in".
+# "color__not_in" -> attr: "color", operator: "not_in".
+# "color__startswith" -> attr: "color", operator: "startswith".
+_KEY_FILTER_RE = r'(?P<attr>.*?)(__)?(?P<operator>(|({})))$'.format('|'.join(_OPERATOR_TO_FUNC.keys()))
 
 
 def _get_attr(item, key):
@@ -93,11 +114,25 @@ class SmartList(list):
 
     def filter(self, **kwargs):
         '''Returns new SmartList instance filtered by attributes/values using an AND operation.
+
+        By default, compares with double-equal "==".
         '''
+        # Get (attr, operator) to operator from kwargs.
+        attr_and_op_to_val = {}
+        for key, val in kwargs.items():
+            res = re.match(_KEY_FILTER_RE, key)
+            if res:
+                attr_and_op_to_val[(res.group('attr'), res.group('operator'))] = val
+            else:
+                raise ValueError('Unrecognized attribute filter: {}'.format(key))
+
+        # Filter current to new list.
         new_list = SmartList()
         for item in self:
-            for key, val in kwargs.items():
-                if _get_attr(item, key) != val:
+            for key, val in attr_and_op_to_val.items():
+                attr, operator = key
+                item_val = _get_attr(item, attr)
+                if not _OPERATOR_TO_FUNC[operator](item_val, val):
                     break
             else:
                 new_list.append(item)
