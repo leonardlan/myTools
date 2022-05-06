@@ -330,11 +330,11 @@ def diff(apple, orange):
 
     # Print mutually exclusive keys.
     if apple_only_keys:
-        print('Apple only keys ({})'.format(len(apple_only_keys)))
+        print('Apple only keys ({}):'.format(len(apple_only_keys)))
         for key in apple_only_keys:
             print('\t{}: {}'.format(key, apple[key]))
     orange_only_keys = set(orange.keys()) - set(apple.keys())
     if orange_only_keys:
-        print('Orange only keys ({})'.format(len(orange_only_keys)))
+        print('Orange only keys ({}):'.format(len(orange_only_keys)))
         for key in orange_only_keys:
             print('\t{}: {}'.format(key, orange[key]))
