@@ -7,8 +7,9 @@ import os
 import re
 import subprocess
 import sys
+import time
 
-from lancore import var_name, human_int
+from lancore import var_name, human_int, human_time
 from my_logging import info
 
 
@@ -338,3 +339,52 @@ def diff(apple, orange):
         print('Orange only keys ({}):'.format(len(orange_only_keys)))
         for key in orange_only_keys:
             print('\t{}: {}'.format(key, orange[key]))
+
+
+class Timer(object):
+    '''Run function call every sleep_seconds seconds. Can cancel with Ctrl+C.
+
+    >>> def print_time():
+        msg = 'Hello! The time is {}'.format(datetime.datetime.now())
+        print(msg)
+        return msg
+    >>> timer = Timer(print_time, 10)
+    >>> timer.run()
+    --------------------------------------------------
+    Hello! The time is 2022-05-19 23:40:52.687426
+    Function call finished in 0 seconds
+    Sleeping for 10 seconds...
+    --------------------------------------------------
+    Hello! The time is 2022-05-19 23:41:02.688512
+    Function call finished in 0 seconds
+    Sleeping for 10 seconds...
+    '''
+
+    def __init__(self, func, sleep_seconds, track_results=True, *args, **kwargs):
+        self.func = func
+        self.sleep_seconds = sleep_seconds
+        self.track_results = track_results
+        self.args = args
+        self.kwargs = kwargs
+        self.results = []
+        self.run_times = []
+
+    @property
+    def times_ran(self):
+        '''Number of times function was called.'''
+        return len(self.run_times)
+
+    def run(self):
+        while True:
+            print('-' * 50)
+
+            start = time.time()
+            res = self.func(*self.args, **self.kwargs)
+            run_time = time.time() - start
+
+            print('Function call finished in {}'.format(human_time(run_time)))
+            if self.track_results:
+                self.results.append(res)
+            self.run_times.append(run_time)
+            print('Sleeping for {}...'.format(human_time(self.sleep_seconds)))
+            time.sleep(self.sleep_seconds)
