@@ -1,9 +1,10 @@
 import os
 
+from cli_tools import cb
 from colors import bright_blue, bright_red
 
 
-def print_path(path):
+def print_path(path=None):
     '''Print blue up to where path exists. Red for the rest.
 
     Try in terminal:
@@ -15,6 +16,7 @@ def print_path(path):
     >>> print_path('Z:')
     >>> print_path('')
     '''
+    path = path or cb()
     dirname = path
     while not os.path.exists(dirname):
         os.path.dirname(path)
