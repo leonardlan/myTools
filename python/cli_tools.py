@@ -9,7 +9,7 @@ import subprocess
 import sys
 import time
 
-from lancore import var_name, human_int, human_time
+from lancore import var_name, human_int, human_time, my_timestamp
 from my_logging import info
 
 
@@ -345,18 +345,20 @@ class Timer(object):
     '''Run function call every sleep_seconds seconds. Can cancel with Ctrl+C.
 
     >>> def print_time():
-        msg = 'Hello! The time is {}'.format(datetime.datetime.now())
-        print(msg)
-        return msg
+            msg = 'Hello! The time is {}'.format(datetime.datetime.now())
+            print(msg)
+            return msg
     >>> timer = Timer(print_time, 10)
+    >>> timer
+    Timer(func=print_time, sleep_seconds=10)
     >>> timer.run()
     --------------------------------------------------
-    Hello! The time is 2022-05-19 23:40:52.687426
-    Function call finished in 0 seconds
+    Hello! The time is 2022-05-22 13:01:44.073427
+    [2022-05-22 13:01:44] Function call finished in 0 seconds
     Sleeping for 10 seconds...
     --------------------------------------------------
-    Hello! The time is 2022-05-19 23:41:02.688512
-    Function call finished in 0 seconds
+    Hello! The time is 2022-05-22 13:01:54.078629
+    [2022-05-22 13:01:54] Function call finished in 0 seconds
     Sleeping for 10 seconds...
     '''
 
@@ -386,7 +388,7 @@ class Timer(object):
             res = self.func(*self.args, **self.kwargs)
             run_time = time.time() - start
 
-            print('Function call finished in {}'.format(human_time(run_time)))
+            print('[{}] Function call finished in {}'.format(my_timestamp(), human_time(run_time)))
             if self.track_results:
                 self.results.append(res)
             self.run_times.append(run_time)
