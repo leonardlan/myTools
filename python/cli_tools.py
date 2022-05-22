@@ -369,6 +369,10 @@ class Timer(object):
         self.results = []
         self.run_times = []
 
+    def __repr__(self):
+        return 'Timer(func={}, sleep_seconds={})'.format(
+            self.func.__name__, self.sleep_seconds)
+
     @property
     def times_ran(self):
         '''Number of times function was called.'''
