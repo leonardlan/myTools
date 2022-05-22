@@ -18,6 +18,7 @@ from cli_tools import cb, confirm, diff, find, get, ns, print_env_vars, print_sy
 from colors import *
 from json_tools import dump_json, load_json
 from lancore import *
+from python_compat import reload
 from my_settings import HOME, MAX_LINES
 from path_tools import print_path
 from smart_list import SmartList
