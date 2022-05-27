@@ -344,6 +344,7 @@ def diff(apple, orange):
 class Timer(object):
     '''Run function call every sleep_seconds seconds. Can cancel with Ctrl+C.
 
+    Simple print time every 10 seconds example:
     >>> def print_time():
             msg = 'Hello! The time is {}'.format(datetime.datetime.now())
             print(msg)
@@ -352,20 +353,48 @@ class Timer(object):
     >>> timer
     Timer(func=print_time, sleep_seconds=10)
     >>> timer.run()
-    --------------------------------------------------
-    Hello! The time is 2022-05-22 13:01:44.073427
-    [2022-05-22 13:01:44] Function call finished in 0 seconds
+    -------------------- 1 --------------------
+    Hello! The time is 2022-05-26 23:17:33.236474
+    [2022-05-26 23:17:33] Function call finished in 0 seconds
     Sleeping for 10 seconds...
-    --------------------------------------------------
-    Hello! The time is 2022-05-22 13:01:54.078629
-    [2022-05-22 13:01:54] Function call finished in 0 seconds
+    -------------------- 2 --------------------
+    Hello! The time is 2022-05-26 23:17:43.242285
+    [2022-05-26 23:17:43] Function call finished in 0 seconds
     Sleeping for 10 seconds...
+
+    Stop at a specific return value.
+    >>> def rand_int():
+            val = random.randint(1, 4)
+            print(val)
+            return val
+    >>> timer = Timer(rand_int, 2, stop_on_result=True, final_result=2)
+    >>> timer.run()
+    -------------------- 1 --------------------
+    1
+    [2022-05-26 23:14:52] Function call finished in 6.0 milliseconds
+    Sleeping for 2 seconds...
+    -------------------- 2 --------------------
+    1
+    [2022-05-26 23:14:54] Function call finished in 0 seconds
+    Sleeping for 2 seconds...
+    -------------------- 3 --------------------
+    4
+    [2022-05-26 23:14:56] Function call finished in 0 seconds
+    Sleeping for 2 seconds...
+    -------------------- 4 --------------------
+    2
+    [2022-05-26 23:14:58] Function call finished in 0 seconds
+    Stopping on result 2
     '''
 
-    def __init__(self, func, sleep_seconds, track_results=True, *args, **kwargs):
+    def __init__(
+            self, func, sleep_seconds, keep_results=True, stop_on_result=False, final_result=None,
+            *args, **kwargs):
         self.func = func
         self.sleep_seconds = sleep_seconds
-        self.track_results = track_results
+        self.keep_results = keep_results
+        self.stop_on_result = stop_on_result
+        self.final_result = final_result
         self.args = args
         self.kwargs = kwargs
         self.results = []
@@ -381,16 +410,25 @@ class Timer(object):
         return len(self.run_times)
 
     def run(self):
+        count = 1
         while True:
-            print('-' * 50)
+            print('{} {} {}'.format('-' * 20, count, '-' * 20))
 
             start = time.time()
             res = self.func(*self.args, **self.kwargs)
             run_time = time.time() - start
 
             print('[{}] Function call finished in {}'.format(my_timestamp(), human_time(run_time)))
-            if self.track_results:
+            if self.keep_results:
                 self.results.append(res)
             self.run_times.append(run_time)
+
+            if self.stop_on_result and res == self.final_result:
+                print('Stopping on result :{}'.format(self.final_result))
+                break
+
+            # Sleep for some time.
             print('Sleeping for {}...'.format(human_time(self.sleep_seconds)))
             time.sleep(self.sleep_seconds)
+
+            count += 1
