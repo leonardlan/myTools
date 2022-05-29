@@ -17,6 +17,7 @@ from colors import (BLUE, BRIGHT, CYAN, DIM, GREEN, NORMAL, MAGENTA, RED, RESET,
                     bright_blue, brighten_it_up)
 from lancore import human_int, var_name
 from my_settings import MAX_LINES
+from python_compat import is_string
 
 
 IGNORED_ATTRIBUTES = ['__builtins__', '__globals__', 'func_globals']
@@ -278,7 +279,7 @@ def _call(func):
 
 
 def _print(to_print):
-    if isinstance(to_print, basestring):
+    if python_compat.is_string(to_print):
         print(to_print)
     else:
         pprint(to_print)

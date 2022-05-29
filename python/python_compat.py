@@ -14,3 +14,11 @@ def reload(module):
     else:
         import importlib
         importlib.reload(module)
+
+
+def is_string(data):
+    try:
+        basestring
+    except NameError:
+        return isinstance(data, str)
+    return isinstance(data, basestring)
