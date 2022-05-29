@@ -8,7 +8,7 @@ import sys
 import time
 
 
-def sleep_random(seconds):
+def sleep_random(seconds=5):
     '''Sleeps for anywhere between 0 and input seconds.'''
     nap_time = random.uniform(0, seconds)
     time.sleep(nap_time)
