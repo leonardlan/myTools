@@ -92,8 +92,8 @@ def print_attrs_for_single_node(node, **kwargs):
 
             connections = cmds.listConnections(plug, plugs=True)
             if connections:
-                print('{} connected to ({}): {}'.format()
-                    attr, len(connections), ', '.join(connections))
+                print('{} connected to ({}): {}'.format(
+                    attr, len(connections), ', '.join(connections)))
             else:
                 print('{} not connected to anything'.format(attr))
         else:
@@ -124,8 +124,8 @@ def print_attrs_for_single_node(node, **kwargs):
 
             # Print value.
             full_name = cmds.attributeName(plug)
-            print('{} ({}) "{}" {}: {}'.format()
-                attr, typ, full_name, ' [locked]' if locked else '', val)
+            print('{} ({}) "{}" {}: {}'.format(
+                attr, typ, full_name, ' [locked]' if locked else '', val))
 
         count += 1
 
@@ -195,27 +195,27 @@ def diff(apple=None, orange=None):
 
     # Print summary.
     if differences:
-        print('\n{} difference{}:\n{}'.format()
-            len(differences), 's' if len(differences) != 1 else '', '\n'.join(differences))
+        print('\n{} difference{}:\n{}'.format(
+            len(differences), 's' if len(differences) != 1 else '', '\n'.join(differences)))
     else:
         print('No differences found between {} and {}'.format(apple, orange))
 
     # Print attributes not in apple.
     not_in_apple = [attr for attr in orange_attrs if attr not in orange_attrs]
     if not_in_apple:
-        print('\n{} attr{} not in {}: {}'.format()
+        print('\n{} attr{} not in {}: {}'.format(
             len(not_in_apple),
             's' if len(not_in_apple) != 1 else '',
             apple,
-            not_in_apple)
+            not_in_apple))
 
     # Print attributes not in orange.
     if not_in_orange:
-        print('\n{} attr{} not in {}: {}'.format()
+        print('\n{} attr{} not in {}: {}'.format(
             len(not_in_orange),
             's' if len(not_in_orange) != 1 else '',
             orange,
-            not_in_orange)
+            not_in_orange))
 
 
 def select_from_clipboard():
