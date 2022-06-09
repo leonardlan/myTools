@@ -30,5 +30,11 @@ def handle_list(func):
 
 @handle_list
 def square(num):
-    '''Example function for handle_list wrapper.'''
+    '''Example function for handle_list wrapper. Return number squared.
+
+    >>> square(3)
+    9
+    >>> square([4, 5, 6])
+    [16, 25, 36]
+    '''
     return num * num
