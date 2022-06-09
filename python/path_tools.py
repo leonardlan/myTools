@@ -4,8 +4,15 @@ from cli_tools import cb
 from colors import bright_blue, bright_red
 
 
-def print_path(path=None):
+def print_path(path=None, replace=None):
     '''Print blue up to where path exists. Red for the rest.
+
+    Args:
+        path (str): File path.
+        replace (dict): Replace keys with their values to expand variables.
+
+    Returns:
+        None
 
     Try in terminal:
     >>> print_path('/')
@@ -17,6 +24,12 @@ def print_path(path=None):
     >>> print_path('')
     '''
     path = path or cb()
+
+    # Replace any variables.
+    if replace:
+        for key, val in replace.items():
+            path = path.replace(key, val)
+
     dirname = path
     while not os.path.exists(dirname):
         os.path.dirname(path)
