@@ -305,11 +305,37 @@ def confirm(question):
     return confirm('Please enter')
 
 
-def diff(apple, orange):
+def diff_lists(apples, oranges):
+    '''Print difference between two dicts (apples vs. oranges).
+
+    Example:
+    >>> diff_lists(['BMW', 'Toyota'], ['Mercedes', 'Toyota', 'Tesla'])
+    Apple only (1):
+        BMW
+    Orange only (2):
+        Mercedes
+        Tesla
+    '''
+    oranges_set = set(oranges)
+    apple_only = [x for x in apples if x not in oranges_set]
+    if apple_only:
+        print('Apple only ({}):'.format(len(apple_only)))
+        for item in apple_only:
+            print('\t{}'.format(item))
+
+    apples_set = set(apples)
+    orange_only = [x for x in oranges if x not in apples_set]
+    if orange_only:
+        print('Orange only ({}):'.format(len(orange_only)))
+        for item in orange_only:
+            print('\t{}'.format(item))
+
+
+def diff_dicts(apple, orange):
     '''Print difference between two dicts (apple vs. orange).
 
     Example:
-    >>> diff(
+    >>> diff_dicts(
         {'a': 1, 'c': 3, 'name': 'Andrew', 'age': 20},
         {'a': 1, 'b': 2, 'name': 'Mark', 'age': 25})
     Key age: 20 | 25
@@ -327,6 +353,7 @@ def diff(apple, orange):
             apple_val = apple[key]
             orange_val = orange[key]
             if apple_val != orange_val:
+                # Print different values.
                 print('Key {}: {} | {}'.format(key, apple_val, orange_val))
 
     # Print mutually exclusive keys.
@@ -339,6 +366,16 @@ def diff(apple, orange):
         print('Orange only keys ({}):'.format(len(orange_only_keys)))
         for key in orange_only_keys:
             print('\t{}: {}'.format(key, orange[key]))
+
+
+def diff(apple, orange):
+    '''Print difference between two dicts/lists (apple vs. orange). Non-recursive.'''
+    if isinstance(apple, list) and isinstance(orange, list):
+        diff_lists(apple, orange)
+    elif isinstance(apple, dict) and isinstance(orange, dict):
+        diff_dicts(apple, orange)
+    else:
+        print('Cannot diff type {} and type {}'.format(type(apple), type(orange)))
 
 
 class Timer(object):
