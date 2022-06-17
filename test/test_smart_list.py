@@ -7,6 +7,7 @@ from smart_list import SmartList
 
 
 class Dog(object):
+    '''Test class keeping track of a dog.'''
 
     too_old = 10
 
