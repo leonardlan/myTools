@@ -170,5 +170,8 @@ export COMMAND='env'
 - Check for different devices connected (ie. via USB)
 - Check for Maya loaded/unloaded plug-in(s)
 
+## It Used To Work Sometime Ago
+- Check for code changes since the last time it was working. There might've been an update that changed the behavior.
+
 ## General debug
 - Try closing and opening the software:laughing:
