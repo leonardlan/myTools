@@ -1,4 +1,4 @@
-'''What am I? Call wai(anything) and find out what it is.'''
+'''Module for wai() (What Am I?).'''
 
 from __future__ import print_function
 
@@ -44,13 +44,16 @@ TYPE_TO_REGEX = {
 }
 
 
-def wai(*things, **kwargs):
+@brighten_it_up
+def wai(thing, ignore_private=False, ignore_attrs=None, call=False, skip_callable=False,
+         skip_module=True, skip_known=False):
     '''What am I? Feed me anything(s). I'll tell you what it is.
 
     Args:
         thing (object): Anything and everything. That's what we're here to find out. :)
+    Kwargs:
         ignore_private (bool): Ignores attributes starting with underscore. Defaults to False.
-        ignore_attrs (list): Attributes to ignore.
+        ignore_attrs ([str]): Attributes to ignore.
         call (bool): Calls attributes that are functions and thing itself if it is callable.
             Defaults to False.
         skip_callable (bool): Doesn't print callable attributes. Defaults to False.
@@ -58,14 +61,6 @@ def wai(*things, **kwargs):
         skip_known (bool): If True, prints every attribute even if we know what it is. Defaults to
             False.
     '''
-    for thing in things:
-        _wai(thing, **kwargs)
-
-
-@brighten_it_up
-def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable=False,
-         skip_module=True, skip_known=False):
-    '''Real logic behind wai(). See wai() for docs.'''
     typ = type(thing)
 
     if not skip_known:
@@ -91,15 +86,18 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
 
         # Out of ideas. We don't know what it is.
 
+    # Is it callable?
     if callable(thing):
         print(_func_name_args_kwargs(thing))
+        # Print docs if it has it.
         if thing.__doc__:
             print(thing.__doc__)
             return
 
-    # So we don't know what it is. Let's print everything we can find about it.
+    # So we don't know what it is. Let's print all the dir we can find about it.
     thing_name = getattr(thing, '__name__', '')
     call_count = private_count = total = 0
+    ignore_attrs = ignore_attrs or []
     ignore_attrs += IGNORED_ATTRIBUTES
     for attr in dir(thing):
         if attr in ignore_attrs:
@@ -115,31 +113,31 @@ def _wai(thing, ignore_private=False, ignore_attrs=[], call=False, skip_callable
             print(RED + str(err))
             continue
 
-        # Skip if module
+        # Skip if module.
         if isinstance(res, ModuleType) and skip_module:
             continue
 
-        # Skip if callable
+        # Skip if callable.
         is_callable = callable(res)
         long_name = '%s.%s' % (thing_name, attr)
         if is_callable and skip_callable:
             continue
         elif is_callable:
-            # Print *args, **kwargs
-            print(_func_name_args_kwargs(res), end='')
+            # Print *args, **kwargs.
+            print(_func_name_args_kwargs(res), end=' ')
             call_count += 1
             if call:
                 _call(res)
             else:
                 print(getattr(res, '__doc__'))
         else:
-            print(BLUE + '%s:' % long_name + GREEN, end='')
+            print(BLUE + '%s:' % long_name + GREEN, end=' ')
             _print(res)
     if call and callable(thing):
         _call(thing)
     sys.stdout.write(CYAN)
     if not skip_callable:
-        print('Callable: %i,' % call_count, end='')
+        print('Callable: %i,' % call_count, end=' ')
     print('Uncallable: %i' % (total - call_count))
     print('Private: %i, Public: %i' % (private_count, total - private_count))
     print('Total: %i' % total)
@@ -240,6 +238,7 @@ def _wai_dict(dict_):
 
 
 def _func_name_args_kwargs(func):
+    '''Return colored string of function call with args and kwargs.'''
     varnames_str = ''
     code = getattr(func, '__code__', None)
     if code:
@@ -279,7 +278,7 @@ def _call(func):
 
 
 def _print(to_print):
-    if python_compat.is_string(to_print):
+    if is_string(to_print):
         print(to_print)
     else:
         pprint(to_print)
