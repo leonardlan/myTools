@@ -4,6 +4,8 @@ from __future__ import print_function
 
 import sys
 
+from functools import wraps
+
 
 # Make CLI beautiful with color-printing to terminal using colorama.
 try:
@@ -63,6 +65,7 @@ def demo_colorama(line='', case='upper'):
 
 def brighten_it_up(func):
     '''Wrapper that brightens up the output.'''
+    @wraps(func)
     def wrapper(*args, **kwargs):
         '''Wrapper func.'''
         sys.stdout.write(BRIGHT)
