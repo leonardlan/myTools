@@ -11,6 +11,7 @@ import time
 
 from lancore import var_name, human_int, human_time, my_timestamp
 from my_logging import info
+from python_compat import is_string
 
 
 def find(haystack, needle, all=False, first=False, ignore_case=True, max_results=50):
@@ -72,11 +73,11 @@ def find(haystack, needle, all=False, first=False, ignore_case=True, max_results
         # Print path to value and value itself.
         path = ''
         for attr in result:
-            if isinstance(attr, str):
+            if is_string(attr):
                 path += "['%s']" % attr
             else:
                 path += '[%s]' % attr
-        print('%s%s:' % (var_name(haystack), path), end='')
+        print('%s%s:' % (var_name(haystack), path), end=' ')
         print(eval('haystack%s' % path))
     num_results = len(results)
     if not first:
@@ -115,7 +116,7 @@ def _find(haystack, needle, first, ignore_case):
                     break
             elif item:
                 # Check if in text.
-                if isinstance(item, str) and isinstance(needle, str):
+                if is_string(item) and is_string(needle):
                     if ignore_case:
                         if needle.lower() in item.lower():
                             # Is text and in item, case-insensitive.
@@ -170,7 +171,7 @@ def get(data, *keys, **kwargs):
     delimiter = kwargs.get('delimiter', DEFAULT_DELIMITER)
 
     # Split keys up if keys is 1 string of delimited keys.
-    if len(keys) == 1 and keys[0] not in data and isinstance(keys[0], str):
+    if len(keys) == 1 and keys[0] not in data and is_string(keys[0], str):
         keys = keys[0].split(delimiter)
 
     # Iterate keys to find value.
