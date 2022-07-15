@@ -35,10 +35,10 @@ class App:
         print('Reloading app')
         try:
             reload(utils)
-        except (Exception, e):
+        except Exception as err:
             self.tray.showMessage(
                 'Error',
-                'Unable to reload utils module!\n%s' % e,
+                'Unable to reload utils module!\n%s' % err,
                 QSystemTrayIcon.Critical
             )
         else:

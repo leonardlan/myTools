@@ -172,12 +172,12 @@ def time_me(func, *args, **kwargs):
         # Execute function call.
         try:
             res = func(*args, **kwargs)
-        except (Exception, e):
+        except Exception as err:
             # Function call errored.
             end = time.time()
             duration = end - start
             print  # Newline before warning.
-            warning('Function errored after %s: %s' % (human_time(duration), e))
+            warning('Function errored after %s: %s' % (human_time(duration), err))
             print(traceback.format_exc().strip())
             return res
 
