@@ -8,21 +8,35 @@ import sys
 import time
 
 
+# Most Python errors.
+# Note, Exception does not catch these exceptions: GeneratorExit, KeyboardInterrupt, SystemExit.
+# BaseException will catch them all.
+PYTHON_ERRORS = [AssertionError, AttributeError, EOFError, FloatingPointError, GeneratorExit,
+    ImportError, IndexError, KeyError, KeyboardInterrupt, MemoryError, NameError,
+    NotImplementedError, OSError, OverflowError, ReferenceError, RuntimeError, StopIteration,
+    SyntaxError, IndentationError, TabError, SystemError, SystemExit, TypeError, UnboundLocalError,
+    UnicodeEncodeError, UnicodeDecodeError, UnicodeTranslateError, ValueError, ZeroDivisionError]
+
+
 def sleep_random(seconds=5):
-    '''Sleeps for anywhere between 0 and input seconds.'''
+    '''Sleeps for anywhere between 0 and input seconds. Returns seconds slept.'''
+    if seconds <= 0:
+        return 0
     nap_time = random.uniform(0, seconds)
+    print('Sleeping for {:.2f}/{} seconds...'.format(nap_time, seconds))
     time.sleep(nap_time)
-    return 'Napped for {:.2f}/{} seconds'.format(nap_time, seconds)
+    return seconds
 
 
 def randomly_error(percentage=50):
-    '''Randomly raises an exception given percentage of the time.
+    '''Randomly raises a random Python exception, given percentage of the time.
 
     Args:
         percentage (float): Percentage between 0 and 100.
     '''
     if random.random() < 0.01 * percentage:
-        raise Exception('Randomly errored')
+        exception = random.choice(PYTHON_ERRORS)
+        raise exception('Randomly raising {}'.format(exception.__name__))
     return percentage
 
 
