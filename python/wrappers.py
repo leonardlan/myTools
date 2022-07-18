@@ -2,9 +2,12 @@
 
 import traceback
 
+from functools import wraps
+
 
 def handle_list(func):
     '''If first arg is a list, run function call on each item and return list. Normal otherwise.'''
+    @wraps(func)
     def wrapper(*args, **kwargs):
         '''Wrapper func.'''
         if args and isinstance(args[0], list):
