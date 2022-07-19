@@ -14,7 +14,7 @@ def smart_loop(func, items, pre_func_call_str=PRE_FUNC_CALL_STR, print_pre_func_
         post_func_call_str=POST_FUNC_CALL_STR, print_post_func_call_str=True,
         error_message_str=ERROR_MESSAGE_STR, print_error_message_str=True,
         report_str=REPORT_STR, print_report_str=True,
-        exception=Exception, **kwargs):
+        exception=Exception, raise_exception=True, **kwargs):
     '''Run function on each given item. Prints progress along the way, tracks error messages, and
     return results.
 
@@ -45,10 +45,16 @@ def smart_loop(func, items, pre_func_call_str=PRE_FUNC_CALL_STR, print_pre_func_
         exception (Exception): Exception to catch from function call (ie. ValueError). Note that
             BaseException catches all exceptions, including GeneratorExit, KeyboardInterrupt, and
             SystemExit. Just "Exception" won't. Use BaseException with caution.
+        raise_exception (bool): If True, raise Exception from function call. False will continue
+            iterating rest of the items.
+
         kwargs (dict): Kwargs passed to function call.
 
     Returns:
-        [dict]: List of results as dict: {successful: True/False, result: value from function call}.
+        [dict]: List of function call results as dict. If successful:
+            {'successful': True, 'result': <result from function call>}
+        If exception raised:
+            {'successful': False, 'message': <message (string)>, 'error': <error raised>}.
     '''
     results = []
     count = len(items)
@@ -72,10 +78,15 @@ def smart_loop(func, items, pre_func_call_str=PRE_FUNC_CALL_STR, print_pre_func_
         try:
             res = func(item, **kwargs)
         except exception as error:
-            msg = error_message_str.format(error=error, **format_kwargs)
+            message = error_message_str.format(error=error, **format_kwargs)
+
+            # Raise exception if specified.
+            if raise_exception:
+                raise exception(message)
+
             if print_error_message_str:
-                print(msg)
-            results.append({'successful': False, 'result': msg})
+                print(message)
+            results.append({'successful': False, 'message': message, 'error': error})
         else:
             results.append({'successful': True, 'result': res})
             successful_count += 1
