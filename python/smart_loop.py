@@ -1,6 +1,7 @@
 '''Includes smart_loop() for running a function on a list of items and printing progress report.'''
 
 import time
+import traceback
 
 
 PRE_FUNC_CALL_STR = '> Running {func_name}({item}) ({index}/{count} {percentage:.1f}%)...'
@@ -14,9 +15,10 @@ def smart_loop(func, items, pre_func_call_str=PRE_FUNC_CALL_STR, print_pre_func_
         post_func_call_str=POST_FUNC_CALL_STR, print_post_func_call_str=True,
         error_message_str=ERROR_MESSAGE_STR, print_error_message_str=True,
         report_str=REPORT_STR, print_report_str=True,
-        exception=Exception, raise_exception=True, **kwargs):
-    '''Run function on each given item. Prints progress along the way, tracks error messages, and
-    return results.
+        exception=Exception, stop_at_exception=True, **kwargs):
+    '''Run function with item as first argument for every item in items. Prints progress along the
+    way, tracks error messages, and return results. Can also choose to stop at exception thrown
+    (stop_at_exception) or continue rest of the list.
 
     Args:
         func (func): Function to run each item on.
@@ -45,8 +47,8 @@ def smart_loop(func, items, pre_func_call_str=PRE_FUNC_CALL_STR, print_pre_func_
         exception (Exception): Exception to catch from function call (ie. ValueError). Note that
             BaseException catches all exceptions, including GeneratorExit, KeyboardInterrupt, and
             SystemExit. Just "Exception" won't. Use BaseException with caution.
-        raise_exception (bool): If True, raise Exception from function call. False will continue
-            iterating rest of the items.
+        stop_at_exception (bool): If True, when function call raises exception, stop iterating and
+            return results up to failed call. False will continue iterating rest of the items.
 
         kwargs (dict): Kwargs passed to function call.
 
@@ -79,14 +81,15 @@ def smart_loop(func, items, pre_func_call_str=PRE_FUNC_CALL_STR, print_pre_func_
             res = func(item, **kwargs)
         except exception as error:
             message = error_message_str.format(error=error, **format_kwargs)
-
-            # Raise exception if specified.
-            if raise_exception:
-                raise exception(message)
-
             if print_error_message_str:
                 print(message)
             results.append({'successful': False, 'message': message, 'error': error})
+
+            # Raise exception if specified.
+            if stop_at_exception:
+                traceback.print_exc()
+                print('Returning results...')
+                return results
         else:
             results.append({'successful': True, 'result': res})
             successful_count += 1
