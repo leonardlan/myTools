@@ -258,7 +258,7 @@ def _cb(content=None):
         clipboard.copy(str(content))
 
 
-def cb(content=None, type='string'):
+def cb(content=None, type='string', delimiter='\n'):
     '''Copies content to clipboard. If no content, returns clipboard content as string.
     Supports Windows and Linux.
 
@@ -266,9 +266,10 @@ def cb(content=None, type='string'):
         content (str): Content to copy to clipboard.
         type (str): Type of content. One of "string", "strings", "int", "ints".
             string: String as is.
-            strings: String split by newline.
+            strings: String split by delimiter, defaults to newline.
             int: First integer as int.
             ints: Integers.
+        delimiter (str): Delimiter to separate clipboard text. Defaults to newline.
     '''
     res = _cb(content=content)
 
@@ -285,14 +286,18 @@ def cb(content=None, type='string'):
                 return [int(num) for num in ints]
             raise ValueError('No integer found in clipboard')
         elif type == 'strings':
-            # Strings split by newline. Filter out empty strings.
+            # Strings split by delimiter. Filter out empty strings.
             strings = []
-            for line in res.split('\n'):
+            for line in res.split(delimiter):
                 line = line.strip()
                 if line:
                     strings.append(str(line))
             return strings
         return str(res)
+
+
+def cb_strings(delimiter='\n'):
+    return cb(type='strings', delimiter=delimiter)
 
 
 def confirm(question):

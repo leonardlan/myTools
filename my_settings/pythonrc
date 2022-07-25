@@ -14,7 +14,8 @@ from pprint import pprint
 
 from tabulate import tabulate
 
-from cli_tools import cb, confirm, diff, find, get, ns, print_env_vars, print_sys_path, Timer
+from cli_tools import (cb, cb_strings, confirm, diff, find, get, ns, print_env_vars, print_sys_path,
+    Timer)
 from colors import *
 from json_tools import dump_json, load_json
 from lancore import *
