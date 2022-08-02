@@ -6,8 +6,8 @@ import traceback
 
 PRE_FUNC_CALL_STR = '> Running {func_name}({item}) ({index}/{count} {percentage:.1f}%)...'
 POST_FUNC_CALL_STR = '> {func_name}({item}) took {seconds:.1f} seconds'
-ERROR_MESSAGE_STR = 'Errored while running {func_name}({item}): {error}'
-REPORT_STR = 'Ran {func_name}() on {count} items in {seconds:.1f} seconds ({successful_count}/' \
+ERROR_MESSAGE_STR = '> Errored while running {func_name}({item}): {error}'
+REPORT_STR = '> Ran {func_name}() on {count} items in {seconds:.1f} seconds ({successful_count}/' \
     '{count} successful)'
 
 
