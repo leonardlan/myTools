@@ -8,6 +8,10 @@ import re
 import sys
 import time
 
+# Enable syntax completion.
+import atexit
+import rlcompleter
+
 start = time.time()
 
 from pprint import pprint
@@ -32,9 +36,7 @@ from mock_data import DOGS, DOGS_DICT, PEOPLE, PEOPLE_DICT, TYPE_TO_VAL
 PYTHON_HISTORY_PATH = os.path.join(HOME, '.python_history')
 
 
-def _num_lines(str_):
-    '''Number of lines in string'''
-    return str_.count('\n') + 1
+IS_LINUX = sys.platform.startswith('linux')
 
 
 def start_qt_application():
@@ -42,88 +44,20 @@ def start_qt_application():
     return QtGui.QApplication(sys.argv)
 
 
-def _history(include_current=False):
-    """Returns current interactive python session command history"""
-    msg = []
-    history_len = readline.get_current_history_length()
-    end = (history_len + 1) if include_current else history_len
-    for i in range(1, end):
-        msg.append(readline.get_history_item(i))
-    return "\n".join(msg)
+# Only Linux specific.
+if IS_LINUX:
+    less_history = lambda: os.system('less -r +G %s' % PYTHON_HISTORY_PATH)
 
 
-# Make current_history print current history without having to call function.
-# current_history() works too.
-class CurrentHistory:
-    def __call__(self):
-        print(_history())
+    def hs(str_, max_count=5):
+        '''Regex search interactive python history using grep. Returns last max_count results.
 
-    def __repr__(self):
-        print(_history())
-        return ''
-
-current_history = CurrentHistory()
-
-
-def history(n=50, c=False):
-    '''Python version of bash history command
-
-    Args:
-        n (int): Lines to print
-        c (bool): Clears history if True
-    '''
-    if c:
-        open(PYTHON_HISTORY_PATH, 'w').close()
-        print(INFO('History cleared ;)'))
-        return
-
-    if not os.path.exists(PYTHON_HISTORY_PATH):
-        return
-
-    # Tail history if on linux.
-    if sys.platform.startswith('linux'):
-        try:
-            os.system('tail -%i %s' % (n, PYTHON_HISTORY_PATH))
-        except IOError:
-            pass
-
-    print(bright_blue('\nCurrent session [%s]:' % my_timestamp()))
-    print(_history())
-
-
-def _append_history_file():
-    history = _history(include_current=True)
-    if not history:
-        return
-    with open(PYTHON_HISTORY_PATH, "a+") as fil:
-        fil.write(
-            bright_blue("\n'''New session [%s]'''\n" % my_timestamp()))
-        fil.write(history + "\n")
-
-
-# Make h print history without having to call function. h() works too.
-class History:
-    def __call__(self):
-        history()
-
-    def __repr__(self):
-        history()
-        return ''
-
-h = History()
-
-less_history = lambda: os.system('less -r +G %s' % PYTHON_HISTORY_PATH)
-
-
-def hs(str_, max_count=5):
-    '''Regex search interactive python history using grep. Returns last max_count results.
-
-    Args:
-        str_ (str): String to search for.
-        max_count (int): Max number of lines to show.
-    '''
-    os.system('grep "%s" %s | tail -%i | grep --color=auto "%s"' % (
-        str_, PYTHON_HISTORY_PATH, max_count, str_))
+        Args:
+            str_ (str): String to search for.
+            max_count (int): Max number of lines to show.
+        '''
+        os.system('grep "%s" %s | tail -%i | grep --color=auto "%s"' % (
+            str_, PYTHON_HISTORY_PATH, max_count, str_))
 
 
 def reload_pythonrc():
@@ -205,36 +139,94 @@ def print_tabulate(
         print('Only showing %i/%i results' % (limit, len_before_limit))
 
 
-# Enable syntax completion and append history file on exit.
+# Add tab complete and append history file on exit.
 try:
     import readline
 except ImportError:
-    # Try pyreadline.
-    try:
-        from pyreadline import Readline
-    except ImportError:
-        print("Module readline not available.")
-    else:
-        readline = Readline()
+    warning('Module readline not available.')
 else:
-    import atexit
-    import rlcompleter
-    readline.parse_and_bind("tab: complete")
+    # Enable tab complete.
+    readline.parse_and_bind('tab: complete')
+
+
+    def _history(include_current=False):
+        '''Returns current interactive python session command history.'''
+        msg = []
+        history_len = readline.get_current_history_length()
+        end = (history_len + 1) if include_current else history_len
+        for i in range(1, end):
+            msg.append(readline.get_history_item(i))
+        return '\n'.join(msg)
+
+
+    def history(n=50, c=False):
+        '''Python version of bash history command
+
+        Args:
+            n (int): Lines to print
+            c (bool): Clears history if True
+        '''
+        if c:
+            open(PYTHON_HISTORY_PATH, 'w').close()
+            print('History cleared ;)')
+            return
+
+        if not os.path.exists(PYTHON_HISTORY_PATH):
+            return
+
+        # Tail history if on linux.
+        if IS_LINUX:
+            try:
+                os.system('tail -%i %s' % (n, PYTHON_HISTORY_PATH))
+            except IOError:
+                pass
+
+        print(bright_blue('\nCurrent session [%s]:' % my_timestamp()))
+        print(_history())
+
+
+    def _append_history_file():
+        '''Write command history to PYTHON_HISTORY_PATH.'''
+        history = _history(include_current=True)
+        if not history:
+            return
+        with open(PYTHON_HISTORY_PATH, 'a+') as fil:
+            fil.write(
+                bright_blue("\n'''New session [%s]'''\n" % my_timestamp()))
+            fil.write(history + '\n')
+
+
+    # Register _append_history_file() on CLI exit.
     atexit.register(_append_history_file)
-    del atexit, rlcompleter
+
+
+    # Make h print history without having to call function. h() works too.
+    class History:
+        def __call__(self):
+            history()
+
+        def __repr__(self):
+            history()
+            return ''
+
+    h = History()
 
 
 # My custom Python prompt.
 class MyPrompt:
     def __repr__(self):
         now = datetime.datetime.now()
-        return '%s >>> ' % str(now.strftime('%I:%M:%S %p'))
+        return '{} >>> '.format(str(now.strftime('%I:%M:%S %p')))
 
 sys.ps1 = MyPrompt()
 
 
 # Shortcuts cause I'm lazy and forgetful.
 ls = print_path
+
+
+# Remove unneeded modules.
+del atexit, rlcompleter
 
 
 print('Loading .pythonrc took %s' % human_time(time.time() - start))
