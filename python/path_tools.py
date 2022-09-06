@@ -4,24 +4,16 @@ from cli_tools import cb
 from colors import bright_blue, bright_red
 
 
-def print_path(path=None, replace=None):
-    '''Print blue up to where path exists. Red for the rest.
+def get_colored_path(path=None, replace=None):
+    '''Return path as colored string to print. Blue up to where path exists. Red for the rest.
+    Uses clipboard text if no path supplied.
 
     Args:
         path (str): File path.
         replace (dict): Replace keys with their values to expand variables.
 
     Returns:
-        None
-
-    Try in terminal:
-    >>> print_path('/')
-    >>> print_path('\\')
-    >>> print_path('C:')
-    >>> print_path('C:/Users/does_not_exist')
-    >>> print_path('C:/Users/does_not_exist/subdir1/subdir2')
-    >>> print_path('Z:')
-    >>> print_path('')
+        str: Colored string of path to print.
     '''
     path = path or cb()
 
@@ -38,12 +30,24 @@ def print_path(path=None, replace=None):
 
         # Already reached root and still doesn't exist. So entire path doesn't exist.
         if dirname == prev_dirname:
-            print(bright_red(path))
-            return
+            return bright_red(path)
 
     # Print existing and non-existing parts of path.
     non_existing = path.replace(dirname, '')
     if non_existing:
-        print('{}{}'.format(bright_blue(dirname), bright_red(non_existing)))
-    else:
-        print(bright_blue(path))
+        return '{}{}'.format(bright_blue(dirname), bright_red(non_existing))
+    return bright_blue(path)
+
+
+def print_path(*args, **kwargs):
+    '''See get_colored_path docstring.
+
+    Try in terminal:
+    >>> print_path('/')
+    >>> print_path('\\')
+    >>> print_path('C:')
+    >>> print_path('C:/Users/does_not_exist')
+    >>> print_path('C:/Users/does_not_exist/subdir1/subdir2')
+    >>> print_path('Z:')
+    '''
+    print get_colored_path(*args, **kwargs)
