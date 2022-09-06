@@ -259,7 +259,7 @@ def _cb(content=None):
 
 
 def cb(content=None, type='string', delimiter='\n'):
-    '''Copies content to clipboard. If no content, returns clipboard content as string.
+    '''If content is supplied, copy to clipboard. If content is None, returns clipboard content.
     Supports Windows and Linux.
 
     Args:
