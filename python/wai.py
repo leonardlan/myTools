@@ -33,11 +33,11 @@ FILE_TYPE_TO_EXTENSION = {
     'Python file': 'py',
 }
 TYPE_TO_REGEX = {
-    'E-mail': r'^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,5})$',
-    'Whole number': r'^\d+$',
-    'Negative int': r'^-\d+$',
-    'Negative float': r'^-\d+$',
-    'Decimal number (float)': r'^\d*\.\d+$',
+    'E-mail Address': r'^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,5})$',
+    'Whole Number': r'^\d+$',
+    'Negative Int': r'^-\d+$',
+    'Decimal Number (Float)': r'^\d*\.\d+$',
+    'Negative Float': r'^-\d*\.\d+$',
     'IP Address': r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}',
     'MAC Address': r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$',
     'UUID': r'[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}',
