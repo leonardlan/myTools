@@ -1,7 +1,9 @@
+'''Path tools with folders and directories.'''
+
 import os
 
 from cli_tools import cb
-from colors import bright_blue, bright_red
+from colors import bright_blue, bright_red, bright_yellow
 
 
 def get_colored_path(path=None, replace=None):
@@ -51,3 +53,17 @@ def print_path(*args, **kwargs):
     >>> print_path('Z:')
     '''
     print get_colored_path(*args, **kwargs)
+
+
+def open_path(path):
+    '''Open file or directory.'''
+    if not os.path.exists(path):
+        print bright_yellow('Path does not exist:'),
+        print get_colored_path(path)
+        return
+
+    if os.path.isdir(path):
+        os.startfile(path.replace('/', '\\'))
+
+    print bright_red('Not sure how to open'),
+    print get_colored_path(path)
