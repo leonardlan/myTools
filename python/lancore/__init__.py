@@ -12,6 +12,7 @@ from functools import wraps
 from collections import OrderedDict, defaultdict, Counter
 
 from my_logging import debug, info, warning, error, critical, demo_logging
+from my_settings import DATETIME_NICE, DATETIME_SORTABLE
 
 
 INTERVALS = OrderedDict([
@@ -258,12 +259,12 @@ def human_size(nbytes, base=BASE_10):
 
 def my_timestamp():
     '''Timestamp without milliseconds (ie. '2021-05-06 20:45:27'). Can be easily sorted.'''
-    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return datetime.datetime.now().strftime(DATETIME_SORTABLE)
 
 
 def my_timestamp_nice():
     '''Timestamp in human-readable format (ie. 'Thu May 6, 9:16 PM').'''
-    return datetime.datetime.now().strftime('%a %b %#d, %#I:%M %p')
+    return datetime.datetime.now().strftime(DATETIME_NICE)
 
 
 '''Nested dict/list related functions.'''
