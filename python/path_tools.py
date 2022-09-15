@@ -52,18 +52,19 @@ def print_path(*args, **kwargs):
     >>> print_path('C:/Users/does_not_exist/subdir1/subdir2')
     >>> print_path('Z:')
     '''
-    print get_colored_path(*args, **kwargs)
+    print(get_colored_path(*args, **kwargs))
 
 
 def open_path(path):
     '''Open file or directory.'''
     if not os.path.exists(path):
-        print bright_yellow('Path does not exist:'),
-        print get_colored_path(path)
+        print(bright_yellow('Path does not exist:'),)
+        print(get_colored_path(path))
         return
 
     if os.path.isdir(path):
         os.startfile(path.replace('/', '\\'))
+        return
 
-    print bright_red('Not sure how to open'),
-    print get_colored_path(path)
+    print(bright_red('Not sure how to open'),)
+    print(get_colored_path(path))
