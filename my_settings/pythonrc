@@ -21,7 +21,7 @@ from tabulate import tabulate
 from cli_tools import (cb, cb_strings, confirm, diff, find, get, ns, print_env_vars, print_sys_path,
     Timer)
 from colors import *
-from file_tools import read_file
+from file_tools import read_file, write_file
 from json_tools import dump_json, load_json
 from lancore import *
 from python_compat import reload

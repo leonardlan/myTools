@@ -1,6 +1,10 @@
 '''Tools for reading/writing to files.'''
 
 
+WRITE_ONLY_MODE = 'w'
+APPEND_ONLY_MODE = 'a'
+
+
 def read_file(
         file_path, print_lines=True, print_line_num=False, max_lines=None, max_line_len=100,
         return_lines=True):
@@ -47,3 +51,16 @@ def read_file(
     if return_lines:
         return lines
     return None
+
+
+def write_file(file_path, lines, mode=WRITE_ONLY_MODE):
+    '''Write lines to file.
+
+    Args:
+        file_path (str): File path.
+        lines (str or [str]): Line or lines to write to file.
+        mode (str): Mode to open file.
+    '''
+    content = '\n'.join(lines) if isinstance(lines, list) else lines
+    with open(file_path, mode) as fil:
+        fil.write(content)
