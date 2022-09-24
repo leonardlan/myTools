@@ -21,7 +21,7 @@ class Path(dict):
         return 'Path({})'.format(self.path)
 
 
-def get_paths(root, regexes=None):
+def get_paths(root, regexes=None, ignore_case=True):
     '''Recursively list folders/files with regex matching. Also supports regex group naming.
 
     Args:
@@ -39,12 +39,15 @@ def get_paths(root, regexes=None):
     for content in os.listdir(root):
         content_path = os.path.join(root, content)
 
-        # Skip it there's more regexes and current one is not a folder.
+        # Skip if there's more regexes and current one is not a folder.
         is_last = len(regexes) == 1
         if not is_last and not os.path.isdir(content_path):
             continue
 
-        res = re.match(regex, content)
+        # Match by regex.
+        kwargs = {'flags': re.IGNORECASE} if ignore_case else {}
+        res = re.match(regex, content, **kwargs)
+
         if res:
             if is_last:
                 path = Path()
