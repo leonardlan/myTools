@@ -20,7 +20,7 @@ class App:
         self.tray = utils.TrayIcon(self.reload)
 
     def _load_stylesheet(self):
-        fil = QFile(os.path.join(utils.MYTOOLS, 'python/stylesheet.qss'))
+        fil = QFile(os.path.join(utils.MYTOOLS, 'style/stylesheet.qss'))
         fil.open(QFile.ReadOnly)
         self.app.setStyleSheet(QString(fil.readAll()))
         fil.close()

@@ -115,6 +115,6 @@ Open actions.yaml:
         n: True
 Open stylesheet.qss:
     icon: Qt
-    path: myTools/python/stylesheet.qss
+    path: myTools/style/stylesheet.qss
 
 separator4: separator
