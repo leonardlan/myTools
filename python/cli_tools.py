@@ -207,14 +207,24 @@ def print_env_vars(filter_=''):
     print('{} env var{}'.format(count, 's' if count != 1 else ''))
 
 
-def print_sys_path(key=''):
-    '''Print sys.path. Able to filter by case-insensitive search.'''
+def _print_paths(paths, key=''):
+    '''Print paths. Able to filter by case-insensitive search.'''
     count = 0
-    for path in sys.path:
+    for path in paths:
         if not key or key.lower() in path.lower():
             print(path)
             count += 1
     print('{} path{}'.format(count, 's' if count != 1 else ''))
+
+
+def print_python_path(key=''):
+    '''Print PYTHONPATH env var.'''
+    _print_paths(os.environ.get('PYTHONPATH', []).split(';'))
+
+
+def print_sys_path(key=''):
+    '''Print sys.path. Able to filter by case-insensitive search.'''
+    _print_paths(sys.path, key=key)
 
 
 def ns(title='Hello!', msg=''):
