@@ -109,7 +109,7 @@ def wai(thing, ignore_private=False, ignore_attrs=None, call=False, skip_callabl
         total += 1
         try:
             res = getattr(thing, attr)
-        except (Exception, err):
+        except Exception as err:
             print(RED + str(err))
             continue
 
@@ -273,7 +273,7 @@ def _call(func):
     try:
         res = func()
         _print(res)
-    except (Exception, err):
+    except Exception as err:
         print(RED, err)
 
 

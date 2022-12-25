@@ -77,7 +77,7 @@ def print_attrs_for_single_node(node, **kwargs):
         # Get type.
         try:
             typ = cmds.getAttr(plug, type=True)
-        except (Exception, err):
+        except Exception as err:
             typ = str(err),
 
         # Get and print value.
