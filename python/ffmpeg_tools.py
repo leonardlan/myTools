@@ -39,6 +39,6 @@ def trim(file_path, start_timestamp='', end_timestamp='', output_path=None):
     commands.extend(['-i', '"{}"'.format(file_path), '-c', 'copy', '"{}"'.format(output_path)])
 
     cmd = ' '.join(commands)
-    print 'Running command: {}'.format(cmd)
+    print('Running command: {}'.format(cmd))
     res = os.system(cmd)
     return res
