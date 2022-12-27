@@ -2,10 +2,8 @@
 
 from __future__ import print_function
 
-import datetime
 import os
 import re
-import subprocess
 import sys
 import time
 
@@ -225,22 +223,6 @@ def print_python_path(key=''):
 def print_sys_path(key=''):
     '''Print sys.path. Able to filter by case-insensitive search.'''
     _print_paths(sys.path, key=key)
-
-
-def ns(title='Hello!', msg=''):
-    '''Sends a desktop notification.'''
-    msg = msg or 'Have a good {}!'.format(datetime.datetime.now().strftime('%A'))
-    if os.name == 'nt':
-        # Attemp to use ToastNotifier (if installed) on Windows.
-        try:
-            from win10toast import ToastNotifier
-        except ImportError:
-            print('No ToastNotifier module installed for notifications')
-        else:
-            toaster = ToastNotifier()
-            toaster.show_toast(title=title, msg=msg, threaded=True)
-    else:
-        subprocess.call("ns '%s'" % msg, shell=True)
 
 
 def _cb(content=None):
