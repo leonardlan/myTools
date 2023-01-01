@@ -32,6 +32,7 @@ from my_settings import HOME, MAX_LINES
 from notify_tools import ns
 from path_tools import open_path, print_path
 from smart_list import SmartList
+from subprocess_tools import meld, subl
 from wai import wai, call_gets
 
 # For playing around in CLI.
