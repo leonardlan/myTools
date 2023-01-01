@@ -17,6 +17,7 @@ def reload(module):
 
 
 def is_string(data):
+    '''Check if input is string. Python 2 uses basestring. Python 3 uses str. What gives?'''
     try:
         basestring
     except NameError:
