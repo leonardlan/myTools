@@ -251,41 +251,49 @@ def _cb(content=None):
 
 
 def cb(content=None, type='string', delimiter='\n'):
-    '''If content is supplied, copy to clipboard. If content is None, returns clipboard content.
+    '''If content is supplied, copy it to clipboard. If content is None, returns clipboard content.
     Supports Windows and Linux.
 
     Args:
         content (str): Content to copy to clipboard.
         type (str): Type of content. One of "string", "strings", "int", "ints".
             string: String as is.
-            strings: String split by delimiter, defaults to newline.
+            strings: String split by delimiter, defaults to newline. If content is surrounded by
+                single or double quotes, remove them, then split by delimiter.
             int: First integer as int.
             ints: Integers.
         delimiter (str): Delimiter to separate clipboard text. Defaults to newline.
     '''
     res = _cb(content=content)
 
+    if content:
+        return
+
     type = type.lower()
     if type not in ['string', 'strings', 'int', 'ints']:
         raise ValueError('Unrecognized type: {}'.format(type))
 
-    if content is None:
-        if type in ['int', 'ints']:
-            ints = re.findall(r'\d+', res)  # Find all integers.
-            if ints:
-                if type == 'int':
-                    return int(ints[0])
-                return [int(num) for num in ints]
-            raise ValueError('No integer found in clipboard')
-        elif type == 'strings':
-            # Strings split by delimiter. Filter out empty strings.
-            strings = []
-            for line in res.split(delimiter):
-                line = line.strip()
-                if line:
-                    strings.append(str(line))
-            return strings
-        return str(res)
+    if type in ['int', 'ints']:
+        ints = re.findall(r'\d+', res)  # Find all integers.
+        if ints:
+            if type == 'int':
+                return int(ints[0])
+            return [int(num) for num in ints]
+        raise ValueError('No integer found in clipboard')
+    elif type == 'strings':
+        # If content is surrounded by single or double quotes, remove them.
+        for quote in ['"', "'"]:
+            if res.startswith(quote) and res.endswith(quote) and res.count(quote) == 2:
+                res = res[1:-1]
+
+        # Strings split by delimiter. Filter out empty strings.
+        strings = []
+        for line in res.split(delimiter):
+            line = line.strip()
+            if line:
+                strings.append(str(line))
+        return strings
+    return str(res)
 
 
 def cb_strings(delimiter='\n'):
