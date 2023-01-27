@@ -19,7 +19,6 @@ from pprint import pprint
 from tabulate import tabulate
 
 # My Tools.
-import os_tools
 
 from cli_tools import (cb, cb_strings, confirm, diff, find, get, print_env_vars,
     print_python_path, print_sys_path, Timer)
@@ -27,10 +26,11 @@ from colors import *
 from file_tools import read_file, write_file
 from json_tools import dump_json, load_json
 from lancore import *
-from python_compat import reload
 from my_settings import HOME, MAX_LINES
 from notify_tools import ns
+from os_tools import tree
 from path_tools import open_path, print_path
+from python_compat import reload
 from smart_list import SmartList
 from subprocess_tools import meld, subl
 from wai import wai, call_gets
