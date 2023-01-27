@@ -18,7 +18,7 @@ class Path(dict):
         return os.path.exists(self.path)
 
     def __repr__(self):
-        return 'Path({})'.format(self.path)
+        return 'Path( {} )'.format(self.path)
 
 
 def get_paths(root, regexes=None, ignore_case=True):
