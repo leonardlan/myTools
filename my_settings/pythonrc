@@ -149,7 +149,7 @@ def print_tabulate(
 try:
     import readline
 except ImportError:
-    warning('Module readline not available.')
+    warning('Module readline not available. No tab complete available.')
 else:
     # Enable tab complete.
     readline.parse_and_bind('tab: complete')
