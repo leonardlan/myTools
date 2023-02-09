@@ -59,31 +59,32 @@ def _find_baddies(func, items, exception, level, **func_kwargs):
 
     # Check first half.
     first_half = items[0:halfway]
-    try:
-        func(first_half, **func_kwargs)
-    except exception:
-        if len(first_half) == 1:
-            # Found a baddie.
-            print('{}Found {}'.format(indent, first_half[0]))
-            baddies.extend(first_half)
-        else:
-            print('{}Checking first half...'.format(indent))
-            baddies.extend(_find_baddies(func, first_half, exception, level + 1))
+    res = _check_half(func, first_half, 'first', exception, level, indent, **func_kwargs)
+    if res:
+        baddies.extend(res)
 
     # Check second half.
     second_half = items[halfway:]
-    try:
-        func(second_half, **func_kwargs)
-    except exception:
-        if len(second_half) == 1:
-            # Found a baddie.
-            print('{}Found {}'.format(indent, second_half[0]))
-            baddies.extend(second_half)
-        else:
-            print('{}Checking second half...'.format(indent))
-            baddies.extend(_find_baddies(func, second_half, exception, level + 1))
+    res = _check_half(func, second_half, 'second', exception, level, indent, **func_kwargs)
+    if res:
+        baddies.extend(res)
 
     return baddies
+
+
+def _check_half(func, half, first_or_second, exception, level, indent, **func_kwargs):
+    '''Run func on this half of arguments.'''
+    try:
+        func(half, **func_kwargs)
+    except exception:
+        if len(half) == 1:
+            # Found a baddie.
+            print('{}Found {}'.format(indent, half[0]))
+            return half
+        else:
+            print('{}Checking {} half...'.format(indent, first_or_second))
+            res = _find_baddies(func, half, exception, level + 1)
+            return res
 
 
 # Example func:
