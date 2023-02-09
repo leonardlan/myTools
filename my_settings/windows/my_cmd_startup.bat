@@ -5,6 +5,10 @@
 :: REG QUERY "HKEY_LOCAL_MACHINE\Software\Microsoft\Command Processor" /v AutoRun
 
 :: Make prompt nice
+:: Example:
+:: [10:05:29 Leonard@MY-PC]
+:: C:\Users\Leonard
+:: >
 set prompt=[$t$h$h$h %username%@%computername%]$_$p$_$g$s
 
 :: Python env vars
@@ -16,6 +20,7 @@ git config --global core.excludesfile "%USERPROFILE%\.gitignore_global"
 
 :: Env vars
 set MYTOOLS=%USERPROFILE%\myTools
+set SANDBOX_SCRIPTS=%USERPROFILE%\sandbox\scripts
 
 :: My aliases/doskeys
 doskey h=doskey /history
@@ -37,7 +42,7 @@ doskey Pictures=cd %USERPROFILE%\Pictures
 
 doskey myTools=cd %MYTOOLS%
 doskey sandbox=cd %USERPROFILE%\sandbox
-doskey sandbox_scripts=cd %USERPROFILE%\sandbox\scripts
+doskey sandbox_scripts=cd %SANDBOX_SCRIPTS%
 
 :: Git
 doskey gg=git gui
