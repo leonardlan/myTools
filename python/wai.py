@@ -17,7 +17,7 @@ from colors import (BLUE, BRIGHT, CYAN, DIM, GREEN, NORMAL, MAGENTA, RED, RESET,
                     bright_blue, brighten_it_up)
 from lancore import human_int, var_name
 from my_settings import MAX_LINES
-from python_compat import is_string
+from python_compatibility import is_string
 
 
 IGNORED_ATTRIBUTES = ['__builtins__', '__globals__', 'func_globals']

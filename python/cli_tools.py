@@ -9,7 +9,7 @@ import time
 
 from lancore import var_name, human_int, human_time, my_timestamp
 from my_logging import info
-from python_compat import is_string
+from python_compatibility import is_string
 
 
 def find(haystack, needle, all=False, first=False, ignore_case=True, max_results=50):

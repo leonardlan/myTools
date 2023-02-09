@@ -6,7 +6,7 @@ import logging
 import os
 import tempfile
 
-import python_compat
+import python_compatibility
 
 
 TEMP_DATA_JSON_FILE = os.path.join(tempfile.gettempdir(), 'python_interactive_data_dump.json')
@@ -31,7 +31,7 @@ def _convert(data):
 
     https://stackoverflow.com/questions/1254454/fastest-way-to-convert-a-dicts-keys-values-from-unicode-to-str
     '''
-    if python_compat.is_string(data):
+    if python_compatibility.is_string(data):
         return str(data)
     elif isinstance(data, collections.Mapping):
         return dict(map(_convert, data.items()))

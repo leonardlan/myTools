@@ -1,7 +1,7 @@
 '''Tools extending os module.'''
 
 import os
-import python_compat
+import python_compatibility
 
 from os.path import getsize, join
 
@@ -60,7 +60,7 @@ def list_files(path='.', ext=None, print_found=False, max_depth=None, ignore_dir
     ext = tuple(ext) if isinstance(ext, list) else ext
 
     # Lowercase extension.
-    if python_compat.is_string(ext):
+    if python_compatibility.is_string(ext):
         ext = ext.lower()
     elif isinstance(ext, tuple):
         ext = tuple(e.lower() for e in ext)
