@@ -3,7 +3,12 @@
 
 import datetime
 import os
+import re
 import subprocess
+import time
+
+from lancore import human_time
+from python_compatibility import is_string
 
 FFMPEG_CMD = 'ffmpeg'
 FFPROBE_CMD = 'ffprobe'
@@ -41,7 +46,9 @@ def trim(media_path, start='', end='', output_path=None, suffix='_trimmed', dry_
             end = length - end
 
             if end < 0:
-                raise ValueError('End timestamp cannot be negative: {}'.format(end))
+                raise ValueError(
+                    'End timestamp cannot be negative: {}. Should be positive number of seconds ' \
+                    'from end of file'.format(end))
 
             end = _as_timestamp(end)
         commands.extend(['-to', end])
@@ -75,7 +82,83 @@ def get_length(media_path):
 
 
 def _as_timestamp(seconds):
-    '''Get string of timestamp (100 -> '0:01:40').'''
+    '''Get timestamp as string of 'HH:MM:SS' from int or string (100 -> '0:01:40').
+
+    Args:
+        seconds (str, int, or float): Seconds as:
+            - string: 'HH:MM:SS' or 'HH:MM:SS.SSS'
+            - int: 100 -> '0:01:40'
+            - float: 55.123 -> '0:00:55.123000'
+
+    Returns:
+        str: Timestamp as HH:MM:SS.
+
+    Raises:
+       TypeError: If seconds is invalid type.
+    '''
     if isinstance(seconds, (int, float)):
         return str(datetime.timedelta(seconds=seconds))
-    return seconds
+    elif is_string(seconds):
+        if re.match(r'\d+:\d\d:\d\d(\.\d*)?$', seconds):
+            return seconds
+        raise ValueError('Input "{}" seconds does not match HH:MM:SS'.format(seconds))
+    raise TypeError(
+        'Invalid seconds type: {}. Should be int, float, or string'.format(type(seconds)))
+
+
+def convert_to_mp3(media_path):
+    '''Convert file to mp3.'''
+    file_name, _ = os.path.splitext(media_path)
+    root = os.path.dirname(media_path)
+    media_path = os.path.join(root, media_path)
+    dest_file = os.path.join(root, '{}.mp3'.format(file_name))
+    if not os.path.exists(dest_file):
+        res = os.system('{} -i "{}" "{}"'.format(FFMPEG_CMD, media_path, dest_file))
+        return res
+    else:
+        print('File already exists: {}'.format(dest_file))
+
+
+def convert_to_mp3_in_dir(root):
+    '''Convert audio/video files to mp3 in DIR using ffmpeg.'''
+    if not os.path.exists(root):
+        print('Path does not exist: {}'.format(root))
+        return
+
+    files = os.listdir(root)
+    start = time.time()
+    count = len(files)
+    already_converted = []
+    failed_to_convert = []
+    converted = []
+    for ind, fil in enumerate(files):
+        if fil.endswith('.mp3'):
+            continue
+
+        print('Converting {} ({}/{})...'.format(fil, ind + 1, count))
+        res = convert_to_mp3(fil)
+
+        if res == 0:
+            converted.append(fil)
+        elif res is None:
+            already_converted.append(fil)
+        else:
+            failed_to_convert.append(fil)
+
+    # Print report.
+    if converted:
+        print('Converted {} in {}'.format(
+            converted[0] if len(converted) == 1 else '{} files'.format(len(converted)),
+            human_time(time.time() - start)))
+    else:
+        print('Did not convert any files')
+
+    # Print already converted.
+    if already_converted:
+        print('Already converted {} file(s):\n{}'.format(
+            len(already_converted), '\n'.join(already_converted)))
+
+    # Print failed to convert.
+    if failed_to_convert:
+        print('Failed to convert {} file(s):\n{}'.format(
+            len(failed_to_convert), '\n'.join(failed_to_convert)))
