@@ -26,6 +26,7 @@ from colors import *
 from file_tools import read_file, write_file
 from json_tools import dump_json, load_json
 from lancore import *
+from list_tools import print_duplicates
 from my_settings import HOME, MAX_LINES
 from notify_tools import ns
 from os_tools import tree
