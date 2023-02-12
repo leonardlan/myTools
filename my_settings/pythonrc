@@ -20,6 +20,8 @@ from tabulate import tabulate
 
 # My Tools.
 
+import python_compatibility
+
 from cli_tools import (cb, cb_strings, confirm, diff, find, get, print_env_vars,
     print_python_path, print_sys_path, Timer)
 from colors import *
@@ -31,7 +33,7 @@ from my_settings import HOME, MAX_LINES
 from notify_tools import ns
 from os_tools import tree
 from path_tools import open_path, print_path
-from python_compatibility import reload
+from python_compatibility import reload, exec_file
 from smart_list import SmartList
 from subprocess_tools import meld, subl
 from wai import wai, call_gets
@@ -69,7 +71,10 @@ if IS_LINUX:
 
 def reload_pythonrc():
     '''Reload this file to update current CLI session without exiting. Reloadception!'''
-    execfile(os.environ.get('PYTHONSTARTUP'))
+    if python_compatibility.is_in_python_2():
+        exec_file(os.environ.get('PYTHONSTARTUP'))
+    else:
+        warning("Reloading pythonrc in Python 3+ isn't working yet.")
 
 
 def print_tabulate(
@@ -144,6 +149,11 @@ def print_tabulate(
     if is_limited:
         print('...')
         print('Only showing %i/%i results' % (limit, len_before_limit))
+
+
+def pwd():
+    '''Print current working directory.'''
+    print(os.getcwd())
 
 
 # Add tab complete and append history file on exit.
