@@ -1,6 +1,7 @@
 '''Path tools with folders and directories.'''
 
 import os
+import re
 
 from cli_tools import cb
 from colors import bright_blue, bright_red, bright_yellow
@@ -68,3 +69,33 @@ def open_path(path):
 
     print(bright_red('Not sure how to open'),)
     print(get_colored_path(path))
+
+
+def re_sub_in_dir(dir_path, regex_pattern, replacement, dry_run=True):
+    '''Replaces filenames in a specified directory that match a regular expression pattern with a
+    replacement string.
+
+    Args:
+        dir_path (str): The path to the directory containing the filenames to be replaced.
+        regex_pattern (str): The regular expression pattern to search for in the filenames.
+        replacement (str): The string to replace the matched pattern with.
+        dry_run (bool): Will rename files if True.
+
+    Returns:
+        None
+    '''
+    count = 0
+    for filename in os.listdir(dir_path):
+        if re.match(regex_pattern, filename):
+            new_filename = re.sub(regex_pattern, replacement, filename)
+            print('Renaming "{}" -> "{}"'.format(filename, new_filename))
+            if dry_run:
+                print('Not renaming in dry run')
+            else:
+                os.rename(os.path.join(dir_path, filename), os.path.join(dir_path, new_filename))
+            count += 1
+
+    if not count:
+        print('No files to rename')
+    elif count > 1:
+        print('Replacing {} files'.format(count))
