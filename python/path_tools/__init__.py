@@ -72,13 +72,13 @@ def open_path(path):
 
 
 def re_sub_in_dir(dir_path, regex_pattern, replacement, dry_run=True):
-    '''Replaces filenames in a specified directory that match a regular expression pattern with a
+    '''Replaces filenames in a specified directory that contains a regular expression pattern with a
     replacement string.
 
     Args:
         dir_path (str): The path to the directory containing the filenames to be replaced.
         regex_pattern (str): The regular expression pattern to search for in the filenames.
-        replacement (str): The string to replace the matched pattern with.
+        replacement (str): The string to replace the regex pattern with.
         dry_run (bool): Will rename files if True.
 
     Returns:
@@ -86,7 +86,7 @@ def re_sub_in_dir(dir_path, regex_pattern, replacement, dry_run=True):
     '''
     count = 0
     for filename in os.listdir(dir_path):
-        if re.match(regex_pattern, filename):
+        if re.search(regex_pattern, filename):
             new_filename = re.sub(regex_pattern, replacement, filename)
             print('Renaming "{}" -> "{}"'.format(filename, new_filename))
             if dry_run:
