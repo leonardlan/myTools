@@ -9,7 +9,7 @@ import time
 
 from lancore import var_name, human_int, human_time, my_timestamp
 from my_logging import info
-from python_compatibility import is_string
+from python_compatibility import get_input, is_string
 
 
 def find(haystack, needle, all=False, first=False, ignore_case=True, max_results=50):
@@ -300,15 +300,19 @@ def cb_strings(delimiter='\n'):
     return cb(type='strings', delimiter=delimiter)
 
 
-def confirm(question):
-    '''True if user confirms yes/no question. False otherwise. Will keep asking if not y/n.'''
-    reply = str(raw_input('{} (y/n): '.format(question))).lower().strip()
-    if reply:
-        if reply[0] == 'y':
+def confirm(prompt):
+    '''Returns True if user confirms yes/no question. False otherwise.
+
+    Will keep asking if not yes/y/no/n.
+    '''
+    while True:
+        answer = get_input(prompt + ' (yes/no): ').lower()
+        if answer in ['yes', 'y']:
             return True
-        if reply[0] == 'n':
+        elif answer in ['no', 'n']:
             return False
-    return confirm('Please enter')
+        else:
+            print("Invalid input. Please enter 'yes', 'y', 'no', or 'n'")
 
 
 def diff_lists(apples, oranges):

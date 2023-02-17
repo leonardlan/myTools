@@ -41,3 +41,11 @@ def exec_file(file_path):
         execfile(file_path)
     else:
         exec(open(file_path).read())
+
+
+def get_input(*args, **kwargs):
+    '''Python renamed raw_input() to input().'''
+    if is_in_python_2():
+        return raw_input(*args, **kwargs)
+    else:
+        return input(*args, **kwargs)
