@@ -2,6 +2,7 @@
 
 import os
 import re
+import shutil
 
 from cli_tools import cb
 from colors import bright_blue, bright_red, bright_yellow
@@ -99,3 +100,37 @@ def re_sub_in_dir(dir_path, regex_pattern, replacement, dry_run=True):
         print('No files to rename')
     elif count > 1:
         print('Replacing {} files'.format(count))
+
+
+def remove_path(path, remove_empty_directories=False, dry_run=True):
+    '''Removes file or folder path. Can also remove upper directory if remove_empty_directories is
+    True.
+
+    Args:
+        path (str): File or folder path to be removed.
+        remove_empty_directories (bool): If True, removes upper director(ies) if it's empty after
+            removing current path.
+        dry_run (bool): Will remove path if True.
+
+    Returns:
+        None
+    '''
+    if not os.path.exists(path):
+        print('Path already does not exist: {}'.format(path))
+        return
+
+    # If remove_empty_directories is True, go up folder until not empty.
+    if remove_empty_directories:
+        while len(os.listdir(os.path.dirname(path))) == 1:
+            path = os.path.dirname(path)
+
+    # Remove path.
+    print('Removing {}'.format(path))
+    if dry_run:
+        print('Not removing in dry run')
+    else:
+        # Remove file/folder.
+        if os.path.isfile(path):
+            os.remove(path)
+        else:
+            shutil.rmtree(path)
