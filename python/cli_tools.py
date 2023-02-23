@@ -296,7 +296,13 @@ def cb(content=None, type='string', delimiter='\n'):
     return str(res)
 
 
+def cb_ints():
+    '''Returns all integers found in clipboard.'''
+    return cb(type='ints')
+
+
 def cb_strings(delimiter='\n'):
+    '''Returns list of clipboard content as string separated by newlines.'''
     return cb(type='strings', delimiter=delimiter)
 
 
