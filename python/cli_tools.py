@@ -13,17 +13,21 @@ from python_compatibility import get_input, is_string
 
 
 def find(haystack, needle, all=False, first=False, ignore_case=True, max_results=50):
-    '''Prints path to needle in iterable haystack (can be nested list or dict).
+    '''Prints path to needle in iterable haystack (can be nested list, dict, os.environ, set, or
+    tuple).
+
+    Useful for finding path to a specific value or string from an API call result.
 
     Example:
         >>> haystack = {
-            'fruits': [
-                {'color': 'yellow', 'name': 'banana'},
-                {'color': 'red', 'name': 'strawberry'},
-                {'color': 'yellow', 'name': 'lemon'}],
-            'vegetables': [
-                {'color': 'green', 'name': 'green pepper'}
-        ]}
+            'fruits': {
+                'banana': {'color': 'yellow', 'cost_per_lb': 1.63},
+                'strawberry': {'color': 'red', 'cost_per_lb': 2.07},
+                'lemon': {'color': 'yellow', 'cost_per_lb': 3.24}},
+            'vegetables': {
+                'green pepper': {'color': 'green'}},
+            'employees': ('Bob', 'John', 'Jane', 'Paul'),
+            'supervisors': set(['Alex', 'Jonas', 'Gary'])}
 
         >>> find(haystack, 'pepper')
         INFO: Searching...
@@ -48,8 +52,19 @@ def find(haystack, needle, all=False, first=False, ignore_case=True, max_results
         INFO: Searching...
         INFO: Not found
 
+        >>> find(haystack, 3.24)
+        [INFO] Searching...
+        ['fruits']['lemon']['cost_per_lb']: 3.24
+        [INFO] Found 1 result
+
+        # Search os.environ
+        >>> find(os.environ, 'SYSTEMDRIVE')
+        INFO: Searching...
+        ['SYSTEMDRIVE']: C:
+        INFO: Found 1 result
+
     Args:
-        haystack (dict or list): Nested dict or list.
+        haystack (list, dict, set, or tuple): Nested list, dict, set, or tuple.
         needle (anything): Target to find.
         all (bool): Shows all results if True. Up to max_results otherwise.
         first (bool): Returns first result if True. All results otherwise.
@@ -85,9 +100,9 @@ def find(haystack, needle, all=False, first=False, ignore_case=True, max_results
 def _find(haystack, needle, first, ignore_case):
     '''Recursive helper for find().'''
     results = []
-    if isinstance(haystack, dict):
+    if isinstance(haystack, (dict, os._Environ)):
         iterable = sorted(haystack.items())
-    elif isinstance(haystack, list):
+    elif isinstance(haystack, (list, tuple, set)):
         iterable = enumerate(haystack)
     else:
         # Not sure how to iterate or if iterable.
@@ -96,8 +111,8 @@ def _find(haystack, needle, first, ignore_case):
     for key, val in iterable:
         # Check both key and val.
         for item in [key, val]:
-            if isinstance(item, (dict, list)):
-                # It's a dict/list. Check recursively.
+            if isinstance(item, (dict, list, tuple, set)):
+                # It's iterable. Check recursively.
                 recursive_results = _find(item, needle, first, ignore_case)
                 if recursive_results:
                     results.extend([[key] + res for res in recursive_results])
@@ -139,7 +154,7 @@ DEFAULT_DELIMITER = ' '
 
 
 def get(data, *keys, **kwargs):
-    '''Get value in nested dict/list. keys can be path to value or space-delimited string.
+    '''Get value in nested dict, list, or tuple. keys can be path to value or space-delimited string.
     Returns None if not found.
 
     >>> data = {
@@ -159,8 +174,11 @@ def get(data, *keys, **kwargs):
     'green pepper'
 
     Args:
+        data (nested dict, list, or tuple): Data to get value from given keys.
         keys (list or str): Keys of path to value. Can also be string of keys separated by space
             delimiter.
+
+    Kwargs:
         delimiter (str): Delimiter for when keys is string. Defaults to space.
 
     Returns:
