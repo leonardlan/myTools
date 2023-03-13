@@ -56,7 +56,7 @@ def list_files(
         print_found (bool): Prints found paths while looping, if True.
         max_depth (int or None): Max depth to walk into. None means no max depth.
         ignore_dir (str, [str], or None): Directories to ignore, match by name.
-        ignore_case (bool): Ignore case for _ if True.
+        ignore_case (bool): Ignore case for name_contains if True.
 
     Returns:
         list: File paths.
