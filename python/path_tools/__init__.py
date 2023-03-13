@@ -4,6 +4,8 @@ import os
 import re
 import shutil
 
+import settings_general
+
 from cli_tools import cb
 from colors import bright_blue, bright_red, bright_yellow
 
@@ -134,3 +136,8 @@ def remove_path(path, remove_empty_directories=False, dry_run=True):
             os.remove(path)
         else:
             shutil.rmtree(path)
+
+
+def remove_illegal_characters(path, char=None):
+    '''Replace illegal path characters with given char in given path. '''
+    return path.translate({ord(c): char for c in settings_general.ILLEGAL_PATH_CHARACTERS})
