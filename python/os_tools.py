@@ -43,15 +43,20 @@ def walk_dir(path='.', max_depth=None, ignore_dir=None, ignore_case=True):
                     dirs.remove(dir_)
 
 
-def list_files(path='.', ext=None, print_found=False, max_depth=None, ignore_dir=None):
+def list_files(
+        path='.', name_contains='', ext=None, print_found=False, max_depth=None, ignore_dir=None,
+        ignore_case=True):
     '''List files in folder recursively using os.walk() with extensions filter.
 
     Args:
         path (str): Root directory to search. Defaults to current directory.
+        name_contains (str): Filter files by name contains using "in" operator. Use ignore_case if
+            ignoring case.
         ext (str, [str], (str,)): Case-insensitive match file path using endswith().
         print_found (bool): Prints found paths while looping, if True.
         max_depth (int or None): Max depth to walk into. None means no max depth.
         ignore_dir (str, [str], or None): Directories to ignore, match by name.
+        ignore_case (bool): Ignore case for _ if True.
 
     Returns:
         list: File paths.
@@ -67,8 +72,16 @@ def list_files(path='.', ext=None, print_found=False, max_depth=None, ignore_dir
 
     # Walk directory.
     paths = []
+    name_contains = name_contains.lower() if ignore_case else name_contains
     for root, _, files in walk_dir(path=path, max_depth=max_depth, ignore_dir=ignore_dir):
         for file in files:
+            # Filter by name_contains.
+            if name_contains:
+                if ignore_case and name_contains not in file.lower():
+                    continue
+                elif not ignore_case and name_contains not in file:
+                    continue
+
             if ext is None or (ext and file.lower().endswith(ext)):
                 full_path = join(root, file)
                 paths.append(full_path)
@@ -123,3 +136,12 @@ def print_dir_sizes(path='.', max_depth=None, ignore_dir=None, ignore_case=True)
             except Exception as err:
                 print('Unable to get dir size: {}'.format(err))
         print('{} [{} bytes | {} files]'.format(root, size, len(files)))
+
+
+
+def make_dirs(path, print_=True):
+    '''Creates directory if not exists.'''
+    if not os.path.exists(path):
+        if print_:
+            print('Creating folder {}'.format(path))
+        os.makedirs(path)
