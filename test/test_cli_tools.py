@@ -15,14 +15,18 @@ EXAMPLE_DATA = {
     'contacts': {
         'John Smith': {
             'gender': 'male',
-            'email': 'john.smith.gmail.com'
+            'email': 'john.smith@gmail.com'
         },
         'Jane Smithers': {
             'gender': 'female',
-            'email': 'jane.smithers.gmail.com'
+            'email': 'jane.smithers@gmail.com'
         }
     },
-    'comment': 'Some comment'
+    'comment': 'Some comment',
+    'countries_tuple': ('Afghanistan', 'Albania', 'USA', 'Canada'),
+    'top_capitals_set':
+        set(['London', 'Tokyo', 'Paris', 'Rome', 'Washington D.C.', 'Berlin', 'Buenos Aires',
+                    'Bangkok'])
 }
 
 
@@ -44,6 +48,8 @@ class TestFind(unittest.TestCase):
     def test_find_val(self):
         self.assertEqual(_find(EXAMPLE_DATA, 'lemon', False, True), [['fruits', 2, 'name']])
         self.assertEqual(_find(EXAMPLE_DATA, 'pepper', False, True), [['vegetables', 0, 'name']])
+        self.assertEqual(_find(EXAMPLE_DATA, 'USA', False, True), [['countries_tuple', 2]])
+        self.assertEqual(_find(EXAMPLE_DATA, 'Berlin', False, True), [['top_capitals_set']])
 
     def test_find_target_both_in_key_and_val(self):
         self.assertEqual(_find(EXAMPLE_DATA, 'comment', False, True), [['comment']])
@@ -69,6 +75,9 @@ class TestGet(unittest.TestCase):
 
     def test_get_in_list_and_dict(self):
         self.assertEqual(get(EXAMPLE_DATA, 'fruits', 0, 'color'), 'yellow')
+
+    def test_get_in_list_dict_tuple(self):
+        self.assertEqual(get(EXAMPLE_DATA, 'countries_tuple', 3), 'Canada')
 
     def test_get_string_with_char_delimiter(self):
         self.assertEqual(get(EXAMPLE_DATA, 'fruits,0,color', delimiter=','), 'yellow')

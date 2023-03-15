@@ -83,6 +83,9 @@ def wai(thing, ignore_private=False, ignore_attrs=None, call=False, skip_callabl
         elif typ == bool:
             print('Just a boolean: %s' % thing)
             return
+        elif typ is set:
+            _wai_set(thing)
+            return
 
         # Out of ideas. We don't know what it is.
 
@@ -202,6 +205,22 @@ def _wai_list(list_, typ):
         _print_parent_types(type(list_[0]))
     else:
         print(DIM + 'Empty %s: %s' % (typ.__name__, str(list_)) + RESET_ALL)
+
+
+def _wai_set(set_):
+    '''What is this set?'''
+    if set_:
+        as_list = list(set_)
+        print(BLUE + 'Set of %s %s%s' % (
+            human_int(len(set_)),
+            get_types(as_list),
+            's' if len(set_) > 1 else ''
+        ))
+        print(NORMAL + GREEN + '%s[0]: ' % var_name(set_),)
+        wai(as_list[0])
+        _print_parent_types(type(as_list[0]))
+    else:
+        print(DIM + 'Empty set: %s' % (str(set_)) + RESET_ALL)
 
 
 def _wai_dict(dict_):
