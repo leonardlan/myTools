@@ -138,7 +138,6 @@ def print_dir_sizes(path='.', max_depth=None, ignore_dir=None, ignore_case=True)
         print('{} [{} bytes | {} files]'.format(root, size, len(files)))
 
 
-
 def make_dirs(path, print_=True):
     '''Creates directory if not exists.'''
     if not os.path.exists(path):
