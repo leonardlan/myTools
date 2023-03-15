@@ -10,8 +10,10 @@ import time
 from lancore import human_time
 from python_compatibility import is_string
 
+
 FFMPEG_CMD = 'ffmpeg'
 FFPROBE_CMD = 'ffprobe'
+MP3_EXT = '.mp3'
 
 
 def trim(media_path, start='', end='', output_path=None, suffix='_trimmed', dry_run=False):
@@ -106,20 +108,24 @@ def _as_timestamp(seconds):
         'Invalid seconds type: {}. Should be int, float, or string'.format(type(seconds)))
 
 
-def convert_to_mp3(media_path):
+def convert_to_mp3(media_path, remove_original=False):
     '''Convert file to mp3.'''
     file_name, _ = os.path.splitext(media_path)
     root = os.path.dirname(media_path)
     media_path = os.path.join(root, media_path)
-    dest_file = os.path.join(root, '{}.mp3'.format(file_name))
+    dest_file = os.path.join(root, '{}{}'.format(file_name, MP3_EXT))
     if not os.path.exists(dest_file):
         res = os.system('{} -i "{}" "{}"'.format(FFMPEG_CMD, media_path, dest_file))
-        return res
+
+        if res == 0 and remove_original:
+            print('Removing original {}'.format(media_path))
+            os.remove(media_path)
+        return dest_file
     else:
         print('File already exists: {}'.format(dest_file))
 
 
-def convert_to_mp3_in_dir(root):
+def convert_to_mp3_in_dir(root, remove_original=False):
     '''Convert audio/video files to mp3 in DIR using ffmpeg.'''
     if not os.path.exists(root):
         print('Path does not exist: {}'.format(root))
@@ -132,11 +138,12 @@ def convert_to_mp3_in_dir(root):
     failed_to_convert = []
     converted = []
     for ind, fil in enumerate(files):
-        if fil.endswith('.mp3'):
+        fil = os.path.join(root, fil)
+        if fil.endswith(MP3_EXT):
             continue
 
         print('Converting {} ({}/{})...'.format(fil, ind + 1, count))
-        res = convert_to_mp3(fil)
+        res = convert_to_mp3(fil, remove_original=remove_original)
 
         if res == 0:
             converted.append(fil)
