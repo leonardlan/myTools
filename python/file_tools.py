@@ -64,3 +64,8 @@ def write_file(file_path, lines, mode=WRITE_ONLY_MODE):
     content = '\n'.join(lines) if isinstance(lines, list) else lines
     with open(file_path, mode) as fil:
         fil.write(content)
+
+
+def clear_file(file_path):
+    '''Clears files.'''
+    open(file_path, 'w').close()
