@@ -16,6 +16,18 @@ def get_colored_diff(s1, s2, s1_color_func=colors.bright_red, s2_color_func=colo
     Returns:
         str: String with colored red/green showing difference between s1 (red) and s2 (gree).
     '''
+    # Handle both equal.
+    if s1 == s2:
+        return '"{}"'.format(s1)
+
+    # Handle either string empty.
+    if not s1:
+        return '"" -> "{}"'.format(s2_color_func(s2))
+    if not s2:
+        return '"{}" -> ""'.format(s1_color_func(s1))
+
+    s1, s2 = str(s1), str(s2)
+
     # Compare by iterating over shorter string.
     res = ''
     diff_count = 0
