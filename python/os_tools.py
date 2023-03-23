@@ -45,7 +45,7 @@ def walk_dir(path='.', max_depth=None, ignore_dir=None, ignore_case=True):
 
 def list_files(
         path='.', name_contains='', ext=None, print_found=False, max_depth=None, ignore_dir=None,
-        ignore_case=True):
+        ignore_case=True, return_file_names=False):
     '''List files in folder recursively using os.walk() with extensions filter.
 
     Args:
@@ -57,6 +57,8 @@ def list_files(
         max_depth (int or None): Max depth to walk into. None means no max depth.
         ignore_dir (str, [str], or None): Directories to ignore, match by name.
         ignore_case (bool): Ignore case for name_contains if True.
+        return_file_names (bool): Return as file names instead of full path if True. Full path if
+            False.
 
     Returns:
         list: File paths.
@@ -95,6 +97,8 @@ def list_files(
         elif not paths:
             print('Did not find any paths')
 
+    if return_file_names:
+        return [os.path.basename(p) for p in paths]
     return paths
 
 
