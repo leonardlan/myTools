@@ -4,6 +4,7 @@ import os
 import re
 import shutil
 
+import color_tools
 import settings_general
 
 from cli_tools import cb
@@ -91,7 +92,7 @@ def re_sub_in_dir(dir_path, regex_pattern, replacement, dry_run=True):
     for filename in os.listdir(dir_path):
         if re.search(regex_pattern, filename):
             new_filename = re.sub(regex_pattern, replacement, filename)
-            print('Renaming "{}" -> "{}"'.format(filename, new_filename))
+            print('Renaming {}'.format(color_tools.get_colored_diff(filename, new_filename)))
             if dry_run:
                 print('Not renaming in dry run')
             else:
@@ -102,6 +103,11 @@ def re_sub_in_dir(dir_path, regex_pattern, replacement, dry_run=True):
         print('No files to rename')
     elif count > 1:
         print('Replacing {} files'.format(count))
+
+
+def re_remove_in_dir(dir_path, regex_pattern, dry_run=True):
+    '''Removes regex pattern in filename in directory.'''
+    re_sub_in_dir(dir_path, regex_pattern, '', dry_run=dry_run)
 
 
 def remove_path(path, remove_empty_directories=False, dry_run=True):
