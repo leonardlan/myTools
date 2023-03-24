@@ -26,7 +26,14 @@ def get_colored_diff(s1, s2, s1_color_func=colors.bright_red, s2_color_func=colo
     if not s2:
         return '"{}" -> ""'.format(s1_color_func(s1))
 
+    # Cast as string.
     s1, s2 = str(s1), str(s2)
+
+    # Handle one string ends with the other.
+    if s1.endswith(s2):
+        return '{}{}'.format(s1_color_func(s1[:-len(s2)]), s2_color_func(s1[-len(s2):]))
+    if s2.endswith(s1):
+        return '{}{}'.format(s2_color_func(s2[:-len(s1)]), s1_color_func(s2[-len(s1):]))
 
     # Compare by iterating over shorter string.
     res = ''
