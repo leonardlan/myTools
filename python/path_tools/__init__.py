@@ -147,3 +147,48 @@ def remove_path(path, remove_empty_directories=False, dry_run=True):
 def remove_illegal_characters(path, char=None):
     '''Replace illegal path characters with given char in given path. '''
     return path.translate({ord(c): char for c in settings_general.ILLEGAL_PATH_CHARACTERS})
+
+
+def flatten_files(directory, dry_run=True, remove_empty=True, delimiter='_'):
+    '''Flattens all files in subfolders into the main directory.
+
+    Args:
+        directory (str): The main directory to which the files should be moved.
+        dry_run (bool): If False, the function will actually move the files.
+        remove_empty (bool): If True, the function will remove empty subdirectories after flattening
+            the files. If False, the function will leave empty subdirectories in place.
+        delimiter (str): Rename separators with this character when moving to main directory.
+
+    Returns:
+        None
+
+    Raises:
+        OSError: If there is an error moving or removing a file or directory.
+    '''
+    for subdir, _, files in os.walk(directory):
+        # Skip main directory.
+        if subdir == directory:
+            continue
+
+        # Get prefix of relative path to directory for adding to filename.
+        dir_prefix = os.path.relpath(subdir, directory).replace(os.sep, delimiter)
+
+        for file in files:
+            src_path = os.path.join(subdir, file)
+            new_filename = delimiter.join([dir_prefix, file])
+            dst_path = os.path.join(directory, new_filename)
+            if dry_run:
+                print(f'Moving {src_path} to {dst_path}')
+            else:
+                shutil.move(src_path, dst_path)
+        if remove_empty and not os.listdir(subdir):
+            if dry_run:
+                print(f'Would remove empty directory {subdir}')
+            else:
+                os.rmdir(subdir)
+    if dry_run:
+        print('Dry run complete. No files were moved or directories removed.')
+    else:
+        print('All files have been moved to the main directory.')
+        if remove_empty:
+            print('Empty subdirectories have been removed.')
