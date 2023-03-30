@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import os
+import pprint
 import re
 import sys
 import time
@@ -243,7 +244,7 @@ def print_sys_path(key=''):
     _print_paths(sys.path, key=key)
 
 
-def _cb(content=None):
+def _cb(content=None, pformat=False):
     '''Helper for cb().'''
     try:
         import clipboard, pyperclip
@@ -260,15 +261,23 @@ def _cb(content=None):
 
         # Copy content to clipboard.
         clip.EmptyClipboard()
+
+        # Pretty format?
+        content = pprint.pformat(content) if pformat else content
+
         clip.SetClipboardText(str(content), clip.CF_UNICODETEXT)
         clip.CloseClipboard()
     else:
         if content is None:
             return clipboard.paste()
+
+        # Pretty format?
+        content = pprint.pformat(content) if pformat else content
+
         clipboard.copy(str(content))
 
 
-def cb(content=None, type='string', delimiter='\n'):
+def cb(content=None, type='string', delimiter='\n', pformat=False):
     '''If content is supplied, copy it to clipboard. If content is None, returns clipboard content.
     Supports Windows and Linux.
 
@@ -281,8 +290,10 @@ def cb(content=None, type='string', delimiter='\n'):
             int: First integer as int.
             ints: Integers.
         delimiter (str): Delimiter to separate clipboard text. Defaults to newline.
+        pformat (bool): If True and content is provided, will copy content to clipboard after pretty
+            formatting with pformat. Useful for copying human-readable list to clipboard.
     '''
-    res = _cb(content=content)
+    res = _cb(content=content, pformat=pformat)
 
     if content:
         return
