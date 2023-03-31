@@ -44,12 +44,12 @@ def walk_dir(path='.', max_depth=None, ignore_dir=None, ignore_case=True):
 
 
 def list_files(
-        path='.', name_contains='', ext=None, print_found=False, max_depth=None, ignore_dir=None,
+        root_dir='.', name_contains='', ext=None, print_found=False, max_depth=None, ignore_dir=None,
         ignore_case=True, return_file_names=False):
     '''List files in folder recursively using os.walk() with extensions filter.
 
     Args:
-        path (str): Root directory to search. Defaults to current directory.
+        root_dir (str): Root directory to search. Defaults to current directory.
         name_contains (str): Filter files by name contains using "in" operator. Use ignore_case if
             ignoring case.
         ext (str, [str], (str,)): Case-insensitive match file path using endswith().
@@ -75,7 +75,7 @@ def list_files(
     # Walk directory.
     paths = []
     name_contains = name_contains.lower() if ignore_case else name_contains
-    for root, _, files in walk_dir(path=path, max_depth=max_depth, ignore_dir=ignore_dir):
+    for root, _, files in walk_dir(path=root_dir, max_depth=max_depth, ignore_dir=ignore_dir):
         for file in files:
             # Filter by name_contains.
             if name_contains:
@@ -88,7 +88,7 @@ def list_files(
                 full_path = join(root, file)
                 paths.append(full_path)
                 if print_found:
-                    print(full_path)
+                    print(os.path.relpath(full_path, root_dir))
 
     # Print report.
     if print_found:
