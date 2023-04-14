@@ -16,7 +16,9 @@ FFPROBE_CMD = 'ffprobe'
 MP3_EXT = '.mp3'
 
 
-def trim(media_path, start='', end='', output_path=None, suffix='_trimmed', dry_run=False):
+def trim(
+        media_path, start='', end='', track_num=None, output_path=None, suffix='_trimmed',
+        dry_run=False):
     '''Trim audio/video to input start/end timestamps and as save as output_path.
 
     Example ffmpeg command:
@@ -26,9 +28,10 @@ def trim(media_path, start='', end='', output_path=None, suffix='_trimmed', dry_
         media_path (str): Path to audio/video.
 
     Kwargs:
-        start (str, int, or float): Start timestamp as string ('HH:MM:SS'; ie. '00:01:12') or
-            seconds as int or float.
+        start (str, int, or float): Start timestamp as string ('HH:MM:SS'; ie. '00:01:12', 'MM:SS';
+            ie. '2:25') or seconds as int or float.
         end (str): End timestamp as string or seconds from end of file, as positive int or float.
+        track_num (int, str, or None): Metadata track number to add to trimmed file.
         output_path (str): Output path. If None, adds suffix to filename.
         suffix (str): If output_path is None, adds default suffix.
         dry_run (bool): Doesn't run ffmpeg command if True.
@@ -60,7 +63,13 @@ def trim(media_path, start='', end='', output_path=None, suffix='_trimmed', dry_
         root, ext = os.path.splitext(media_path)
         output_path = root + suffix + ext
 
-    commands.extend(['-i', '"{}"'.format(media_path), '-c', 'copy', '"{}"'.format(output_path)])
+    commands.extend(['-i', '"{}"'.format(media_path)])
+
+    # Add track number.
+    if track_num:
+        commands.extend([f'-metadata track={track_num}'])
+
+    commands.extend(['-c', 'copy', '"{}"'.format(output_path)])
 
     cmd = ' '.join(commands)
     print('Running command: {}'.format(cmd))
@@ -68,8 +77,7 @@ def trim(media_path, start='', end='', output_path=None, suffix='_trimmed', dry_
         print('Not running in dry run')
         return None
 
-    res = os.system(cmd)
-    return res
+    return os.system(cmd)
 
 
 def get_length(media_path):
@@ -84,11 +92,11 @@ def get_length(media_path):
 
 
 def _as_timestamp(seconds):
-    '''Get timestamp as string of 'HH:MM:SS' from int or string (100 -> '0:01:40').
+    '''Convert int/float into timestamp string of 'HH:MM:SS'. Return input if already string.
 
     Args:
         seconds (str, int, or float): Seconds as:
-            - string: 'HH:MM:SS' or 'HH:MM:SS.SSS'
+            - string: acceptable by ffmpeg (ie. 'MM:SS', 'HH:MM:SS' or 'HH:MM:SS.SSS')
             - int: 100 -> '0:01:40'
             - float: 55.123 -> '0:00:55.123000'
 
@@ -101,9 +109,7 @@ def _as_timestamp(seconds):
     if isinstance(seconds, (int, float)):
         return str(datetime.timedelta(seconds=seconds))
     elif is_string(seconds):
-        if re.match(r'\d+:\d\d:\d\d(\.\d*)?$', seconds):
-            return seconds
-        raise ValueError('Input "{}" seconds does not match HH:MM:SS'.format(seconds))
+        return seconds
     raise TypeError(
         'Invalid seconds type: {}. Should be int, float, or string'.format(type(seconds)))
 
@@ -169,3 +175,80 @@ def convert_to_mp3_in_dir(root, remove_original=False):
     if failed_to_convert:
         print('Failed to convert {} file(s):\n{}'.format(
             len(failed_to_convert), '\n'.join(failed_to_convert)))
+
+
+def split_audio_file(
+        audio_file_path, timestamps_file_path, overwrite=False, directory='.', add_track_num=True,
+        dry_run=True):
+    '''Split an audio file into smaller files based on timestamps defined in a text file.
+
+    Written with the help of ChatGPT.
+
+    Args:
+        audio_file_path (str): The path to the input audio file.
+        timestamps_file_path (str): The path to the text file containing the timestamps for
+            splitting the audio file. Example line: "0:00 3:45 Song Title"
+        overwrite (bool): If True, overwrite existing output files with the same name. Defaults to
+            False.
+        directory (str): The directory where the output files will be saved. Defaults to the current
+            directory.
+        add_track_num (bool): If True, adds track number according to order in timestamp file,
+            starting with 1.
+        dry_run (bool): Doesn't run ffmpeg command if True.
+
+    Returns:
+        None
+
+    Raises:
+        None
+
+    Example Usage:
+    >>> split_audio_file(
+            'input_file.mp3',
+            'timestamps.txt',
+            overwrite=True,
+            directory='/path/to/output/directory')
+    '''
+    # Open the timestamps file and read in each line.
+    with open(timestamps_file_path, 'r') as f:
+        lines = f.readlines()
+
+    # Iterate through each line, split it into its components, and split the audio file.
+    failed_files = []
+    for index, line in enumerate(lines):
+        components = line.strip().split(' ')
+        start = components[0]
+        end = components[1]
+        text = ' '.join(components[2:])
+        track_num = index + 1
+
+        # Generate a new file name based on the text
+        new_file_name = f'{text}.mp3'
+
+        # Check if the file already exists and whether we should overwrite it
+        file_path = os.path.join(directory, new_file_name)
+        if os.path.exists(file_path) and not overwrite:
+            print(f'Skipping file {file_path} since it already exists and overwrite=False')
+            continue
+
+        # Use FFmpeg to split the audio file
+        result = trim(
+            audio_file_path,
+            start=start,
+            end=end,
+            track_num=track_num if add_track_num else None,
+            output_path=file_path,
+            dry_run=dry_run)
+
+        # Check if the split was successful and print a message
+        if result == 0:
+            print(f'Split audio file from {start} to {end} and saved to {file_path}')
+        elif not dry_run:
+            print(f'Failed to split audio file from {start} to {end} and save to {file_path}')
+            failed_files.append(file_path)
+
+    # Print out a list of files that failed to save
+    if not dry_run and failed_files:
+        print('The following files failed to save:')
+        for file_name in failed_files:
+            print(file_name)
