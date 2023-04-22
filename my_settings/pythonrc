@@ -210,7 +210,7 @@ else:
         with open(PYTHON_HISTORY_PATH, 'a+') as fil:
             fil.write("\n'''New session [%s]'''\n" % my_timestamp())
             # Ignore ASCII otherwise Python 3 will throw UnicodeDecodeError in the next session.
-            fil.write(history.encode('ascii', errors='ignore') + '\n')
+            fil.write(history.encode('ascii', errors='ignore') + b'\n')
 
 
     # Register _append_history_file() on CLI exit.
