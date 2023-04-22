@@ -3,6 +3,7 @@ AUDIO = ('aif', 'mp3', 'm4a', 'wav', 'wma')
 IMAGE = ('exr', 'gif', 'jpeg', 'jpg', 'png', 'ppm', 'svg', 'tif', 'tiff', 'ttf')
 VIDEO = ('avi', 'mov', 'mp4', 'mpeg', 'mpg')
 AUDIO_AND_VIDEO = AUDIO + VIDEO
+IMAGE_METADATA = 'aae'  # Extra XML metadata (ie. camera information) format used by Apple.
 
 # Documents.
 EXCEL = ('xls', 'xlsb', 'xlsm', 'xlsx')
