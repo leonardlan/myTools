@@ -93,28 +93,35 @@ class BaseFile:
         return key_map.get(key, key) if key_map else key
 
     def __getitem__(self, key):
+        '''Get key value.'''
         key = self._get_key(key)
         return self.mutagen_file.get(key)
 
     def get(self, key, default=None):
+        '''Get key value, defaulting to specified value.'''
         key = self._get_key(key)
         return self.mutagen_file.get(key, default)
 
     def __contains__(self, key):
+        '''Check if key in mutagen file keys.'''
         return key in self.mutagen_file
 
     def __setitem__(self, key, val):
+        '''Change key value.'''
         key = self._get_key(key)
         self.mutagen_file[key] = val
 
     def __delitem__(self, key):
+        '''Delete key.'''
         key = self._get_key(key)
         del self.mutagen_file[key]
 
     def keys(self):
+        '''Return all keys.'''
         return self.mutagen_file.keys()
 
     def save(self, *args, **kwargs):
+        '''Save file.'''
         return self.mutagen_file.save(*args, **kwargs)
 
 
