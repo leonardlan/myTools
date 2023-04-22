@@ -41,7 +41,7 @@ def randomly_error(percentage=50):
 
 
 def infinite_loop():
-    '''Hangs current process.'''
+    '''Hangs current process. Session will have high power usage.'''
     print('Hanging in infinite loop...')
     while True:
         pass
