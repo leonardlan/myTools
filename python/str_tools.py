@@ -49,10 +49,9 @@ def string_match(
 
     # Remove specified characters.
     if remove_chars:
-        strings_to_match = [re.sub('[' + re.escape(remove_chars) + ']', '', str_) \
-            for str_ in strings_to_match]
-        _string_list = [re.sub('[' + re.escape(remove_chars) + ']', '', str_) \
-            for str_ in _string_list]
+        regex = '[' + re.escape(remove_chars) + ']'
+        strings_to_match = [re.sub(regex, '', str_) for str_ in strings_to_match]
+        _string_list = [re.sub(regex, '', str_) for str_ in _string_list]
 
     # Split extension in string_list.
     if split_ext:
