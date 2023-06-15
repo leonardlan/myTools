@@ -350,6 +350,30 @@ def confirm(prompt):
             print("Invalid input. Please enter 'yes', 'y', 'no', or 'n'")
 
 
+def choose_one(items):
+    '''Returns index of item in list that the user chooses. None if user chooses None.
+
+    >>> res = cli_tools.choose_one(['A', 'B', 'C'])
+    Choose one by entering number (or skip with Enter):
+     1) A
+     2) B
+     3) C
+    Choose one by entering number (or skip with Enter): 3
+    Chosen: 3
+    >>> print(res)
+    2
+    '''
+    instruct = 'Choose one by entering number (or skip with Enter): '
+    prompt = '{0}\n{1}\n{0}'.format(
+        instruct, '\n'.join([' {}) {}'.format(i + 1, item) for i, item in enumerate(items)]))
+    answer = get_input(prompt)
+    if answer.isdigit() and 1 <= int(answer) <= len(items) + 1:
+        print('Chosen: {}'.format(answer))
+        return int(answer) - 1
+    print('Did not choose any')
+    return None
+
+
 def diff_lists(apples, oranges):
     '''Print difference between two dicts (apples vs. oranges).
 
