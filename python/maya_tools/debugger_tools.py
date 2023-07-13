@@ -164,7 +164,7 @@ def diff(apple=None, orange=None):
             apple_plug = '{}.{}'.format(apple, attr)
             try:
                 apple_val = cmds.getAttr(apple_plug)
-            except RuntimeError, err:
+            except RuntimeError as err:
                 print('Could not get {}: {}'.format(apple_plug, str(err).strip()))
                 continue
 
@@ -172,7 +172,7 @@ def diff(apple=None, orange=None):
             orange_plug = '{}.{}'.format(orange, attr)
             try:
                 orange_val = cmds.getAttr(orange_plug)
-            except RuntimeError, err:
+            except RuntimeError as err:
                 print('Could not get {}: {}'.format(orange_plug, str(err).strip()))
                 continue
 

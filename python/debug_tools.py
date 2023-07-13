@@ -32,7 +32,7 @@ def find_traceback(file_path):
 
     try:
         fil = open(file_path, 'r')
-    except IOError, exception:
+    except IOError as exception:
         return (tracebacks, 'Unable to open {}: {}'.format(file_path, exception.strerror))
 
     with fil:
