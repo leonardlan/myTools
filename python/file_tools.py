@@ -1,9 +1,15 @@
 '''Tools for reading/writing to files.'''
 
 
-WRITE_ONLY_MODE = 'w'
-APPEND_ONLY_MODE = 'a'
+import re
 
+
+APPEND_ONLY_MODE = 'a'
+READ_ONLY_MODE = 'r'
+READ_WRITE_MODE = 'r+'
+WRITE_ONLY_MODE = 'w'
+
+MAX_LINE_LENGTH = 100
 
 def read_file(
         file_path, print_lines=True, print_line_num=False, max_lines=None, max_line_len=100,
@@ -53,7 +59,41 @@ def read_file(
     return None
 
 
-def write_file(file_path, lines, mode=WRITE_ONLY_MODE):
+def find_in_file(file_path, target, regex_match=False, first_only=True):
+    '''Find target in file.
+
+   Args:
+        file_path (str): File path.
+        target (str): Target as normal or regex search string.
+
+   Kwargs:
+        regex_match (bool): Use re.match() if True; use 'in' operator otherwise.
+
+   Returns:
+        (int, (str/re.Match)) or [(int, (str/re.Match))]: If first_only is True, returns tuple of
+            first (zero-based) index that matches target and re.Match object if regex_match is True,
+            else line with target. If first_only is False, returns list of above matched lines.
+            Empty list if no matches.
+    '''
+    results = []
+    with open(file_path, READ_ONLY_MODE) as fil:
+        for index, line in enumerate(fil):
+            if regex_match:
+                res = re.match(target, line)
+                if res:
+                    if first_only:
+                        return index, res
+                    results.append((index, res))
+            else:
+                if target in line:
+                    result = index, line.rstrip()
+                    if first_only:
+                        return result
+                    results.append((result))
+    return results
+
+
+def write_file(file_path, lines, mode=WRITE_ONLY_MODE, encoding=None):
     '''Write lines to file.
 
     Args:
@@ -62,7 +102,7 @@ def write_file(file_path, lines, mode=WRITE_ONLY_MODE):
         mode (str): Mode to open file.
     '''
     content = '\n'.join(lines) if isinstance(lines, list) else lines
-    with open(file_path, mode) as fil:
+    with open(file_path, mode, encoding=encoding) as fil:
         fil.write(content)
 
 
