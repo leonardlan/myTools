@@ -3,21 +3,21 @@
 '''${1:What_do_I_do?}
 
 Args:
-    ${2:arg} (${3:type}): ${4:What_am_I?}
+    ${2:arg} (${3:type}): ${4:Description of the argument.}
 
 Kwargs:
-    ${5:kwarg} (${6:type}): ${7:What_am_I?}
+    ${5:kwarg} (${6:type}): ${7:Description of the keyword argument.}
 
 Returns:
-    ${8:type}: ${9:What_do_you_want?}
+    ${8:type}: ${9:Description of the return value.}
 
 Raises:
-   ${10:Error}
+    ${10:Error}: ${11:Description of the error conditions raised (if any).}
 
 Example:
 
->>> print func('foo')
-'fee'
+    >>> func('foo')
+    'fee'
 '''
 ]]></content>
     <tabTrigger>'''</tabTrigger>
