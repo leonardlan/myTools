@@ -208,7 +208,7 @@ def get(data, *keys, **kwargs):
 
 
 def print_env_vars(filter_=''):
-    '''Print os.environ. Able to filter by case-insensitive search.'''
+    '''Print os.environ. Able to filter by case-insensitive search. Split by semi-colon.'''
     count = 0
     for key in sorted(os.environ):
         filter_lower = filter_.lower()
