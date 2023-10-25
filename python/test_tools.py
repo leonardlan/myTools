@@ -1,8 +1,9 @@
-'''Tools for simulating long processes, randomly erroring, infinite-loop hangs, memory leaks, and
-CPU-overload situations. Run with caution.
+'''Tools for simulating long processes, randomly erroring, infinite-loop hangs, memory leaks,
+overloading CPU and disk writing situations. Run with caution.
 '''
 
 import multiprocessing
+import os
 import random
 import sys
 import time
@@ -63,8 +64,8 @@ def memory_leak():
 
 
 def memory_leak_2():
-    print('Starting memory leak...')
     '''Infinite loop with memory leak. Memory rises slower than memory_leak().'''
+    print('Starting memory leak...')
     while True:
         def func(): pass
         func.__doc__ = func
@@ -94,3 +95,22 @@ def crash():
         func()
     print('Crashing using recursion...')
     func()
+
+
+def overload_write(num_chars=10000, char='a', file_path='test.txt'):
+    '''Overload disk write by writing an increasing line of characters to a file. The disk graph in
+    Task Manager should start rising with fluctuations, until it maxes out. Quit with Ctrl+C.
+
+    Kwargs:
+        num_chars (int): Positive integer of number of characters to start and increment with. Can
+            use 1 for slowest rise in disk write.
+        char (str): Character to write with.
+        file_path (str): Path to file to write to.
+    '''
+    increment = char * num_chars
+    line = increment
+    print(f'Writing temp file to {os.path.abspath(file_path)} ...')
+    with open(file_path, 'w') as f:
+        while True:
+            f.write('{}\n'.format(line))
+            line += increment
