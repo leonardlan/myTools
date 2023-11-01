@@ -23,7 +23,7 @@ from tabulate import tabulate
 import python_compatibility
 
 from cli_tools import (cb, cb_strings, confirm, diff, find, get, print_env_vars,
-    print_python_path, print_sys_path, Timer)
+    print_my_python_modules, print_python_path, print_sys_path, Timer)
 from colors import *
 from file_tools import read_file, write_file
 from json_tools import dump_json, load_json

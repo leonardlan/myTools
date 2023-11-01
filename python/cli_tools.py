@@ -10,7 +10,11 @@ import time
 
 from lancore import var_name, human_int, human_time, my_timestamp
 from my_logging import info
+from os_tools import walk_dir
 from python_compatibility import get_input, is_string
+
+
+INIT_PY = '__init__.py'
 
 
 def find(haystack, needle, all=False, first=False, ignore_case=True, max_results=50):
@@ -242,6 +246,23 @@ def print_python_path(key=''):
 def print_sys_path(key=''):
     '''Print sys.path. Able to filter by case-insensitive search.'''
     _print_paths(sys.path, key=key)
+
+
+def print_my_python_modules():
+    path = os.environ.get('MYTOOLS_PYTHONPATH', '')
+    if not path:
+        print('Could not get MYTOOLS_PYTHONPATH from env vars')
+        return
+    for root, _, files in walk_dir(path=path, ignore_dir='__pycache__', ext='.py'):
+        if root == path:
+            # If in root dir, just print all the Python files.
+            for f in files:
+                print(os.path.splitext(f)[0])
+        elif INIT_PY in files:
+            relpath = os.path.relpath(root, path)
+            for f in files:
+                if f != INIT_PY:
+                    print('{}.{}'.format(relpath, os.path.splitext(f)[0]))
 
 
 def _cb(content=None, pformat=False):

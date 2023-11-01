@@ -11,8 +11,10 @@
 :: >
 set prompt=[$t$h$h$h %username%@%computername%]$_$p$_$g$s
 
+set MYTOOLS_PYTHONPATH=%USERPROFILE%\myTools\python
+
 :: Python env vars
-set PYTHONPATH=%PYTHONPATH%;%USERPROFILE%\myTools\python
+set PYTHONPATH=%PYTHONPATH%;%MYTOOLS_PYTHONPATH%
 set PYTHONSTARTUP=%USERPROFILE%\myTools\my_settings\pythonrc
 
 :: Set git ignore global on windows
