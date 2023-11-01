@@ -6,7 +6,7 @@ import python_compatibility
 from os.path import getsize, join
 
 
-def walk_dir(path='.', max_depth=None, ignore_dir=None, ignore_case=True):
+def walk_dir(path='.', max_depth=None, ignore_dir=None, ignore_case=True, ext=None):
     '''Same as os.walk() but with max depth and ignore director(y/ies).
 
     Kwargs:
@@ -14,6 +14,7 @@ def walk_dir(path='.', max_depth=None, ignore_dir=None, ignore_case=True):
         max_depth (int or None): Max depth to walk into. None means no max depth.
         ignore_dir (str, [str], or None): Directories to ignore, match by name.
         ignore_case (bool): If True, will match case-insensitive when ignore_dir is specified.
+        ext (str, [str], or None): Extension(s) to ignore. Searches with endswith().
 
     Returns:
         generator: Same as os.walk()
@@ -25,11 +26,16 @@ def walk_dir(path='.', max_depth=None, ignore_dir=None, ignore_case=True):
     if ignore_case:
         ignore_dirs = set(dir_.lower() for dir_ in ignore_dirs)
 
+    # Get exts as tuple.
+    ext = ext or []
+    exts = [ext] if not isinstance(ext, list) else ext
+    exts = tuple(ext) if not isinstance(ext, tuple) else ext
+    if ignore_case:
+        exts = tuple(ext.lower() for ext in exts)
+
     path = path.rstrip(os.sep)
     num_sep = path.count(os.sep)
     for root, dirs, files in os.walk(path):
-        yield root, dirs, files
-
         # Remove sub directories if max depth reached.
         num_sep_this = root.count(os.sep)
         if isinstance(max_depth, int) and num_sep + max_depth <= num_sep_this:
@@ -41,6 +47,15 @@ def walk_dir(path='.', max_depth=None, ignore_dir=None, ignore_case=True):
                 new_dir = dir_.lower() if ignore_case else dir_
                 if new_dir in ignore_dirs:
                     dirs.remove(dir_)
+
+        # Filter files down to specific extensions, if specified.
+        if exts:
+            # files = [f for f in files if f.endswith(exts)]
+            for f in files:
+                if not f.endswith(exts):
+                    files.remove(f)
+
+        yield root, dirs, files
 
 
 def list_files(
