@@ -33,8 +33,8 @@ add_line_to_file 'source ~/.my_bashrc' ~/.bashrc
 echo Adding cron job...
 crontab -l > /tmp/mycron
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-add_line_to_file "0 9-18 * * 1-5 ${DIR}/bin/notify-time > /dev/null 2>&1 # Notify me every so often" /tmp/mycron
-add_line_to_file "*/5 9-18 * * 1-5 ${DIR}/bin/change-desktop-wallpaper > /dev/null 2>&1 # Change desktop background" /tmp/mycron
+add_line_to_file "0 9-18 * * 1-5 ${DIR}/scripts/bash/notify-time > /dev/null 2>&1 # Notify me every so often" /tmp/mycron
+add_line_to_file "*/5 9-18 * * 1-5 ${DIR}/scripts/bash/change-desktop-wallpaper > /dev/null 2>&1 # Change desktop background" /tmp/mycron
 crontab /tmp/mycron
 rm /tmp/mycron
 echo "New crontab:"
