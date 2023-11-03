@@ -8,7 +8,6 @@ ln -sfnv `readlink -f my_settings/gitconfig` ~/.gitconfig
 ln -sfnv `readlink -f my_settings/gitignore_global` ~/.gitignore_global
 ln -sfnv `readlink -f my_settings/my_bashrc` ~/.my_bashrc
 ln -sfnv `readlink -f my_settings/pythonrc` ~/.pythonrc
-ln -sfnv `readlink -f docs/useful_commands.md` ~/useful_commands.md
 ln -sfnv `readlink -f myTools.desktop` ~/.local/share/applications/myTools.desktop
 echo Symlinks all set up
 
