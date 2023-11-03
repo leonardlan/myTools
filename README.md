@@ -119,9 +119,5 @@ INFO: Not found
 - lssmart - Prints path to file color-indicating up to where it exists.
 ![lssmart](img/lssmart.png?raw=true "Lists path to file up to existing in blue and rest in red")
 
-## Maya Scripts
-[Cube of Spheres](maya_scripts/cube_of_spheres.py) creates a cube made up of spheres with input size
-![Cube of Spheres](img/cube_of_spheres.png?raw=true "Cube of Spheres!!!!")
-
 # Unit Tests
 To run unit tests, execute `nosetests` in project root directory.
