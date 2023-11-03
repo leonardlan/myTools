@@ -85,7 +85,5 @@ IF EXIST %sublime_merge_path% (
 
 ENDLOCAL
 
-doskey useful-commands=s %MYTOOLS%\docs\useful_commands.md
-
 :: Python
 doskey nt=nosetests $*
