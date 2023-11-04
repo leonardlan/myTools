@@ -4,12 +4,10 @@ import os
 import sys
 import tempfile
 
-tempfile.gettempdir()
-
 
 HOME = os.environ['HOME'] if sys.platform.startswith('linux') else os.environ['USERPROFILE']
 MAX_LINES = 50
-MYTOOLS = os.path.join(HOME, 'myTools')
+MYTOOLS = os.environ.get('MYTOOLS_PATH', '')
 MY_TEMP_DIR = os.path.join(tempfile.gettempdir(), 'myTools')
 
 # Datetime string formats.

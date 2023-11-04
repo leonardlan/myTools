@@ -11,18 +11,19 @@
 :: >
 set prompt=[$t$h$h$h %username%@%computername%]$_$p$_$g$s
 
-set MYTOOLS_PYTHONPATH=%USERPROFILE%\myTools\python
+set MYTOOLS_PATH=%USERPROFILE%\dev\myTools
+set MYTOOLS_PYTHONPATH=%MYTOOLS_PATH%\python
 
 :: Python env vars
 set PYTHONPATH=%PYTHONPATH%;%MYTOOLS_PYTHONPATH%
-set PYTHONSTARTUP=%USERPROFILE%\myTools\my_settings\pythonrc
+set PYTHONSTARTUP=%MYTOOLS_PATH%\my_settings\pythonrc
 
 :: Set git ignore global on windows
 git config --global core.excludesfile "%USERPROFILE%\.gitignore_global"
 
 :: Env vars
-set MYTOOLS=%USERPROFILE%\myTools
-set SANDBOX_SCRIPTS=%USERPROFILE%\sandbox\scripts
+set SANDBOX_PATH=%USERPROFILE%\dev\sandbox
+set SANDBOX_SCRIPTS=%SANDBOX_PATH%\scripts
 
 :: My aliases/doskeys
 doskey h=doskey /history
@@ -42,8 +43,8 @@ doskey Documents=cd %USERPROFILE%\Documents
 doskey Downloads=cd %USERPROFILE%\Downloads
 doskey Pictures=cd %USERPROFILE%\Pictures
 
-doskey myTools=cd %MYTOOLS%
-doskey sandbox=cd %USERPROFILE%\sandbox
+doskey myTools=cd %MYTOOLS_PATH%
+doskey sandbox=cd %SANDBOX_PATH%
 doskey sandbox_scripts=cd %SANDBOX_SCRIPTS%
 
 :: Git
