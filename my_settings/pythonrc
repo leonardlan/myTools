@@ -230,11 +230,24 @@ else:
 
 
 # My custom Python prompt.
+_PROMPT_NAME = ''
 class MyPrompt:
-    def __repr__(self):
-        now = datetime.datetime.now()
-        return '{} >>> '.format(str(now.strftime('%I:%M:%S %p')))
+    '''My custom Python prompt with timestamp ('01:23:00 PM >>>').
 
+    Can also specify a name with _PROMPT_NAME to help distinguish between multiple sessions.
+    01:23:00 PM >>>_PROMPT_NAME = 'prod'
+    01:23:01 PM [prod] >>>
+    '''
+    def __repr__(self):
+        if '_PROMPT_NAME' in globals():
+            global _PROMPT_NAME
+        else:
+            _PROMPT_NAME = ''
+
+        now = datetime.datetime.now()
+        return '{} {}>>> '.format(
+            str(now.strftime('%I:%M:%S %p')),
+            '[{}] '.format(_PROMPT_NAME) if _PROMPT_NAME else '')
 sys.ps1 = MyPrompt()
 
 
