@@ -11,14 +11,15 @@ SEP = '.'
 
 
 def get_module_path(module_input):
-    '''Get path of given module or string representation of module (ie. 'os.path', 'os.path.join').
+    '''Get path of given module, class, or function, or its string representation (ie. 'os.path',
+    'os.path.join').
 
     Args:
         module_input (module or str): Python module or string representation of module (ie.
             'os.path').
 
     Returns:
-        str: File path of specified module
+        str: File path of specified module.
 
     Raises:
         TypeError: If the module_input is not a string or types.ModuleType.
@@ -29,7 +30,9 @@ def get_module_path(module_input):
         return module_input.__file__
 
     if not is_string(module_input):
-        raise TypeError(f'Unsupported module type: {type(module_input)}')
+        if not hasattr(module_input, '__module__'):
+            raise TypeError(f'Unsupported module type: {type(module_input)}')
+        module_input = getattr(module_input, '__module__')
 
     try:
         module = importlib.import_module(module_input)
