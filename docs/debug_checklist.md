@@ -1,17 +1,8 @@
-(setq markdown-xhtml-header-content
-      "<style type='text/css'>
-img {
-    vertical-align: middle;
-    width: 32px;
-    height: 32px
-}
-</style>")
-
 <title>Debug Checklist</title>
 
 # Debug Checklist
 
-The things I've learned throughout years of debugging failed renders and bugs. Maybe one day this will be scripted and no longer require TDs. :smile:
+Things I've learned throughout years of debugging failed renders and bugs.
 
 ## :computer:Service not found or failing
 - Check logs on client machine
