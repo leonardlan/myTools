@@ -84,9 +84,6 @@ separator5: separator
 TODO List:
     icon: todo_list
     path: my_todo_list.md
-'&Debug Checklist':
-    icon: debug
-    path: myTools/docs/debug_checklist.md
 
 separator6: separator
 

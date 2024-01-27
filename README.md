@@ -7,7 +7,6 @@ A collection of my
   - [Useful commands](docs/useful_commands.md)
   - Git preferences
   - Sublime preferences
-  - Step-by-step [debug checklist](docs/debug_checklist.md) for when a render fails on the farm or a service is not working
 
 from working as a Software Developer and Pipeline TD in VFX industry.
 
