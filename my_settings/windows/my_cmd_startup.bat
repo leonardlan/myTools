@@ -11,7 +11,8 @@
 :: >
 set prompt=[$t$h$h$h %username%@%computername%]$_$p$_$g$s
 
-set MYTOOLS_PATH=%USERPROFILE%\dev\myTools
+set DEV=%USERPROFILE%\dev
+set MYTOOLS_PATH=%DEV%\myTools
 set MYTOOLS_PYTHONPATH=%MYTOOLS_PATH%\python
 
 :: Python env vars
@@ -22,7 +23,7 @@ set PYTHONSTARTUP=%MYTOOLS_PATH%\my_settings\pythonrc
 git config --global core.excludesfile "%USERPROFILE%\.gitignore_global"
 
 :: Env vars
-set SANDBOX_PATH=%USERPROFILE%\dev\sandbox
+set SANDBOX_PATH=DEV%\sandbox
 set SANDBOX_SCRIPTS=%SANDBOX_PATH%\scripts
 
 :: My aliases/doskeys
@@ -43,6 +44,7 @@ doskey Documents=cd %USERPROFILE%\Documents
 doskey Downloads=cd %USERPROFILE%\Downloads
 doskey Pictures=cd %USERPROFILE%\Pictures
 
+doskey dev=cd %DEV%
 doskey myTools=cd %MYTOOLS_PATH%
 doskey sandbox=cd %SANDBOX_PATH%
 doskey sandbox_scripts=cd %SANDBOX_SCRIPTS%
