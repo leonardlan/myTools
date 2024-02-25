@@ -11,7 +11,8 @@ SUBLIME_TEXT_EXE = r'C:\Program Files\Sublime Text 3\sublime_text.exe'
 def run_command(command, *args):
     '''Run command with args using subprocess.Popen().'''
     contents = [command] + list(args)
-    command = ' '.join(contents)
+    command = ['"{}"'.format(c) if ' ' in c else c for c in contents]
+    command = ' '.join(command)
     print('Running command: {}'.format(command))
     return subprocess.Popen(contents)
 
