@@ -42,6 +42,9 @@ from wai import wai, call_gets
 # from mock_data import DOGS, DOGS_DICT, PEOPLE, PEOPLE_DICT, TYPE_TO_VAL
 
 
+_SESSION_START_DATETIME = datetime.datetime.now()
+
+
 PYTHON_HISTORY_PATH = os.path.join(HOME, '.python_history')
 
 
