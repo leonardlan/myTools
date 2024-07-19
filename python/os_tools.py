@@ -163,3 +163,9 @@ def make_dirs(path, print_=True):
         if print_:
             print('Creating folder {}'.format(path))
         os.makedirs(path)
+
+
+def run_command_in_new_session(cmd):
+    '''Runs command in new Command Prompt session.'''
+    print('Running in new session: {}'.format(cmd))
+    os.system('start cmd /k "{}"'.format(cmd))
