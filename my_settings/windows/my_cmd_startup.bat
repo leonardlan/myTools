@@ -23,8 +23,9 @@ set PYTHONSTARTUP=%MYTOOLS_PATH%\my_settings\pythonrc
 git config --global core.excludesfile "%USERPROFILE%\.gitignore_global"
 
 :: Env vars
-set SANDBOX_PATH=DEV%\sandbox
+set SANDBOX_PATH=%DEV%\sandbox
 set SANDBOX_SCRIPTS=%SANDBOX_PATH%\scripts
+set WORKSPACE_PATH=%DEV%\workspace
 
 :: My aliases/doskeys
 doskey h=doskey /history
@@ -48,6 +49,7 @@ doskey dev=cd %DEV%
 doskey myTools=cd %MYTOOLS_PATH%
 doskey sandbox=cd %SANDBOX_PATH%
 doskey sandbox_scripts=cd %SANDBOX_SCRIPTS%
+doskey workspace=cd %WORKSPACE_PATH%
 
 :: Git
 doskey gg=git gui
