@@ -1,5 +1,7 @@
 @echo off
 
+echo Running my_cmd_startup.bat...
+
 :: My windows cmd settings. Set path as AutoRun of "Command Processor" key using regedit.
 :: Query current AutoRun value:
 :: REG QUERY "HKEY_LOCAL_MACHINE\Software\Microsoft\Command Processor" /v AutoRun
@@ -14,10 +16,11 @@ set prompt=[$t$h$h$h %username%@%computername%]$_$p$_$g$s
 set DEV=%USERPROFILE%\dev
 set MYTOOLS_PATH=%DEV%\myTools
 set MYTOOLS_PYTHONPATH=%MYTOOLS_PATH%\python
+set MYTOOLS_MY_SETTINGS=%MYTOOLS_PATH%\my_settings
 
 :: Python env vars
 set PYTHONPATH=%PYTHONPATH%;%MYTOOLS_PYTHONPATH%
-set PYTHONSTARTUP=%MYTOOLS_PATH%\my_settings\pythonrc
+set PYTHONSTARTUP=%MYTOOLS_MY_SETTINGS%\pythonrc
 
 :: Set git ignore global on windows
 git config --global core.excludesfile "%USERPROFILE%\.gitignore_global"
@@ -26,6 +29,7 @@ git config --global core.excludesfile "%USERPROFILE%\.gitignore_global"
 set SANDBOX_PATH=%DEV%\sandbox
 set SANDBOX_SCRIPTS=%SANDBOX_PATH%\scripts
 set WORKSPACE_PATH=%DEV%\workspace
+set SUBLIME_PATH="C:\Program Files\Sublime Text 3\sublime_text.exe"
 
 :: My aliases/doskeys
 doskey h=doskey /history
@@ -33,6 +37,8 @@ doskey py=python $*
 doskey p=python $*
 doskey pi=python -i $*
 doskey python-vanilla="set \"PYTHONPATH=\" & set \"PYTHONSTARTUP=\" & python"
+doskey nt=nosetests $*
+doskey tree=tree /f
 
 doskey u=cd ..
 doskey uu=cd ..\..
@@ -40,7 +46,7 @@ doskey uuu=cd ..\..\..
 doskey uuuu=cd ..\..\..\..
 doskey uuuuu=cd ..\..\..\..\..
 
-:: Popular folders
+:: Change directory to popular folders
 doskey Documents=cd %USERPROFILE%\Documents
 doskey Downloads=cd %USERPROFILE%\Downloads
 doskey Pictures=cd %USERPROFILE%\Pictures
@@ -66,19 +72,19 @@ doskey git-show-devs=git shortlog -sn
 doskey git-show-origin=git remote show origin
 doskey git-stash-show=git stash show -p
 
+
 SETLOCAL
 
-:: Add s doskey.
-set sublime_path="C:\Program Files\Sublime Text 3\sublime_text.exe"
-IF EXIST %sublime_path% (
-    doskey s=%sublime_path% $*
+:: Add 's' Sublime doskey
+IF EXIST %SUBLIME_PATH% (
+    doskey s=%SUBLIME_PATH% $*
 ) ELSE (
     @echo on
-    echo Sublime Text not installed at %sublime_path%
+    echo Sublime Text not installed at %SUBLIME_PATH%
     @echo off
 )
 
-:: Add sm doskey.
+:: Add sm doskey
 set sublime_merge_path="C:\Program Files\Sublime Merge\sublime_merge.exe"
 IF EXIST %sublime_merge_path% (
     doskey sm=%sublime_merge_path% $*
@@ -90,5 +96,8 @@ IF EXIST %sublime_merge_path% (
 
 ENDLOCAL
 
-:: Python
-doskey nt=nosetests $*
+
+:: Shortcuts for editing and re-running this current file (my_cmd_startup.bat)
+set MY_CMD_STARTUP_PATH=%MYTOOLS_MY_SETTINGS%\windows\my_cmd_startup.bat
+doskey my_cmd_startup=%MY_CMD_STARTUP_PATH%
+doskey open_my_cmd_startup=%SUBLIME_PATH% %MY_CMD_STARTUP_PATH%
