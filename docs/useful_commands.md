@@ -678,6 +678,12 @@ mail
 nvidia-smi
 ```
 
+## Windows Command Prompt
+```cmd
+:: List all doskey aliases
+doskey /macros:all
+```
+
 ## Misc
 ```bash
 # Unzip tar.gz
