@@ -29,6 +29,7 @@ set WORKSPACE_PATH=%DEV%\workspace
 set SUBLIME_PATH="C:\Program Files\Sublime Text 3\sublime_text.exe"
 
 :: My aliases/doskeys
+doskey ls=dir
 doskey h=doskey /history
 doskey py=python $*
 doskey p=python $*
