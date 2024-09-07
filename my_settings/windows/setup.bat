@@ -8,3 +8,6 @@ echo Symlinks all set up
 echo Setting up Sublime symlink...
 mklink "%USERPROFILE%\AppData\Roaming\Sublime Text 3\Packages\User\Preferences.sublime-settings" "%USERPROFILE%\myTools\sublime\Preferences.sublime-settings"
 echo Sublime symlinks all set up
+
+echo Setting git ignore global...
+git config --global core.excludesfile "%USERPROFILE%\.gitignore_global"
