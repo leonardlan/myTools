@@ -22,9 +22,6 @@ set MYTOOLS_MY_SETTINGS=%MYTOOLS_PATH%\my_settings
 set PYTHONPATH=%PYTHONPATH%;%MYTOOLS_PYTHONPATH%
 set PYTHONSTARTUP=%MYTOOLS_MY_SETTINGS%\pythonrc
 
-:: Set git ignore global on windows
-git config --global core.excludesfile "%USERPROFILE%\.gitignore_global"
-
 :: Env vars
 set SANDBOX_PATH=%DEV%\sandbox
 set SANDBOX_SCRIPTS=%SANDBOX_PATH%\scripts
