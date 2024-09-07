@@ -10,7 +10,7 @@ echo Running my_cmd_startup.bat...
 :: Example:
 :: [10:05:29 Leonard@MY-PC]
 :: C:\Users\Leonard
-:: >
+:: > 
 set prompt=[$t$h$h$h %username%@%computername%]$_$p$_$g$s
 
 set DEV=%USERPROFILE%\dev
