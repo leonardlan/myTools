@@ -38,6 +38,9 @@ doskey python-vanilla="set \"PYTHONPATH=\" & set \"PYTHONSTARTUP=\" & python"
 doskey nt=nosetests $*
 doskey tree=tree /f
 
+:: Make directory and cd into it
+doskey mkcd=md $1 ^& cd $1
+
 doskey u=cd ..
 doskey uu=cd ..\..
 doskey uuu=cd ..\..\..
@@ -54,6 +57,7 @@ doskey myTools=cd %MYTOOLS_PATH%
 doskey sandbox=cd %SANDBOX_PATH%
 doskey sandbox_scripts=cd %SANDBOX_SCRIPTS%
 doskey workspace=cd %WORKSPACE_PATH%
+doskey ws=cd %WORKSPACE_PATH%
 
 :: Git
 doskey gg=git gui
