@@ -99,6 +99,10 @@ IF EXIST %sublime_merge_path% (
 ENDLOCAL
 
 
+:: Add executables and batch scripts to PATH.
+set PATH=%PATH%;%MYTOOLS_PATH%\bin\windows
+
+
 :: Shortcuts for editing and re-running this current file (my_cmd_startup.bat)
 set MY_CMD_STARTUP_PATH=%MYTOOLS_MY_SETTINGS%\windows\my_cmd_startup.bat
 doskey my_cmd_startup=%MY_CMD_STARTUP_PATH%
