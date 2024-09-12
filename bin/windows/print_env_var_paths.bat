@@ -1,3 +1,4 @@
+@echo off
 rem Print passed environment variable (ie. PATH) split by semi-colons.
 
 @echo off
