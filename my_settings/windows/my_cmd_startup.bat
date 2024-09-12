@@ -11,8 +11,9 @@ echo Running my_cmd_startup.bat...
 :: [10:05:29 Leonard@MY-PC]
 :: C:\Users\Leonard
 :: > 
-:: First line is blue, second line is green, third line with the ">" is white.
-set prompt=$E[1;34m[$t$h$h$h %username%@%computername%]$_$E[1;32m$p$_$E[1;0m$g$s$E[1;0m
+:: First line is blue (except username and computername is cyan), second line is green, third line
+:: with the ">" is white.
+set prompt=$E[1;34m[$t$h$h$h $E[1;36m%username%@%computername%$E[1;34m]$_$E[1;32m$p$_$E[1;0m$g$s$E[1;0m
 
 set DEV=%USERPROFILE%\dev
 set MYTOOLS_PATH=%DEV%\myTools
