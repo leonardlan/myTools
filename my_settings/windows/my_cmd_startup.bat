@@ -75,6 +75,7 @@ doskey gmom=git merge origin/master
 doskey git-show-devs=git shortlog -sn
 doskey git-show-origin=git remote show origin
 doskey git-stash-show=git stash show -p
+doskey git-show-top-level=git rev-parse --show-toplevel
 
 
 SETLOCAL
