@@ -38,7 +38,7 @@ doskey p=python $*
 doskey pi=python -i $*
 doskey python-vanilla="set \"PYTHONPATH=\" & set \"PYTHONSTARTUP=\" & python"
 doskey nt=nosetests $*
-doskey tree=tree /f
+doskey tree=tree /f $*
 
 :: Make directory and cd into it
 doskey mkcd=md $1 ^& cd $1
