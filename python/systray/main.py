@@ -1,12 +1,28 @@
-#!/usr/bin/python
+'''My system tray context menu.
+
+Creates a new icon in system tray with convenient developer tools.
+
+Example usage:
+
+from systray import main
+reload(main)
+
+app = main.App()
+app.run()
+'''
+
 
 import os
 import sys
 
-from PyQt4.QtGui import QSystemTrayIcon, QApplication
-from PyQt4.QtCore import QFile, QString
+from PyQt5.QtWidgets import QSystemTrayIcon, QApplication
+from PyQt5.QtCore import QFile
+from PyQt5.QtCore import QMetaType
 
-import utils
+from python_compatibility import reload
+
+from . import utils
+reload(utils)
 
 
 class App:
@@ -22,7 +38,7 @@ class App:
     def _load_stylesheet(self):
         fil = QFile(os.path.join(utils.MYTOOLS, 'style/stylesheet.qss'))
         fil.open(QFile.ReadOnly)
-        self.app.setStyleSheet(QString(fil.readAll()))
+        self.app.setStyleSheet(str(fil.readAll()))
         fil.close()
 
     def run(self):

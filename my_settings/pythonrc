@@ -52,8 +52,8 @@ IS_LINUX = sys.platform.startswith('linux')
 
 
 def start_qt_application():
-    from PyQt4 import QtGui
-    return QtGui.QApplication(sys.argv)
+    from PyQt5 import QtWidgets
+    return QtWidgets.QApplication(sys.argv)
 
 
 # Only Linux specific.

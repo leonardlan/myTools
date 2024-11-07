@@ -5,12 +5,14 @@ import sys
 from functools import partial
 from ruamel.yaml import YAML
 
-from PyQt4.QtGui import QMenu, QIcon, QSystemTrayIcon, QCursor
+from PyQt5.QtGui import QIcon, QCursor
+from PyQt5.QtWidgets import QMenu, QSystemTrayIcon
+
+from my_settings import MYTOOLS
+from subprocess_tools import subl
 
 
 HOME = os.path.expanduser('~')
-MYTOOLS = os.path.expanduser('~/myTools')
-SANDBOX = os.path.expanduser('~/dev/sandbox')
 ACTIONS_CONFIG_FILE = os.path.join(MYTOOLS, 'config/actions.yaml')
 
 
@@ -28,22 +30,6 @@ def run(cmd, keep_open=False, title=''):
         cmd += " -t '%s'" % title
     print('Running:', cmd)
     subprocess.Popen(cmd, shell=True)
-
-
-def open_sublime(path, chrome=False, n=False, a=False, toggle_side_bar=False):
-    '''Open file in sublime.'''
-    print('Opening', path)
-    path = os.path.join(HOME, path)
-    cmd = [os.path.expanduser('~/sublime_text_3/sublime_text'), path]
-    if n:
-        cmd.insert(1, '-n')
-    if a:
-        cmd.insert(2, '-a')
-    if toggle_side_bar:
-        cmd[1:1] = ['--command', 'toggle_side_bar']
-    subprocess.call(cmd)
-    if chrome:
-        subprocess.call(['google-chrome', path])
 
 
 def open_terminal(dir_, title=''):
@@ -77,7 +63,7 @@ class TrayIcon(QSystemTrayIcon):
 
     def _setup_actions(self, menu, actions):
         '''Setup actions.'''
-        for text, data in actions.items()():
+        for text, data in actions.items():
             # Separator.
             if data == 'separator':
                 menu.addSeparator()
@@ -100,7 +86,7 @@ class TrayIcon(QSystemTrayIcon):
             if data.get('cmd'):
                 action.triggered.connect(partial(run, data.get('cmd'), **data.get('kwargs', {})))
             elif data.get('path'):
-                action.triggered.connect(partial(open_sublime, data.get('path')))
+                action.triggered.connect(partial(subl, data.get('path')))
             elif data.get('terminal_path'):
                 action.triggered.connect(
                     partial(open_terminal, data.get('terminal_path'), **data.get('kwargs', {})))
