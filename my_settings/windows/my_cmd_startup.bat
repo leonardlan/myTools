@@ -1,5 +1,11 @@
 @echo off
 
+:: Stop if not in interactive session.
+if not %CMDCMDLINE%==C:\WINDOWS\System32\cmd.exe (
+    echo "Not setting up my_cmd_startup in batch mode"
+    goto :eof
+)
+
 echo Running my_cmd_startup.bat...
 
 :: My windows cmd settings. Set path as AutoRun of "Command Processor" key using regedit.
