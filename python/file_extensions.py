@@ -1,6 +1,9 @@
+'''Definitions of various file extensions categorized by their types and usage.'''
+
+
 # A/V.
 AUDIO = ('aif', 'mp3', 'm4a', 'wav', 'wma')
-IMAGE = ('exr', 'gif', 'jpeg', 'jpg', 'png', 'ppm', 'svg', 'tif', 'tiff', 'ttf')
+IMAGE = ('exr', 'gif', 'jpeg', 'jpg', 'png', 'ppm', 'svg', 'tif', 'tiff', 'ttf', 'tx')
 VIDEO = ('avi', 'mov', 'mp4', 'mpeg', 'mpg')
 AUDIO_AND_VIDEO = AUDIO + VIDEO
 IMAGE_METADATA = 'aae'  # Extra XML metadata (ie. camera information) format used by Apple.
@@ -43,5 +46,6 @@ DATA = ('csv', 'json', 'xml', 'yml')
 EXECUTABLE = 'exe'
 MARKDOWN = ('markdown', 'md')
 RESTRUCTURED = 'rst'
+TEMP_FILE = 'tmp'
 TEXT = 'txt'
 ZIP = 'zip'
