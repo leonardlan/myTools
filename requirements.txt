@@ -6,5 +6,5 @@ ruamel.ordereddict==0.4.14
 ruamel.yaml.clib==0.2.0
 ruamel.yaml==0.16.10
 tabulate==0.6.8
-virtualenv==16.4.3
+virtualenv==20.26.6
 virtualenvwrapper==4.8.4
