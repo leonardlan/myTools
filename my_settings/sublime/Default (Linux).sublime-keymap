@@ -1,5 +1,0 @@
-[
-  { "keys": ["ctrl+t", "ctrl+s"], "command": "timestamp" },
-  { "keys": ["ctrl+shift+q"], "command": "exit" },
-  { "keys": ["ctrl+q"], "command": "pass" },
-]
