@@ -3,5 +3,6 @@
 	{ "keys": ["ctrl+shift+tab"], "command": "prev_view" },
 	{ "keys": ["ctrl+t", "s"], "command": "timestamp"},
 	{ "keys": ["ctrl+t", "ctrl+s"], "command": "timestamp"},
-	{ "keys": ["ctrl+shift+c"], "command": "copy_path"}
+	{ "keys": ["ctrl+shift+c"], "command": "copy_path"},
+	{ "keys": ["ctrl+shift+o"], "command": "open_dir", "args": { "dir": "$file_path", "file": "$file_name"}}
 ]
