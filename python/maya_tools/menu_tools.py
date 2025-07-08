@@ -2,6 +2,8 @@
 
 from maya import cmds, mel
 
+from python_compatibility import reload
+
 import maya_tools
 from maya_tools import debugger_tools
 
