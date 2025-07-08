@@ -8,7 +8,7 @@ import color_tools
 import settings_general
 
 from cli_tools import cb
-from colors import bright_blue, bright_red, bright_yellow
+from colors import bright_blue, bright_green, bright_red, bright_yellow
 
 
 def get_colored_path(path=None, replace=None):
@@ -76,8 +76,7 @@ def open_path(path):
 
 
 def re_sub_in_dir(dir_path, regex_pattern, replacement, dry_run=True):
-    '''Replaces filenames in a specified directory that contains a regular expression pattern with a
-    replacement string.
+    '''Uses re.sub() to rename files in a directory, if pattern matches filename.
 
     Args:
         dir_path (str): The path to the directory containing the filenames to be replaced.
@@ -92,7 +91,9 @@ def re_sub_in_dir(dir_path, regex_pattern, replacement, dry_run=True):
     for filename in os.listdir(dir_path):
         if re.search(regex_pattern, filename):
             new_filename = re.sub(regex_pattern, replacement, filename)
-            print('Renaming {}'.format(color_tools.get_colored_diff(filename, new_filename)))
+            print(
+                'Renaming:\n\t{} ->\n\t{}'.format(
+                    bright_red(filename), bright_green(new_filename)))
             if dry_run:
                 print('Not renaming in dry run')
             else:
