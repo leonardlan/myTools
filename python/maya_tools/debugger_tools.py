@@ -187,7 +187,7 @@ def diff(apple=None, orange=None):
             orange_plug_locked = 'locked' if cmds.getAttr(orange_plug, lock=True) else 'unlocked'
             if apple_plug_locked != orange_plug_locked:
                 diff_str = '{} is {} and {} is {}'.format(
-                    apple, apple_plug_locked, orange, orange_plug_locked)
+                    apple_plug, apple_plug_locked, orange_plug, orange_plug_locked)
                 differences.append(diff_str)
 
         else:
