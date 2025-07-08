@@ -179,12 +179,12 @@ def flatten_files(directory, dry_run=True, remove_empty=True, delimiter='_'):
             new_filename = delimiter.join([dir_prefix, file])
             dst_path = os.path.join(directory, new_filename)
             if dry_run:
-                print(f'Flatten {src_path_rel} to {new_filename}')
+                print('Flatten {} to {}'.format(src_path_rel, new_filename))
             else:
                 shutil.move(src_path, dst_path)
         if remove_empty and not os.listdir(subdir):
             if dry_run:
-                print(f'Remove empty directory {subdir}')
+                print('Remove empty directory {}'.format(subdir))
             else:
                 os.rmdir(subdir)
     if dry_run:
