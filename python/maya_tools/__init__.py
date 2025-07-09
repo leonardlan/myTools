@@ -12,6 +12,12 @@ def cb(content=None):
     clipboard.setText(str(content))
 
 
+def cb_strings(delimiter='\n'):
+    '''Returns list of clipboard content as string separated by newlines.'''
+    content = cb()
+    return content.split(delimiter)
+
+
 def print_to_status(text):
     '''Print to status line in bottom of Maya UI. Replaces newlines with pipe '|'.'''
     maya.mel.eval('print "{}"'.format(text.replace('"', '\\"').replace('\n', '|')))
