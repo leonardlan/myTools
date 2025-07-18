@@ -8,6 +8,7 @@ Example usage:
 
 import template_script
 reload(template_script)
+
 results = template_script.run_on_multiple(template_script.ITEMS, dry_run=True, return_results=True)
 '''
 
