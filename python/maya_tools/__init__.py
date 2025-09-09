@@ -1,12 +1,26 @@
 '''Functions used in Maya environment.'''
 
-from PySide2.QtWidgets import QApplication
 import maya.mel
+
+
+def get_QApplication():
+    '''Get QApplication regardless of version. Maya 2023 uses PySide2, meanwhile 2026 Uses PySide6.
+    '''
+    try:
+        from PySide2.QtWidgets import QApplication
+    except ModuleNotFoundError as _:
+        try:
+            from PySide6.QtWidgets import QApplication
+        except Exception as e:
+            raise e('Unable to import QApplication from PySide2 and PySide6')
+
+    return QApplication
 
 
 def cb(content=None):
     '''Copies content to clipboard. If no content, returns clipboard content.'''
-    clipboard = QApplication.clipboard()
+    q_app = get_QApplication()
+    clipboard = q_app.clipboard()
     if content is None:
         return str(clipboard.text())
     clipboard.setText(str(content))
