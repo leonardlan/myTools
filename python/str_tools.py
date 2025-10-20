@@ -5,7 +5,17 @@
 
 import os
 import re
-import unidecode
+import sys
+
+# Try importing unidecode if available and Python version supports it
+if sys.version_info >= (3, 7):
+    try:
+        from unidecode import unidecode
+    except ImportError:
+        unidecode = None
+else:
+    unidecode = None
+
 
 from python_compatibility import is_string
 
@@ -16,6 +26,8 @@ def string_match(
     '''Check if a string or list of strings matches any of the strings in a list of strings, with
     options for ignoring case, ignoring Unicode, removing certain characters, and splitting strings
     into name and extension.
+
+    Note: ignore_accents only works if Python version >= 3.7 and unidecode module is available.
 
     Written with the help of ChatGPT.
 
@@ -45,7 +57,7 @@ def string_match(
         _string_list = [str_.lower() for str_ in _string_list]
 
     # Ignore accent (ie. "e" and "é".)
-    if ignore_accents:
+    if ignore_accents and unidecode is not None:
         strings_to_match = [unidecode.unidecode(str_) for str_ in strings_to_match]
         _string_list = [unidecode.unidecode(str_) for str_ in _string_list]
 
