@@ -58,6 +58,7 @@ def memory_leak():
     have to close session to clear memory.
     '''
     print('Starting memory leak...')
+    print('Force quit terminal to stop.')
     items = [2]
     while True:
         items.append(items[-1] * 2)
@@ -66,6 +67,7 @@ def memory_leak():
 def memory_leak_2():
     '''Infinite loop with memory leak. Memory rises slower than memory_leak().'''
     print('Starting memory leak...')
+    print('Ctrl+C to stop.')
     while True:
         def func(): pass
         func.__doc__ = func
@@ -109,7 +111,7 @@ def overload_write(num_chars=10000, char='a', file_path='test.txt'):
     '''
     increment = char * num_chars
     line = increment
-    print(f'Writing temp file to {os.path.abspath(file_path)} ...')
+    print('Writing temp file to {} ...'.format(os.path.abspath(file_path)))
     with open(file_path, 'w') as f:
         while True:
             f.write('{}\n'.format(line))
