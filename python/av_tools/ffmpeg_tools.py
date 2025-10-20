@@ -67,7 +67,7 @@ def trim(
 
     # Add track number.
     if track_num:
-        commands.extend([f'-metadata track={track_num}'])
+        commands.extend(['-metadata track={}'.format(track_num)])
 
     commands.extend(['-c', 'copy', '"{}"'.format(output_path)])
 
@@ -223,12 +223,12 @@ def split_audio_file(
         track_num = index + 1
 
         # Generate a new file name based on the text
-        new_file_name = f'{text}.mp3'
+        new_file_name = '{}.mp3'.format(text)
 
         # Check if the file already exists and whether we should overwrite it
         file_path = os.path.join(directory, new_file_name)
         if os.path.exists(file_path) and not overwrite:
-            print(f'Skipping file {file_path} since it already exists and overwrite=False')
+            print('Skipping file {} since it already exists and overwrite=False'.format(file_path))
             continue
 
         # Use FFmpeg to split the audio file
@@ -242,9 +242,11 @@ def split_audio_file(
 
         # Check if the split was successful and print a message
         if result == 0:
-            print(f'Split audio file from {start} to {end} and saved to {file_path}')
+            print('Split audio file from {} to {} and saved to {}'.format(start, end, file_path))
         elif not dry_run:
-            print(f'Failed to split audio file from {start} to {end} and save to {file_path}')
+            print(
+                'Failed to split audio file from {} to {} and save to {}'.format(
+                    start, end, file_path))
             failed_files.append(file_path)
 
     # Print out a list of files that failed to save
