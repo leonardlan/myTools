@@ -31,7 +31,7 @@ def get_module_path(module_input):
 
     if not is_string(module_input):
         if not hasattr(module_input, '__module__'):
-            raise TypeError(f'Unsupported module type: {type(module_input)}')
+            raise TypeError('Unsupported module type: {}'.format(type(module_input)))
         module_input = getattr(module_input, '__module__')
 
     try:
@@ -48,14 +48,14 @@ def get_module_path(module_input):
             try:
                 module = importlib.import_module(module_input_prev)
             except ModuleNotFoundError as err:
-                raise err(f'Could not find module in {module_input} nor {module_input_prev}')
+                raise err('Could not find module in {} nor {}'.format(module_input, module_input_prev))
             else:
                 if hasattr(module, last_item):
                     return module.__file__
 
                 # Module does exist, but doesn't contain last item.
                 raise RuntimeError(
-                    f"Module {module_input_prev} exists, but doesn't contain {last_item}")
+                    "Module {} exists, but doesn't contain {}".format(module_input_prev, last_item))
         raise err
     else:
         return module.__file__
