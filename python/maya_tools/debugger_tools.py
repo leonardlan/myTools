@@ -152,8 +152,15 @@ def diff(apple=None, orange=None):
     not_in_orange = []
     differences = []
     for attr in apple_attrs:
+        # Occasionally, an attribute from cmds.listAttr() will start with period "." but running
+        # cmds.getAttr() with double periods "..attr_name" will error. So we remove it.
+        if attr.startswith('.'):
+            print('Attribute {} in node {} starts with period "."'.format(apple, attr))
+            attr = attr[1:]
+
         # Skip attributes with period. (ie. type TdataCompound)
         if '.' in attr:
+            print('Skipping attribute with period "." in node {}: {}'.format(apple, attr))
             continue
 
         # Compare with orange.
@@ -191,6 +198,7 @@ def diff(apple=None, orange=None):
                 differences.append(diff_str)
 
         else:
+            # Orange does not have this attribute.
             not_in_orange.append(attr)
 
     # Print summary.
