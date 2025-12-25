@@ -2,6 +2,7 @@
 
 
 import os
+import shutil
 import zipfile
 
 
@@ -13,9 +14,9 @@ def zip_files(source_dir, output_path):
         output_path (str): The path to save the ZIP archive to.
     '''
     with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for root, dirs, files in os.walk(source_dir):
-            for file in files:
-                zipf.write(os.path.join(root, file))
+        for root, _, files in os.walk(source_dir):
+            for file_ in files:
+                zipf.write(os.path.join(root, file_))
 
 
 def extract_zip(zip_path, output_dir=None):
@@ -32,3 +33,30 @@ def extract_zip(zip_path, output_dir=None):
     with zipfile.ZipFile(zip_path, 'r') as zipf:
         zipf.extractall(output_dir)
     print('Extracted zip files to {output_dir}')
+
+
+def zip_subfolders(source_dir, output_dir):
+    '''Create a ZIP archive for each top-level directory in source_dir, saving each archive to
+    output_dir with the same name. Uses shutil.make_archive().
+
+    Args:
+        source_dir (str): Source directory containing folders to zip.
+        output_dir (str): Output directory to export zipped folders to.
+
+    Returns:
+        None
+    '''
+    # Create output_dir if not exist.
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Get list of directories in source_dir.
+    dirs = [entry.name for entry in os.scandir(source_dir) if entry.is_dir()]
+
+    # Zip every directory.
+    total = len(dirs)
+    for ind, item in enumerate(dirs, start=1):
+        print('[{}/{}] Zipping {}'.format(ind, total, item))
+        output_zip_path = os.path.join(output_dir, item)
+        source_item = os.path.join(source_dir, item)
+        shutil.make_archive(base_name=output_zip_path, format='zip', root_dir=source_item)
