@@ -16,19 +16,15 @@ def is_in_python_3():
 
 
 def reload(module):
-    '''Reload module backwards compatible for all Python versions. Why, Python, why?'''
-    if is_in_python_2():
-        reload(module)
-        return
+    '''Reload module backwards compatible for all Python versions.'''
+    try:
+        # Try Python 3 method.
+        from importlib import reload as _reload
+    except ImportError:
+        # Use Python 2 builtin reload.
+        from __builtin__ import reload as _reload
 
-    # Assume Python 3 here.
-    if PYTHON_VERSION_MINOR <= 3:
-        # Python 3, up to 3.3, use this:
-        import imp
-        imp.reload(module)
-    else:
-        import importlib
-        importlib.reload(module)
+    _reload(module)
 
 
 def is_string(data):
