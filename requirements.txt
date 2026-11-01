@@ -1,7 +1,7 @@
 clipboard==0.0.4
 colorama==0.4.1
 nose-timer==0.7.5
-pylint==1.9.4
+pylint==4.0.9
 ruamel.ordereddict==0.4.14
 ruamel.yaml.clib==0.2.0
 ruamel.yaml==0.16.10
